@@ -1,5 +1,6 @@
 import React, {useRef} from 'react';
 import logo from '../assets/logo/logo.png';
+import bgVideo from '../assets/videos/bg.mp4';
 
 const Team: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -44,24 +45,35 @@ const Team: React.FC = () => {
             <div className="max-w-7xl mx-auto flex flex-col items-center">
 
                 <div className="mb-10 md:mb-16 w-full">
-                    <div className="w-full flex flex-col items-center justify-center gap-6 md:gap-10">
-                        {/* Заголовок: тепер text-center працює і для мобілок, і для десктопа */}
-                        <h2 className="text-2xl md:text-6xl font-black font-brutal leading-[0.9] tracking-tighter uppercase text-white text-center">
-                            Тебе навчатимуть <br className="hidden md:block" />
-                            професіонали
-                        </h2>
+                    <div className="w-full relative overflow-hidden border-2 border-zinc-800 bg-black">
+                        {/* BACKGROUND VIDEO */}
+                        <video
+                            className="absolute inset-0 w-full h-full object-cover"
+                            src={bgVideo}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                        />
 
-                        {/* Контейнер логотипа */}
-                        <div className="flex justify-center items-center w-full">
-                            <img
-                                src={logo}
-                                alt="HOLYSHOOT"
-                                /* Використовуємо w-[VALUE], щоб точно вказати розмір.
-                                   w-[250px] — це приблизно "трішки більше ніж w-56", але менше за повний екран.
-                                   md:w-[350px] — збільшуємо для великих екранів.
-                                */
-                                className="w-[280px] md:w-[400px] h-auto object-contain"
-                            />
+                        {/* OVERLAY (щоб текст читався) */}
+                        <div className="absolute inset-0 bg-black/10" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/60 to-black/60" />
+
+                        {/* CONTENT */}
+                        <div className="relative z-10 w-full flex flex-col items-center justify-center gap-6 md:gap-10 py-12 md:py-20 px-4">
+                            <h2 className="text-2xl md:text-6xl font-black font-brutal leading-[0.9] tracking-tighter uppercase text-white text-center">
+                                Тебе навчатимуть <br className="hidden md:block" />
+                                професіонали
+                            </h2>
+
+                            <div className="flex justify-center items-center w-full">
+                                <img
+                                    src={logo}
+                                    alt="HOLYSHOOT"
+                                    className="w-[280px] md:w-[400px] h-auto object-contain"
+                                />
+                            </div>
                         </div>
                     </div>
 
