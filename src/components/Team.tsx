@@ -57,13 +57,14 @@ const Team: React.FC = () => {
                         />
 
                         {/* OVERLAY (щоб текст читався) */}
-                        <div className="absolute inset-0 bg-black/10" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/60 to-black/60" />
+                        <div className="absolute inset-0 bg-black/10"/>
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/60 to-black/60"/>
 
                         {/* CONTENT */}
-                        <div className="relative z-10 w-full flex flex-col items-center justify-center gap-6 md:gap-10 py-12 md:py-20 px-4">
+                        <div
+                            className="relative z-10 w-full flex flex-col items-center justify-center gap-6 md:gap-10 py-12 md:py-20 px-4">
                             <h2 className="text-2xl md:text-6xl font-black font-brutal leading-[0.9] tracking-tighter uppercase text-white text-center">
-                                Тебе навчатимуть <br className="hidden md:block" />
+                                Тебе навчатимуть <br className="hidden md:block"/>
                                 професіонали
                             </h2>
 
@@ -77,15 +78,19 @@ const Team: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="mt-8 p-4 md:p-10 bg-zinc-900 flex flex-col gap-8 md:gap-10 border-2 border-zinc-800 relative">
+                    <div
+                        className="mt-8 p-4 md:p-10 bg-zinc-900 flex flex-col gap-8 md:gap-10 border-2 border-zinc-800 relative">
                         <div className="max-w-3xl">
                             <p className="text-[18px] md:text-[24px] font-black font-brutal uppercase text-white leading-tight">
-                                Рекламний відео продакшн <span className="text-purple-500 text-shadow-sm">HOLYSHOOT</span>
+                                Рекламний відео продакшн <span
+                                className="text-purple-500 text-shadow-sm">HOLYSHOOT</span>
                             </p>
                             <p className="text-zinc-400 text-[14px] md:text-[16px] font-bold mt-3 leading-snug">
-                                Ми рекламний відео продакшн з досвідом реальної роботи в індустрії. Практикуюча команда, яка інтегрує АІ в реальні комерційні проекти.
+                                Ми рекламний відео продакшн з досвідом реальної роботи в індустрії. Практикуюча команда,
+                                яка інтегрує АІ в реальні комерційні проекти.
                                 <br/>
-                                <span className="font-black text-white mt-4 block tracking-widest text-[14px] md:text-[16px] uppercase">
+                                <span
+                                    className="font-black text-white mt-4 block tracking-widest text-[14px] md:text-[16px] uppercase">
                                     Наші крайні АІ роботи:
                                 </span>
                             </p>
@@ -105,27 +110,41 @@ const Team: React.FC = () => {
                                         className="snap-center shrink-0 w-[85vw] md:w-[500px] aspect-video brutalist-border border-white bg-black relative group/card cursor-pointer overflow-hidden shadow-2xl"
                                     >
                                         <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">
-                                            <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-                                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white/30 flex items-center justify-center group-hover/card:border-purple-500 group-hover/card:bg-purple-500/10 transition-all">
-                                                <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <div
+                                                className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                                            <div
+                                                className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white/30 flex items-center justify-center group-hover/card:border-purple-500 group-hover/card:bg-purple-500/10 transition-all">
+                                                <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="currentColor"
+                                                     viewBox="0 0 24 24">
                                                     <path d="M8 5v14l11-7z"/>
                                                 </svg>
                                             </div>
-                                            <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500/60 shadow-[0_0_15px_#a855f7] animate-scan-y pointer-events-none"></div>
+                                            <div
+                                                className="absolute top-0 left-0 w-full h-[2px] bg-purple-500/60 shadow-[0_0_15px_#a855f7] animate-scan-y pointer-events-none"></div>
                                         </div>
 
                                         {/* Касетний інтерфейс */}
-                                        <div className="absolute top-2 left-2 md:top-3 md:left-3 flex gap-1 md:gap-2 z-10">
-                                            <div className="bg-purple-600 text-white px-1.5 py-0.5 font-brutal text-[8px] md:text-[10px] uppercase animate-pulse">REC ●</div>
-                                            <div className="bg-black/80 text-white px-1.5 py-0.5 font-brutal text-[8px] md:text-[10px] border border-white/20 uppercase">4K_RAW</div>
+                                        <div
+                                            className="absolute top-2 left-2 md:top-3 md:left-3 flex gap-1 md:gap-2 z-10">
+                                            <div
+                                                className="bg-purple-600 text-white px-1.5 py-0.5 font-brutal text-[8px] md:text-[10px] uppercase animate-pulse">REC
+                                                ●
+                                            </div>
+                                            <div
+                                                className="bg-black/80 text-white px-1.5 py-0.5 font-brutal text-[8px] md:text-[10px] border border-white/20 uppercase">4K_RAW
+                                            </div>
                                         </div>
 
-                                        <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 bg-gradient-to-t from-black to-transparent flex justify-between items-end">
+                                        <div
+                                            className="absolute bottom-0 left-0 w-full p-3 md:p-4 bg-gradient-to-t from-black to-transparent flex justify-between items-end">
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] md:text-base font-black font-brutal text-white uppercase tracking-tight">{video.title}</span>
-                                                <span className="text-[7px] md:text-[10px] font-bold text-purple-500 uppercase">{video.tag}_MASTER_PROJECT</span>
+                                                <span
+                                                    className="text-[10px] md:text-base font-black font-brutal text-white uppercase tracking-tight">{video.title}</span>
+                                                <span
+                                                    className="text-[7px] md:text-[10px] font-bold text-purple-500 uppercase">{video.tag}_MASTER_PROJECT</span>
                                             </div>
-                                            <span className="text-[8px] md:text-xs font-black font-brutal text-white/70">{video.duration}</span>
+                                            <span
+                                                className="text-[8px] md:text-xs font-black font-brutal text-white/70">{video.duration}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -159,38 +178,43 @@ const Team: React.FC = () => {
                     </div>
 
                     {/* Сітка викладачів */}
-                    <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6 justify-center">
+                    <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-6 justify-center">
                         {instructors.map((ins, idx) => (
-                            <div key={idx}
-                                 className="brutalist-border p-4 md:p-6 bg-zinc-900 border-zinc-800 flex flex-col md:flex-row gap-5 h-full hover:border-purple-500 transition-all group">
+                            <div
+                                key={idx}
+                                className="brutalist-border p-4 md:p-6 bg-zinc-900 border-zinc-800 flex flex-col gap-4 hover:border-purple-500 transition-all group"
+                            >
+                                {/* TOP: photo left + name/role right */}
+                                <div className="flex gap-5 items-start">
+                                    <div className="
+  w-[140px] h-[140px]
+  min-[480px]:w-[160px] min-[480px]:h-[170px]
+  md:w-[200px] md:h-[220px]
+  shrink-0 brutalist-border border-purple-500 overflow-hidden relative
+">
+                                        <img
+                                            src={`https://picsum.photos/seed/instructor_${idx}_pro/400/400`}
+                                            alt={ins.name}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    </div>
 
-                                {/* Фото викладача (тепер зліва) */}
-                                <div className="w-[180px] h-[180px] md:w-[200px] md:h-[220px] lg:  shrink-0 brutalist-border border-purple-500 overflow-hidden relative">
-                                    <img
-                                        src={`https://picsum.photos/seed/instructor_${idx}_pro/400/400`}
-                                        alt={ins.name}
-                                        /* Прибрано grayscale (чб), тепер кольорове */
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                </div>
-
-                                {/* Інформація (справа) */}
-                                <div className="flex flex-col justify-start">
-                                    <div className="mb-3">
-                                        <h3 className="text-[20px] md:text-[24px] font-black uppercase font-brutal text-white leading-none">
+                                    {/* ВАЖЛИВО: додаємо w-full */}
+                                    <div className="flex flex-col justify-start w-full min-w-0">
+                                        <h3 className="text-[24px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
                                             {ins.name}
                                         </h3>
-                                        <p className="text-purple-500 font-bold uppercase text-[12px] md:text-[14px] mt-1">
+
+                                        <p className="text-purple-500 font-bold uppercase text-[14px] md:text-[14px] mt-1">
                                             {ins.role}
                                         </p>
                                     </div>
-
-                                    <div className="flex-grow">
-                                        <p className="text-zinc-400 font-medium text-[14px] md:text-[16px] leading-tight border-l border-zinc-700 pl-3">
-                                            {ins.desc}
-                                        </p>
-                                    </div>
                                 </div>
+
+                                {/* BOTTOM: description full width */}
+                                <p className="text-zinc-400 font-medium text-[14px] md:text-[16px] leading-tight pt-4">
+                                    {ins.desc}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -198,7 +222,8 @@ const Team: React.FC = () => {
 
                 {/* Фінальний банер */}
                 <div className="mt-12 md:mt-20 text-center px-4">
-                    <div className="inline-block bg-white text-black p-4 md:p-6 font-black text-sm md:text-2xl uppercase brutalist-border border-black font-brutal brutalist-shadow-accent">
+                    <div
+                        className="inline-block bg-white text-black p-4 md:p-6 font-black text-sm md:text-2xl uppercase brutalist-border border-black font-brutal brutalist-shadow-accent">
                         Ми формуємо новий стандарт AI-креаторів.
                     </div>
                 </div>

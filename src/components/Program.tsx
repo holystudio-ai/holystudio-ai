@@ -19,14 +19,29 @@ const Program: React.FC = () => {
             ПРОГРАМА КУРСУ
           </h2>
 
-          {/* Адаптивна сітка: 1 колонка на мобільних, 2 на планшетах, 4 на десктопі */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pr-2">
+          {/* Сітка програми */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pr-2">
             {steps.map((step, idx) => (
-                <div key={idx} className={`flex flex-col gap-2 p-4 md:p-3 brutalist-border border-black ${step.accent ? 'bg-purple-600 text-white' : 'bg-white'} brutalist-shadow transition-transform hover:-translate-y-1 mb-2`}>
-                  <div className="text-2xl md:text-lg font-black font-brutal opacity-40">{step.num}</div>
+                <div
+                    key={idx}
+                    className={`flex flex-col gap-2 p-3 md:p-4 brutalist-border border-black ${
+                        step.accent ? 'bg-purple-600 text-white' : 'bg-white'
+                    } brutalist-shadow transition-transform hover:-translate-y-1`}
+                >
+                  {/* Номер */}
+                  <div className="text-lg md:text-2xl font-black font-brutal opacity-40">
+                    {step.num}
+                  </div>
+
+                  {/* Контент */}
                   <div>
-                    <h3 className="text-lg md:text-sm font-black uppercase mb-1 font-brutal leading-tight">{step.title}</h3>
-                    <p className="text-sm md:text-xs font-bold leading-tight opacity-80">{step.details}</p>
+                    <h3 className="text-sm md:text-lg font-black uppercase mb-1 font-brutal leading-tight">
+                      {step.title}
+                    </h3>
+
+                    <p className="text-xs md:text-sm font-bold leading-tight opacity-80">
+                      {step.details}
+                    </p>
                   </div>
                 </div>
             ))}

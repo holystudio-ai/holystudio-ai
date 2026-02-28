@@ -43,11 +43,10 @@ const App: React.FC = () => {
                             className="bg-black text-white py-8 px-6 border-2 border-white">
                             <div className="flex flex-col gap-6">
                                 <h2 className="text-2xl md:text-4xl font-black font-brutal leading-none uppercase tracking-tighter">
-                                    РАННІ ПТАШКИ РОСУ П’ЮТЬ, А ПІЗНІ - СЛЬОЗИ ЛЛЮТЬ*
+                                    Першому диня, а останньому лушпиння*
                                 </h2>
                                 <p className="text-xs md:text-sm font-bold border-l-4 border-purple-500 pl-4 font-brutal opacity-80 uppercase max-w-2xl">
-                                    *народна приказка підкреслює, що найкращі результати дістаються тим, хто не
-                                    зволікає.
+                                    *популярний вираз про важливість швидкості: хто встиг першим, той забрав найкраще.
                                 </p>
                             </div>
                         </div>
