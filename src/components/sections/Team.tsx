@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
-import logo from '../assets/logo/logo.png';
-import bgVideo from '../assets/videos/bg.mp4';
+import logoYellow from '../../assets/logo/logo=yellow.png';
+import bgVideo from '../../assets/videos/bg.mp4';
 
 const Team: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ const Team: React.FC = () => {
 
                             <div className="flex justify-center items-center w-full">
                                 <img
-                                    src={logo}
+                                    src={logoYellow}
                                     alt="HOLYSHOOT"
                                     className="w-[280px] md:w-[400px] h-auto object-contain"
                                 />
@@ -81,10 +81,6 @@ const Team: React.FC = () => {
                     <div
                         className="mt-8 p-4 md:p-10 bg-zinc-900 flex flex-col gap-8 md:gap-10 border-2 border-zinc-800 relative">
                         <div className="max-w-3xl">
-                            <p className="text-[18px] md:text-[24px] font-black font-brutal uppercase text-white leading-tight">
-                                Рекламний відео продакшн <span
-                                className="text-purple-500 text-shadow-sm">HOLYSHOOT</span>
-                            </p>
                             <p className="text-zinc-400 text-[14px] md:text-[16px] font-bold mt-3 leading-snug">
                                 Ми рекламний відео продакшн з досвідом реальної роботи в індустрії. Практикуюча команда,
                                 яка інтегрує АІ в реальні комерційні проекти.
@@ -201,11 +197,11 @@ const Team: React.FC = () => {
 
                                     {/* ВАЖЛИВО: додаємо w-full */}
                                     <div className="flex flex-col justify-start w-full min-w-0">
-                                        <h3 className="text-[24px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
+                                        <h3 className="text-[25px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
                                             {ins.name}
                                         </h3>
 
-                                        <p className="text-purple-500 font-bold uppercase text-[14px] md:text-[14px] mt-1">
+                                        <p className="text-purple-500 font-bold uppercase text-[16px] md:text-[14px] mt-1">
                                             {ins.role}
                                         </p>
                                     </div>

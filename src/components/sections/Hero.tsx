@@ -1,12 +1,12 @@
 import React from 'react';
-import Pricing from "@/src/components/Pricing.tsx";
-import heroImage from "../assets/images/hero-image.jpeg";
+import Pricing from "@/src/components/sections/Pricing.tsx";
+import heroImage from "../../assets/images/hero-image.jpeg";
 
 const Hero: React.FC = () => {
     const mainTitle = "НАВЧИСЬ СТВОРЮВАТИ АІ КРЕАТИВИ КІНОШНОЇ ЯКОСТІ З НУЛЯ ЗА 5 ДНІВ.";
 
     return (
-        <section className="pt-32 pb-5 px-4 overflow-hidden">
+        <section className="pt-32 pb-5 px-4 overflow-x-hidden overflow-y-visible">
             <div className="max-w-7xl mx-auto">
                 <div className="flex w-full">
                     <div
@@ -21,14 +21,21 @@ const Hero: React.FC = () => {
                         backgroundPosition: 'top center',
                         backgroundRepeat: 'no-repeat'
                     }}
-                    className="min-h-[100dvh] flex flex-col justify-end p-4 md:p-8 w-full border-black brutalist-border"
+                    className="min-h-[100dvh] flex flex-col justify-end p-1 md:p-8 w-full border-black brutalist-border"
                 >
-                    <div className="relative group max-w-full">
+                    <div className="relative group max-w-full overflow-hidden">
                         <h1
-                            className="text-[11vw] sm:text-5xl md:text-7xl lg:text-[100px] font-black font-brutal leading-[0.9] md:leading-[0.95] mb-4 md:mb-8 tracking-tighter glitch select-none text-white break-words"
+                            className="
+      text-[clamp(30px,9.5vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
+      font-black font-brutal leading-[0.9] md:leading-[0.95]
+      mb-4 md:mb-8 tracking-tighter select-none text-white
+      glitch
+      max-w-full overflow-hidden
+      break-normal [overflow-wrap:anywhere] [word-break:normal]
+    "
                             data-text={mainTitle}
                         >
-                            {mainTitle.split('АІ КРЕАТИВИ').map((part, index) => (
+                            {mainTitle.split("АІ КРЕАТИВИ").map((part, index) => (
                                 <React.Fragment key={index}>
                                     {part}
                                     {index === 0 && <span className="text-purple-500">АІ КРЕАТИВИ</span>}

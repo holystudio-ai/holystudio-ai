@@ -1,65 +1,25 @@
 import React from 'react';
 import Header from '@/src/components/layout/Header.tsx';
-import Hero from '@/src/components/Hero';
-import Audience from '@/src/components/Audience';
-import Team from '@/src/components/Team';
-import Program from '@/src/components/Program';
-import Pricing from '@/src/components/Pricing';
-import FAQ from '@/src/components/FAQ';
-import Guarantee from '@/src/components/Guarantee';
 import Footer from '@/src/components/layout/Footer.tsx';
-import ResultsGallery from '@/src/components/ResultsGallery';
-import SkillsSection from "@/src/components/SkillsSection.tsx";
-import StudentsWorks from "@/src/components/StudentWorks.tsx";
+import {Routes, Route} from "react-router-dom";
+import HomePage from "@/src/pages/Home.tsx";
+import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
+import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
+import TermsOfUse from "@/src/pages/TermsOfUse.tsx";
+import ScrollToTop from "@/src/components/features/ScrollToTop.tsx";
 
 const App: React.FC = () => {
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
             <Header/>
+            <ScrollToTop/>
+            <Routes>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage/>}/>
+                <Route path="/public-offer" element={<PublicOfferPage/>}/>
+                <Route path="/terms" element={<TermsOfUse/>}/>
+            </Routes>
 
-            <main>
-                <Hero/>
-
-                <Audience/>
-
-                <ResultsGallery/>
-
-                <Team/>
-
-                <Program/>
-
-                <Pricing badge={true} text="ЩОБ СТАТИ РАННЬОЮ ПТАШКОЮ І НЕ ЛИТИ СЛЬОЗИ ПІЗНІШЕ" title={"спеціальна пропозиція"}/>
-
-                <SkillsSection/>
-
-                <Guarantee/>
-
-                <StudentsWorks/>
-
-
-                <section className="pt-12 pb-16 px-4 bg-black border-t-2 border-purple-600">
-                    <div className="max-w-4xl mx-auto space-y-12">
-                        <div
-                            className="bg-black text-white py-8 px-6 border-2 border-white">
-                            <div className="flex flex-col gap-6">
-                                <h2 className="text-2xl md:text-4xl font-black font-brutal leading-none uppercase tracking-tighter">
-                                    Першому диня, а останньому лушпиння*
-                                </h2>
-                                <p className="text-xs md:text-sm font-bold border-l-4 border-purple-500 pl-4 font-brutal opacity-80 uppercase max-w-2xl">
-                                    *популярний вираз про важливість швидкості: хто встиг першим, той забрав найкраще.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="max-w-2xl mx-auto">
-                            <Pricing badge={true} title={"спеціальна пропозиція"} text={"770 грн щоб забрати свою диню, а тим хто вагається лишимо тільки лушпиння"} id="bottom-pricing" isEmbedded={true}/>
-                        </div>
-                    </div>
-                </section>
-
-                <FAQ/>
-
-            </main>
             <Footer/>
         </div>
     );

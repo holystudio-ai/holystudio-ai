@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo/logo.png";
+import {Link} from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,13 +16,13 @@ const Header: React.FC = () => {
       <header className="fixed top-0 left-0 w-full z-50 bg-black border-b-2 border-white">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 md:h-20 flex items-center justify-between gap-2">
           {/* Logo */}
-          <div className="flex items-center shrink-0">
+          <Link to="/" className="flex items-center shrink-0">
             <img
                 src={logo}
                 alt="HOLYSTUDIO LOGO"
                 className="h-8 md:h-12 w-auto max-w-[140px] sm:max-w-none transition-all"
             />
-          </div>
+          </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">

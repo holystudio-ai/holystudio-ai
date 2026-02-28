@@ -1,5 +1,5 @@
 import React from 'react';
-import LoadingBar from "@/src/components/LoadingBar.tsx";
+import LoadingBar from "@/src/components/sections/LoadingBar.tsx";
 
 const title = "DON'T SCROLL THE FUTURE - CREATE IT"
 
