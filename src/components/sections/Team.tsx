@@ -164,7 +164,7 @@ const Team: React.FC = () => {
                 </div>
 
                 {/* --- Сітка викладачів --- */}
-                <div className=" w-full mx-auto py-10">
+                <div className=" w-full mx-auto pt-10">
                     {/* Головний заголовок секції */}
                     <div className="mb-10 text-center md:text-left">
                         <h2 className="text-[24px] md:text-[32px] font-black font-brutal uppercase text-white leading-none">
