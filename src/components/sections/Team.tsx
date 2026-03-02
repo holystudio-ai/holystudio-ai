@@ -197,7 +197,7 @@ const Team: React.FC = () => {
 
                                     {/* ВАЖЛИВО: додаємо w-full */}
                                     <div className="flex flex-col justify-start w-full min-w-0">
-                                        <h3 className="text-[30px] max-[365px]:text-[22px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
+                                        <h3 className="text-[35px] max-[365px]:text-[22px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
                                             {ins.name}
                                         </h3>
 
