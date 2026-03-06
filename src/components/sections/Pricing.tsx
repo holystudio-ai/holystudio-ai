@@ -1,4 +1,8 @@
 import React from 'react';
+import { formatPriceUah, coursePriceUah } from '@/src/lib/pricing.ts';
+import { redirectToZeneduPayment } from '@/src/lib/zenedu.ts';
+
+const DISPLAY_PRICE = formatPriceUah(coursePriceUah);
 
 interface PricingProps {
     title?: string;
@@ -20,7 +24,6 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
                 </div>
             )}
 
-
             <h2 className="text-lg md:text-xl font-black mb-4 mt-4 font-brutal leading-none uppercase text-white tracking-tighter">
                 {title}
             </h2>
@@ -33,7 +36,7 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
                 </div>
                 <div className="flex flex-col items-center">
                     <span
-                        className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">770</span>
+                        className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">{DISPLAY_PRICE}</span>
                     <span className="text-sm md:text-lg text-white font-black font-brutal leading-none">ГРН</span>
                 </div>
             </div>
@@ -43,7 +46,8 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
             </p>
 
             <button
-                onClick={() => window.open('https://t.me/your_bot_link', '_blank')}
+                type="button"
+                onClick={redirectToZeneduPayment}
                 className="w-full bg-white text-black text-sm md:text-base font-black py-2.5 uppercase brutalist-border border-black brutalist-shadow-hover transition-all font-brutal"
             >
                 ОТРИМАТИ ДОСТУП

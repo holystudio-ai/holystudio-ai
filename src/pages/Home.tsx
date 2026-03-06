@@ -9,6 +9,9 @@ import SkillsSection from "@/src/components/sections/SkillsSection.tsx";
 import Guarantee from "@/src/components/sections/Guarantee.tsx";
 import StudentsWorks from "@/src/components/sections/StudentWorks.tsx";
 import FAQ from "@/src/components/sections/FAQ.tsx";
+import { formatPriceUah, coursePriceUah } from '@/src/lib/pricing.ts';
+
+const priceLabel = `${formatPriceUah(coursePriceUah)} грн`;
 
 const HomePage = () => {
     return (
@@ -50,7 +53,7 @@ const HomePage = () => {
 
                         <div className="max-w-2xl mx-auto">
                             <Pricing badge={true} title={"спеціальна пропозиція"}
-                                     text={"770 грн щоб забрати свою диню, а тим хто вагається лишимо тільки лушпиння"}
+                                     text={`${priceLabel} щоб забрати свою диню, а тим хто вагається лишимо тільки лушпиння`}
                                      id="bottom-pricing" isEmbedded={true}/>
                         </div>
                     </div>

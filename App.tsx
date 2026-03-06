@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '@/src/components/layout/Header.tsx';
 import Footer from '@/src/components/layout/Footer.tsx';
 import {Routes, Route} from "react-router-dom";
-import HomePage from "@/src/pages/Home.tsx";
+import HomePage from '@/src/pages/Home.tsx';
 import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
 import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
 import TermsOfUse from "@/src/pages/TermsOfUse.tsx";
