@@ -1,20 +1,41 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# HOLYSTUDIO AI landing
 
-# Run and deploy your AI Studio app
+Лендінг на `Vite + React` з простим checkout-потоком через Zenedu.
 
-This contains everything you need to run your app locally.
+## Що зараз працює
 
-View your app in AI Studio: https://ai.studio/apps/drive/1aCdGJlIMbGSr_G0lwstZwmCVFXS3oEce
+- кнопка `ОТРИМАТИ ДОСТУП` веде напряму на `Zenedu direct payment`
+- оплата, сторінка подяки, email із доступом і унікальне бот-посилання обробляються самим `Zenedu`
+- ціна `770 грн`, direct payment link, landing link, bot link і сайт `https://holystudio.ai/` зашиті прямо в код
+- локальний фронтенд не залежить від `.env` для checkout-потоку
 
-## Run Locally
+## Потік оплати
 
-**Prerequisites:**  Node.js
+1. користувач натискає кнопку у `src/components/sections/Pricing.tsx`
+2. фронтенд редіректить на Zenedu direct payment link
+3. `Zenedu` показує checkout-сторінку
+4. після оплати `Zenedu` веде на свою thank-you page
+5. `Zenedu` сам відправляє доступ на email і працює з ботом
 
+## Де лежать константи
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- `src/lib/pricing.ts` — ціна `770`
+- `src/lib/zenedu.ts` — сайт, direct payment, landing і bot link
+
+## Локальний запуск
+
+1. `npm install`
+2. `npm run dev`
+
+## Перевірка
+
+- `npm run typecheck`
+- `npm run build`
+
+## Основні файли
+
+- `src/components/sections/Pricing.tsx`
+- `src/lib/pricing.ts`
+- `src/lib/zenedu.ts`
+- `src/pages/Home.tsx`
+- `vite.config.ts`
