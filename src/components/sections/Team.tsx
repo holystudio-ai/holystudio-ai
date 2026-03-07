@@ -11,11 +11,13 @@ import Marian from '../../assets/team/марян.jpg';
 import works1 from "../../assets/videos/works1.mp4";
 import works2 from "../../assets/videos/works2.mp4";
 import works3 from "../../assets/videos/works3.mp4";
+import works4 from "../../assets/videos/works4.mp4";
 
 const Team: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
     const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+    const [videoOrientation, setVideoOrientation] = useState<Record<string, 'landscape' | 'portrait'>>({});
 
     const instructors = [
         {
@@ -41,7 +43,8 @@ const Team: React.FC = () => {
     const videoWorks = [
         { id: '01', title: 'AMIC ENERGY', duration: '0:15', tag: 'РЕКЛАМНИЙ РОЛИК', src: works1 },
         { id: '02', title: 'AFFX ACADEMY', duration: '0:12', tag: 'РЕКЛАМНА КАМПАНІЯ', src: works2 },
-        { id: '03', title: 'VERAFIED ', duration: '0:30', tag: 'FASHION VIDEO', src: works3 },
+        { id: '03', title: 'VERAFIED', duration: '0:30', tag: 'FASHION VIDEO', src: works3 },
+        { id: '04', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4 },
     ];
 
     const scroll = (direction: 'left' | 'right') => {
@@ -57,7 +60,6 @@ const Team: React.FC = () => {
     const stopAllVideosExcept = (id: string) => {
         for (const videoId in videoRefs.current) {
             const videoEl = videoRefs.current[videoId];
-
             if (!videoEl) continue;
 
             if (videoId !== id) {
@@ -65,6 +67,25 @@ const Team: React.FC = () => {
                 videoEl.currentTime = 0;
                 videoEl.muted = true;
             }
+        }
+    };
+
+    const openFullscreen = async (videoEl: HTMLVideoElement) => {
+        try {
+            if (videoEl.requestFullscreen) {
+                await videoEl.requestFullscreen();
+                return;
+            }
+
+            const safariVideo = videoEl as HTMLVideoElement & {
+                webkitEnterFullscreen?: () => void;
+            };
+
+            if (safariVideo.webkitEnterFullscreen) {
+                safariVideo.webkitEnterFullscreen();
+            }
+        } catch (error) {
+            console.error('Fullscreen failed:', error);
         }
     };
 
@@ -106,6 +127,18 @@ const Team: React.FC = () => {
         if (activeVideoId === id) {
             setActiveVideoId(null);
         }
+    };
+
+    const handleLoadedMetadata = (id: string) => {
+        const currentVideo = videoRefs.current[id];
+        if (!currentVideo) return;
+
+        const isPortrait = currentVideo.videoHeight > currentVideo.videoWidth;
+
+        setVideoOrientation((prev) => ({
+            ...prev,
+            [id]: isPortrait ? 'portrait' : 'landscape',
+        }));
     };
 
     return (
@@ -179,12 +212,11 @@ const Team: React.FC = () => {
                                                 ref={(el) => {
                                                     videoRefs.current[video.id] = el;
                                                 }}
-                                                className="absolute inset-0 w-full h-full object-cover"
-                                                src={video.src}
+                                                className="work-video absolute inset-0 w-full h-full bg-black object-cover object-center"                                                src={video.src}
                                                 playsInline
                                                 preload="metadata"
                                                 muted
-                                                controls={false}
+                                                controls={isActive}
                                                 controlsList="nodownload noplaybackrate noremoteplayback"
                                                 disablePictureInPicture
                                                 onEnded={() => handleEnded(video.id)}
@@ -225,26 +257,46 @@ const Team: React.FC = () => {
 
                                                     <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 bg-gradient-to-t from-black via-black/80 to-transparent flex justify-between items-end z-20 pointer-events-none">
                                                         <div className="flex flex-col">
-                                                            <span className="text-[14px] md:text-base font-black font-brutal text-white uppercase tracking-tight">
-                                                                {video.title}
-                                                            </span>
+                            <span className="text-[14px] md:text-base font-black font-brutal text-white uppercase tracking-tight">
+                                {video.title}
+                            </span>
                                                             <span className="text-[12px] md:text-[14px] font-bold text-purple-500 uppercase">
-                                                                {video.tag}
-                                                            </span>
+                                {video.tag}
+                            </span>
                                                         </div>
+
+                                                        <span className="text-[11px] md:text-[13px] font-bold text-white/80 uppercase">
+                            {video.duration}
+                        </span>
                                                     </div>
                                                 </>
                                             )}
 
                                             {isActive && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handlePause(video.id)}
-                                                    className="absolute top-3 right-3 z-30 bg-black/70 text-white border border-white/20 px-3 py-1 text-[10px] md:text-xs font-black uppercase hover:bg-white hover:text-black transition-all"
-                                                    aria-label={`Stop ${video.title}`}
-                                                >
-                                                    Stop
-                                                </button>
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const currentVideo = videoRefs.current[video.id];
+                                                            if (currentVideo) {
+                                                                openFullscreen(currentVideo);
+                                                            }
+                                                        }}
+                                                        className="absolute top-3 left-3 z-30 bg-black/70 text-white border border-white/20 px-3 py-1 text-[10px] md:text-xs font-black uppercase hover:bg-purple-500 hover:text-white transition-all"
+                                                        aria-label={`Fullscreen ${video.title}`}
+                                                    >
+                                                        Full
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handlePause(video.id)}
+                                                        className="absolute top-3 right-3 z-30 bg-black/70 text-white border border-white/20 px-3 py-1 text-[10px] md:text-xs font-black uppercase hover:bg-white hover:text-black transition-all"
+                                                        aria-label={`Stop ${video.title}`}
+                                                    >
+                                                        Stop
+                                                    </button>
+                                                </>
                                             )}
                                         </div>
                                     );
@@ -257,6 +309,7 @@ const Team: React.FC = () => {
                             >
                                 ←
                             </button>
+
                             <button
                                 onClick={() => scroll('right')}
                                 className="absolute -right-5 top-1/2 -translate-y-1/2 bg-white text-black w-10 h-10 brutalist-border border-black font-black hidden md:flex items-center justify-center hover:bg-purple-500 hover:text-white transition-all z-30"
@@ -267,26 +320,28 @@ const Team: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="w-full mx-auto pt-10">
-                    <div className="mb-10 text-center md:text-left">
-                        <h2 className="text-[24px] md:text-[32px] font-black font-brutal uppercase text-white leading-none">
+                <div className="w-full pt-10 flex flex-col items-center">
+                    <div className="mb-10 text-center">
+                        <h2 className="text-[24px] md:text-[32px] font-black font-brutal uppercase text-white leading-none text-center">
                             Автори і викладачі курсу
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-6 justify-center">
+                    <div className="w-full max-w-[1320px] flex flex-wrap justify-center gap-6">
                         {instructors.map((ins, idx) => (
                             <div
                                 key={idx}
-                                className="brutalist-border p-4 md:p-6 bg-zinc-900 border-zinc-800 flex flex-col gap-4 hover:border-purple-500 transition-all group"
+                                className="w-full md:w-[620px] brutalist-border p-4 md:p-6 bg-zinc-900 border-zinc-800 flex flex-col gap-4 hover:border-purple-500 transition-all group"
                             >
                                 <div className="flex gap-5 items-start">
-                                    <div className="
-                                        w-[140px] h-[140px]
-                                        min-[480px]:w-[160px] min-[480px]:h-[170px]
-                                        md:w-[200px] md:h-[220px]
-                                        shrink-0 brutalist-border border-purple-500 overflow-hidden relative
-                                    ">
+                                    <div
+                                        className="
+                            w-[140px] h-[140px]
+                            min-[480px]:w-[160px] min-[480px]:h-[170px]
+                            md:w-[200px] md:h-[220px]
+                            shrink-0 brutalist-border border-purple-500 overflow-hidden relative
+                        "
+                                    >
                                         <img
                                             src={ins.image}
                                             alt={ins.name}
@@ -295,7 +350,7 @@ const Team: React.FC = () => {
                                     </div>
 
                                     <div className="flex flex-col justify-start w-full min-w-0">
-                                        <h3 className="text-[35px] max-[365px]:text-[22px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
+                                        <h3 className="text-[28px] max-[365px]:text-[22px] md:text-[24px] font-black uppercase font-brutal text-white leading-tight">
                                             {ins.name}
                                         </h3>
 
@@ -323,16 +378,44 @@ const Team: React.FC = () => {
             <style>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-                @keyframes scan-y {
-                    0% { transform: translateY(0); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { transform: translateY(200px); opacity: 0; }
-                }
+    @keyframes scan-y {
+        0% { transform: translateY(0); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(200px); opacity: 0; }
+    }
 
-                .animate-scan-y {
-                    animation: scan-y 3.5s linear infinite;
-                }
+    .animate-scan-y {
+        animation: scan-y 3.5s linear infinite;
+    }
+
+    /* У маленькому плеєрі відео заповнює горизонтальну картку */
+    .work-video {
+        object-fit: cover;
+        object-position: center;
+        background: black;
+    }
+
+    /* У fullscreen відео показується у рідній орієнтації без кропу */
+    .work-video:fullscreen {
+        object-fit: contain !important;
+        object-position: center !important;
+        background: black !important;
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+
+    .work-video:-webkit-full-screen {
+        object-fit: contain !important;
+        object-position: center !important;
+        background: black !important;
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+
+    .work-video::-webkit-media-controls {
+        z-index: 2147483647;
+    }
             `}</style>
         </section>
     );

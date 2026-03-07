@@ -15,12 +15,10 @@ const blocks = [
             "Ми покажемо як отримувати якість з перших генерацій, не витрачаючи купу місяців на вивчення технічки... або повернемо кошти!",
     },
     {
-        num: "01",
         title: "САМ СОБІ РЕЖИСЕР",
         details: "AI вже стало реальністю: нейромережі замінюють цілі знімальні групи, дозволяючи одній людині, створювати кінематографічні ролики без космічних бюджетів і великих команд",
     },
     {
-        num: "02",
         title: "НЕ ПРОСПИ...",
         details: "можливість опанувати генеративний AI зараз, щоб перетворити свої ідеї на професійний контент і зірвати куш $$$ нової цифрової ери, поки інші зволікають.",
     },
@@ -38,8 +36,7 @@ const Hero: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="relative min-h-[100dvh] flex flex-col justify-end p-1 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
-                    {/* HERO IMAGE */}
+                <div className="relative min-h-[78svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pb-12 pt-6 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
                     <img
                         src={heroImage}
                         alt=""
@@ -50,21 +47,19 @@ const Hero: React.FC = () => {
                         className="absolute inset-0 w-full h-full object-cover object-top"
                     />
 
-                    {/* OVERLAYS */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1]" />
                     <div className="absolute inset-0 bg-black/10 z-[1]" />
 
-                    {/* CONTENT */}
-                    <div className="relative z-10 group max-w-full overflow-hidden">
+                    <div className="relative z-10 group max-w-full overflow-hidden mt-2 md:mt-0">
                         <h1
                             className="
-                                text-[clamp(30px,9.5vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
-                                font-black font-brutal leading-[0.9] md:leading-[0.95]
-                                mb-4 md:mb-8 tracking-tighter select-none text-white
-                                glitch
-                                max-w-full overflow-hidden
-                                break-normal [overflow-wrap:anywhere] [word-break:normal]
-                            "
+                text-[clamp(35px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
+                font-black font-brutal leading-[0.92] md:leading-[0.95]
+                mb-4 md:mb-8 tracking-tighter select-none text-white
+                glitch
+                max-w-full overflow-hidden
+                break-words
+            "
                             data-text={mainTitle}
                         >
                             {mainTitle.split("АІ КРЕАТИВИ").map((part, index) => (
@@ -116,10 +111,6 @@ const Hero: React.FC = () => {
                                         key={i}
                                         className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
                                     >
-                                        <div className="text-[26px] sm:text-[32px] md:text-[52px] font-black opacity-40 leading-none mb-1">
-                                            {block.num}
-                                        </div>
-
                                         <h4 className="text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none mb-1">
                                             {block.title}
                                         </h4>

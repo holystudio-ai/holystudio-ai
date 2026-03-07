@@ -36,9 +36,9 @@ const Pricing: React.FC<PricingProps> = ({
 
             <div className="flex justify-center items-center gap-4 mb-4">
                 <div className="flex flex-col items-center">
-                    <span className="text-3xl md:text-5xl line-through decoration-black decoration-4 text-white/70 font-black font-brutal tracking-tighter">
-  4000
-</span>
+                    <span
+                        className="text-3xl md:text-5xl line-through text-white/70 font-black font-brutal tracking-tighter">4000
+                    </span>
                     <span className="text-sm md:text-lg text-white/70 font-black font-brutal">ГРН</span>
                 </div>
                 <div className="flex flex-col items-center">
