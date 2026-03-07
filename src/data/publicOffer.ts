@@ -1,4 +1,4 @@
-import { PolicyData } from "@/src/data/types.ts";
+import {PolicyData} from "@/src/data/types.ts";
 
 export const publicOffer: PolicyData = {
     title: "Публічна оферта",

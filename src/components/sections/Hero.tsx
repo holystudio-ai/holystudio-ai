@@ -1,6 +1,30 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
-import heroImage from "../../assets/images/hero-image.jpeg";
+import heroImage from "../../assets/images/hero-image.jpg";
+
+const blocks = [
+    {
+        type: "hero",
+        title:
+            "ОТРИМАЙ НАВИЧКИ ЗІ СТВОРЕННЯ ФОТО І ВІДЕО ТОПОВОЇ ЯКОСТІ, НАВІТЬ ЯКЩО ТИ ПОВНИЙ НУЛЬ ПО НАШІЙ УНІКАЛЬНИЙ ПРОМПТ-СТРУКТУРІ.",
+    },
+    {
+        type: "result",
+        title: "РЕЗУЛЬТАТ ГАРАНТОВАНИЙ",
+        details:
+            "Ми покажемо як отримувати якість з перших генерацій, не витрачаючи купу місяців на вивчення технічки... або повернемо кошти!",
+    },
+    {
+        num: "01",
+        title: "САМ СОБІ РЕЖИСЕР",
+        details: "AI вже стало реальністю: нейромережі замінюють цілі знімальні групи, дозволяючи одній людині, створювати кінематографічні ролики без космічних бюджетів і великих команд",
+    },
+    {
+        num: "02",
+        title: "НЕ ПРОСПИ...",
+        details: "можливість опанувати генеративний AI зараз, щоб перетворити свої ідеї на професійний контент і зірвати куш $$$ нової цифрової ери, поки інші зволікають.",
+    },
+];
 
 const Hero: React.FC = () => {
     const mainTitle = "НАВЧИСЬ СТВОРЮВАТИ АІ КРЕАТИВИ КІНОШНОЇ ЯКОСТІ З НУЛЯ ЗА 5 ДНІВ.";
@@ -45,35 +69,63 @@ const Hero: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex-box gap-10 items-start mt-12">
-                    <div>
-                        <p className="text-l md:text-2xl leading-tight">
-                            Отримай навички зі створення <span className="font-bold">фото і відео топової якості</span>,
-                            навіть якщо ти повний нуль по нашій <span
-                            className="font-bold">унікальний промпт-структурі.</span> Ми покажемо як отримувати якість з
-                            перших генерацій, не витрачаючи купу місяців на вивчення технічки…. <span
-                            className="font-bold">або повернемо кошти!</span>
-                        </p>
-                        <p className="text-l md:text-2xl font-bold leading-tight mb-6">
-                            Ми покажемо як отримувати якість з перших генерацій... або повернемо кошти!
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-l md:text-2xl leading-tight">
-                            Поки всі говорили про майбутнє генеративного AI, воно вже стало реальністю: нейромережі
-                            замінюють цілі знімальні групи, дозволяючи <span className="font-bold">одній людині</span>,
-                            творювати кінематографічні ролики <span
-                            className="font-bold">без космічних бюджетів і великих команд</span> Не проспи можливість
-                            опанувати генеративний AI зараз, щоб перетворити свої ідеї на професійний контент і <span
-                            className="font-bold">зірвати куш $$$</span> нової цифрової ери, <span
-                            className="font-bold">поки інші зволікають.</span>
-                        </p>
-                        <p className="text-l md:text-2xl font-bold leading-tight mb-6">
-                            Ми покажемо як отримувати якість з перших генерацій... або повернемо кошти!
-                        </p>
+                <div className="flex-box gap-10 items-start mt-12 font-brutal">
+                    <div className="flex-box gap-10 items-start mt-12 font-brutal">
+                        <div className="flex flex-col gap-6 mt-12">
+                            {blocks.map((block, i) => {
+                                if (block.type === "hero") {
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="border-2 border-dashed border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
+                                        >
+                                            <h3 className="text-[18px] sm:text-[22px] md:text-[34px] font-black uppercase leading-[1.05] tracking-tight text-center">
+                                                {block.title}
+                                            </h3>
+                                        </div>
+                                    );
+                                }
+
+                                if (block.type === "result") {
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
+                                        >
+                                            <h4 className="mb-2 text-[20px] sm:text-[24px] md:text-[34px] font-black uppercase leading-none">
+                                                {block.title}
+                                            </h4>
+
+                                            <p className="text-[14px] sm:text-[16px] md:text-[22px] font-bold leading-tight uppercase">
+                                                {block.details}
+                                            </p>
+                                        </div>
+                                    );
+                                }
+
+                                return (
+                                    <div
+                                        key={i}
+                                        className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
+                                    >
+                                        <div className="text-[26px] sm:text-[32px] md:text-[52px] font-black opacity-40 leading-none mb-1">
+                                            {block.num}
+                                        </div>
+
+                                        <h4 className="text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none mb-1">
+                                            {block.title}
+                                        </h4>
+
+                                        <p className="text-[13px] sm:text-[14px] md:text-[22px] font-bold leading-tight opacity-90">
+                                            {block.details}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    <Pricing text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"}/>
+                    <Pricing badge showBonus text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"}/>
                 </div>
             </div>
         </section>

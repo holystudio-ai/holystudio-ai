@@ -67,7 +67,7 @@ const Program: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"></path>
                   </svg>
                 </div>
-                <p className="text-sm md:text-xs font-bold leading-tight">
+                <p className="text-sm md:text-xs font-bold leading-tight" id="pricing">
                   20 шаблонів промптів для створення ультра-реалістичного контенту
                 </p>
               </div>

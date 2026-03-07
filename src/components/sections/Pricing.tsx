@@ -10,12 +10,18 @@ interface PricingProps {
     badge?: boolean;
     id?: string;
     isEmbedded?: boolean;
+    showBonus?: boolean;
 }
 
-const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, title, text, badge=false}) => {
-    const content = (
+const Pricing: React.FC<PricingProps> = ({
+                                             isEmbedded = false,
+                                             title,
+                                             text,
+                                             badge = false,
+                                             showBonus = false
+                                         }) => {    const content = (
         <div
-            className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden max-w-md mx-auto">
+            className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden w-full md:max-w-md mx-auto">
 
             {badge && (
                 <div
@@ -30,9 +36,10 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
 
             <div className="flex justify-center items-center gap-4 mb-4">
                 <div className="flex flex-col items-center">
-                    <span
-                        className="text-base md:text-xl line-through text-white/70 font-black font-brutal tracking-tighter">4000</span>
-                    <span className="text-[8px] md:text-[10px] text-white/70 font-black font-brutal">ГРН</span>
+                    <span className="text-3xl md:text-5xl line-through decoration-black decoration-4 text-white/70 font-black font-brutal tracking-tighter">
+  4000
+</span>
+                    <span className="text-sm md:text-lg text-white/70 font-black font-brutal">ГРН</span>
                 </div>
                 <div className="flex flex-col items-center">
                     <span
@@ -40,6 +47,18 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
                     <span className="text-sm md:text-lg text-white font-black font-brutal leading-none">ГРН</span>
                 </div>
             </div>
+
+            {showBonus && (
+                <div className="bg-black text-white px-4 py-4 mb-5 flex items-center gap-4 mx-auto max-w-[640px] font-sans">
+                    <div className="bg-white text-black w-8 h-8 md:w-12 md:h-12 shrink-0 flex items-center justify-center">
+                        <span className="text-[24px] md:text-[28px] font-bold leading-none">+</span>
+                    </div>
+
+                    <p className="text-[12px] md:text-[15px] normal-case font-semibold text-left leading-tight">
+                        20 шаблонів промптів для створення ультра-реалістичного контенту
+                    </p>
+                </div>
+            )}
 
             <p className="text-xs md:text-sm font-black mb-6 text-white uppercase leading-tight max-w-xs mx-auto font-brutal">
                 {text || "ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"}
@@ -55,11 +74,11 @@ const Pricing: React.FC<PricingProps> = ({id = "pricing", isEmbedded = false, ti
         </div>
     );
 
-    if (isEmbedded) return <div id={id} className="px-1">{content}</div>;
+    if (isEmbedded) return <div className="px-1">{content}</div>;
 
     return (
-        <section id={id} className="pt-4 pb-12 px-6">
-            <div className="max-w-md mx-auto">
+        <section className="pt-4 pb-4">
+            <div className="w-full md:max-w-md mx-auto">
                 {content}
             </div>
         </section>
