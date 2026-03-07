@@ -33,30 +33,38 @@ const Hero: React.FC = () => {
         <section className="pt-32 pb-5 px-4 overflow-x-hidden overflow-y-visible">
             <div className="max-w-7xl mx-auto">
                 <div className="flex w-full">
-                    <div
-                        className="ml-auto inline-block bg-white text-black px-4 py-1 font-black text-sm md:text-lg uppercase mb-6 brutalist-border border-black font-brutal">
+                    <div className="ml-auto inline-block bg-white text-black px-4 py-1 font-black text-sm md:text-lg uppercase mb-6 brutalist-border border-black font-brutal">
                         ІНТЕНСИВ ВІД РЕКЛАМНОГО ВІДЕОПРОДАКШЕНУ
                     </div>
                 </div>
-                <div
-                    style={{
-                        backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%), url(${heroImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'top center',
-                        backgroundRepeat: 'no-repeat'
-                    }}
-                    className="min-h-[100dvh] flex flex-col justify-end p-1 md:p-8 w-full border-black brutalist-border"
-                >
-                    <div className="relative group max-w-full overflow-hidden">
+
+                <div className="relative min-h-[100dvh] flex flex-col justify-end p-1 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
+                    {/* HERO IMAGE */}
+                    <img
+                        src={heroImage}
+                        alt=""
+                        aria-hidden="true"
+                        fetchPriority="high"
+                        loading="eager"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-top"
+                    />
+
+                    {/* OVERLAYS */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1]" />
+                    <div className="absolute inset-0 bg-black/10 z-[1]" />
+
+                    {/* CONTENT */}
+                    <div className="relative z-10 group max-w-full overflow-hidden">
                         <h1
                             className="
-      text-[clamp(30px,9.5vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
-      font-black font-brutal leading-[0.9] md:leading-[0.95]
-      mb-4 md:mb-8 tracking-tighter select-none text-white
-      glitch
-      max-w-full overflow-hidden
-      break-normal [overflow-wrap:anywhere] [word-break:normal]
-    "
+                                text-[clamp(30px,9.5vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
+                                font-black font-brutal leading-[0.9] md:leading-[0.95]
+                                mb-4 md:mb-8 tracking-tighter select-none text-white
+                                glitch
+                                max-w-full overflow-hidden
+                                break-normal [overflow-wrap:anywhere] [word-break:normal]
+                            "
                             data-text={mainTitle}
                         >
                             {mainTitle.split("АІ КРЕАТИВИ").map((part, index) => (
@@ -125,7 +133,7 @@ const Hero: React.FC = () => {
                         </div>
                     </div>
 
-                    <Pricing badge showBonus text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"}/>
+                    <Pricing badge showBonus text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />
                 </div>
             </div>
         </section>
