@@ -10,12 +10,20 @@ import Guarantee from "@/src/components/sections/Guarantee.tsx";
 import StudentsWorks from "@/src/components/sections/StudentWorks.tsx";
 import FAQ from "@/src/components/sections/FAQ.tsx";
 import { formatPriceUah, coursePriceUah } from '@/src/lib/pricing.ts';
+import Seo from "@/src/components/features/Seo.tsx";
+import { buildCourseSchema } from "@/src/lib/seo.ts";
 
 const priceLabel = `${formatPriceUah(coursePriceUah)} грн`;
+const priceValue = String(coursePriceUah);
 
 const HomePage = () => {
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
+            <Seo
+                title="AI Creative Intensive"
+                description="Онлайн-інтенсив від HOLYSTUDIO: навчись створювати AI фото та відео кінематографічної якості з нуля за 5 днів. Програма, кейси, гарантія та спеціальна ціна."
+                structuredData={buildCourseSchema(priceValue)}
+            />
             <main>
                 <Hero/>
 
