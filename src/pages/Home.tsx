@@ -37,7 +37,7 @@ const HomePage = () => {
                 <StudentsWorks/>
 
 
-                <section className="pt-12 pb-16 px-4 bg-black border-t-2 border-purple-600">
+                <section className=" pb-8 px-4 bg-black">
                     <div className="max-w-4xl mx-auto space-y-12">
                         <div
                             className="bg-black text-white py-8 px-6 border-2 border-white">

@@ -150,7 +150,7 @@ const FAQ: React.FC = () => {
     ];
 
     return (
-        <section id="faq" className="py-24 px-4 bg-white text-black">
+        <section id="faq" className="py-12 px-4 bg-white text-black">
             <div className="max-w-4xl mx-auto">
                 <h2 className="text-4xl md:text-7xl font-black font-brutal mb-12 tracking-tighter uppercase leading-none">FAQ</h2>
 

@@ -48,7 +48,7 @@ const Audience: React.FC = () => {
     ];
 
     return (
-        <section id="audience" className="py-8 md:py-16 px-6 bg-black">
+        <section id="audience" className="py-8 px-6 bg-black">
             <div className="max-w-5xl mx-auto">
                 <h2 className="text-4xl md:text-5xl font-black font-brutal mb-6 md:mb-10 tracking-tighter leading-none text-white text-center md:text-left">
                     КОМУ ПІДХОДИТЬ <span className="text-purple-500">КУРС</span>

@@ -12,13 +12,15 @@ import works1 from "../../assets/videos/works1.mp4";
 import works2 from "../../assets/videos/works2.mp4";
 import works3 from "../../assets/videos/works3.mp4";
 import works4 from "../../assets/videos/works4.mp4";
+import workPoster1 from "../../assets/video-posters/work-poster1.png";
+import workPoster2 from "../../assets/video-posters/work-poster2.png";
+import workPoster3 from "../../assets/video-posters/work-poster3.png";
+import workPoster4 from "../../assets/video-posters/works-poster4.png";
 
 const Team: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
     const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
-    const [videoOrientation, setVideoOrientation] = useState<Record<string, 'landscape' | 'portrait'>>({});
-
     const instructors = [
         {
             name: "Катя",
@@ -41,10 +43,10 @@ const Team: React.FC = () => {
     ];
 
     const videoWorks = [
-        { id: '01', title: 'AMIC ENERGY', duration: '0:15', tag: 'РЕКЛАМНИЙ РОЛИК', src: works1 },
-        { id: '02', title: 'AFFX ACADEMY', duration: '0:12', tag: 'РЕКЛАМНА КАМПАНІЯ', src: works2 },
-        { id: '03', title: 'VERAFIED', duration: '0:30', tag: 'FASHION VIDEO', src: works3 },
-        { id: '04', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4 },
+        { id: '01', title: 'AMIC ENERGY', duration: '0:15', tag: 'РЕКЛАМНИЙ РОЛИК', src: works1, poster: workPoster1 },
+        { id: '02', title: 'AFFX ACADEMY', duration: '0:12', tag: 'РЕКЛАМНА КАМПАНІЯ', src: works2, poster: workPoster2 },
+        { id: '03', title: 'VERAFIED', duration: '0:30', tag: 'FASHION VIDEO', src: works3, poster: workPoster3 },
+        { id: '04', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4, poster: workPoster4 },
     ];
 
     const scroll = (direction: 'left' | 'right') => {
@@ -133,12 +135,17 @@ const Team: React.FC = () => {
         const currentVideo = videoRefs.current[id];
         if (!currentVideo) return;
 
-        const isPortrait = currentVideo.videoHeight > currentVideo.videoWidth;
+        currentVideo.muted = true;
 
-        setVideoOrientation((prev) => ({
-            ...prev,
-            [id]: isPortrait ? 'portrait' : 'landscape',
-        }));
+        // Safari often keeps the preview black after reload unless it seeks
+        // to an actual frame instead of relying on metadata-only preload.
+        try {
+            if (currentVideo.currentTime === 0) {
+                currentVideo.currentTime = 0.01;
+            }
+        } catch (error) {
+            console.error('Preview seek failed:', error);
+        }
     };
 
     return (
@@ -212,18 +219,27 @@ const Team: React.FC = () => {
                                                 ref={(el) => {
                                                     videoRefs.current[video.id] = el;
                                                 }}
-                                                className="work-video absolute inset-0 w-full h-full bg-black object-cover object-center"                                                src={video.src}
+                                                className="work-video absolute inset-0 w-full h-full bg-black object-cover object-center"
+                                                src={`${video.src}#t=0.001`}
+                                                poster={video.poster}
                                                 playsInline
-                                                preload="metadata"
+                                                preload="auto"
                                                 muted
                                                 controls={isActive}
                                                 controlsList="nodownload noplaybackrate noremoteplayback"
                                                 disablePictureInPicture
+                                                onLoadedMetadata={() => handleLoadedMetadata(video.id)}
                                                 onEnded={() => handleEnded(video.id)}
                                             />
 
                                             {!isActive && (
                                                 <>
+                                                    <img
+                                                        src={video.poster}
+                                                        alt={`${video.title} poster`}
+                                                        className="absolute inset-0 z-[5] w-full h-full object-cover"
+                                                    />
+
                                                     <div className="absolute inset-0 bg-black/30 z-10" />
 
                                                     <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none z-10" />

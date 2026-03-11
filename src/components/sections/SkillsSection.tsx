@@ -5,7 +5,7 @@ const title = "DON'T SCROLL THE FUTURE - CREATE IT"
 
 const SkillsSection = () => {
     return (
-        <section className="py-20 px-4 bg-zinc-900 border-y-2 border-white overflow-hidden">
+        <section className="py-20 px-4 bg-zinc-900 overflow-hidden">
             <div className="max-w-4xl mx-auto text-center">
 
                 <div className="mb-12 flex flex-col items-center">

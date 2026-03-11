@@ -21,7 +21,7 @@ const StudentsWorks: React.FC = () => {
     };
 
     return (
-        <section className="py-16 md:py-24 px-4 bg-black overflow-hidden">
+        <section className="py-8 md:py-24 px-4 bg-black overflow-hidden">
             <div className="max-w-7xl mx-auto">
 
                 {/* Заголовок */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import studyVideo from "../../assets/videos/study-video.mp4";
 
 import studyPhoto1 from "../../assets/images/study1.jpg";
@@ -28,6 +28,10 @@ const photos = [
 const ResultsGallery: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoPreview = studyPhoto1;
 
   const preloadImage = (src: string) => {
     if (loadedImages[src]) return;
@@ -65,6 +69,41 @@ const ResultsGallery: React.FC = () => {
 
   const visiblePhotos = useMemo(() => photos.slice(index, index + 2), [index]);
 
+  const handlePlayVideo = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      video.currentTime = 0;
+      await video.play();
+      setIsVideoPlaying(true);
+    } catch (error) {
+      console.error("Study video play failed:", error);
+    }
+  };
+
+  const openFullscreen = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      if (video.requestFullscreen) {
+        await video.requestFullscreen();
+        return;
+      }
+
+      const safariVideo = video as HTMLVideoElement & {
+        webkitEnterFullscreen?: () => void;
+      };
+
+      if (safariVideo.webkitEnterFullscreen) {
+        safariVideo.webkitEnterFullscreen();
+      }
+    } catch (error) {
+      console.error("Fullscreen failed:", error);
+    }
+  };
+
   return (
       <section className="py-24 px-4 bg-white text-black">
         <div className="max-w-7xl mx-auto">
@@ -73,16 +112,75 @@ const ResultsGallery: React.FC = () => {
           </h2>
 
           {/* VIDEO */}
-          <div className="w-full aspect-video border-4 border-black bg-black overflow-hidden mb-2">
+          <div className="relative w-full max-w-[360px] md:max-w-[420px] mx-auto aspect-[9/16] border-4 border-black bg-black overflow-hidden mb-2">
+            {!isVideoPlaying && (
+                <div className="absolute inset-0 z-20">
+                  <img
+                      src={videoPreview}
+                      alt="Video preview"
+                      className="w-full h-full object-contain bg-black"
+                  />
+
+                  <div className="absolute inset-0 bg-black/30" />
+
+                  <div className="absolute inset-x-0 top-4 flex justify-center">
+                    <div className="border-2 border-white bg-black/80 px-4 py-2 text-[11px] md:text-sm font-black uppercase text-white font-brutal tracking-tight">
+                      {isVideoReady ? "Натисни щоб подивитися відео" : "Завантажуємо превʼю відео..."}
+                    </div>
+                  </div>
+
+                  <button
+                      type="button"
+                      onClick={handlePlayVideo}
+                      disabled={!isVideoReady}
+                      className={`absolute inset-0 flex items-center justify-center transition ${
+                          isVideoReady ? "cursor-pointer" : "cursor-wait"
+                      }`}
+                      aria-label="Play study video"
+                  >
+                    <div className="flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-full border-4 border-white bg-black/70">
+                      {isVideoReady ? (
+                          <svg
+                              className="ml-1 h-10 w-10 md:h-12 md:w-12 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                      ) : (
+                          <div className="h-8 w-8 rounded-full border-4 border-white/30 border-t-white animate-spin" />
+                      )}
+                    </div>
+                  </button>
+                </div>
+            )}
+
             <video
+                ref={videoRef}
                 src={studyVideo}
-                autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
-                className="w-full h-full object-cover"
+                preload="auto"
+                poster={videoPreview}
+                onLoadedData={() => setIsVideoReady(true)}
+                onCanPlay={() => setIsVideoReady(true)}
+                controls={isVideoPlaying}
+                controlsList="nodownload noplaybackrate noremoteplayback"
+                disablePictureInPicture
+                className="w-full h-full object-contain bg-black"
             />
+
+            {isVideoPlaying && (
+                <button
+                    type="button"
+                    onClick={openFullscreen}
+                    className="absolute top-3 left-3 z-30 bg-black/70 text-white border border-white/20 px-3 py-1 text-[10px] md:text-xs font-black uppercase hover:bg-purple-500 hover:text-white transition-all"
+                    aria-label="Fullscreen study video"
+                >
+                  Full
+                </button>
+            )}
           </div>
 
           {/* PHOTOS */}

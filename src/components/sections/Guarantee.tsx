@@ -2,7 +2,7 @@ import React from 'react';
 
 const Guarantee: React.FC = () => {
     return (
-        <section className="py-12 px-4 bg-zinc-900 text-white border-y-4 border-purple-600">
+        <section className="py-12 px-4 bg-zinc-900 text-white">
             <div className="max-w-4xl mx-auto ">
 
                 <div className="flex flex-col md:flex-row gap-6 items-center mb-8 justify-between">
