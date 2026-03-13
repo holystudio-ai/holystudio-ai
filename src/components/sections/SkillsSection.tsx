@@ -9,7 +9,7 @@ const SkillsSection = () => {
             <div className="max-w-4xl mx-auto text-center">
 
                 <div className="mb-12 flex flex-col items-center">
-                    <h1
+                    <h2
                         className="text-4xl md:text-7xl font-black font-brutal leading-[0.95] mb-8 tracking-tighter glitch select-none"
                         data-text={title}
                     >
@@ -19,7 +19,7 @@ const SkillsSection = () => {
                                 {index === 0 && <span className="text-purple-500">CREATE IT</span>}
                             </React.Fragment>
                         ))}
-                    </h1>
+                    </h2>
                 </div>
 
                 <div className="max-w-2xl mx-auto">

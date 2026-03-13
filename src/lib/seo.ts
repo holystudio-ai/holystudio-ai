@@ -1,3 +1,9 @@
+export const SITE_URL = "https://holystudio.ai";
+export const SITE_NAME = "HOLYSTUDIO";
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+export const DEFAULT_OG_IMAGE_WIDTH = "2000";
+export const DEFAULT_OG_IMAGE_HEIGHT = "2233";
+
 export const buildCourseSchema = (price: string) => ({
     "@context": "https://schema.org",
     "@type": "Course",
@@ -6,10 +12,12 @@ export const buildCourseSchema = (price: string) => ({
         "Інтенсив зі створення AI фото та відео кінематографічної якості з нуля за 5 днів.",
     provider: {
         "@type": "Organization",
-        name: "HOLYSTUDIO",
+        name: SITE_NAME,
+        url: SITE_URL,
     },
     offers: {
         "@type": "Offer",
+        url: SITE_URL,
         price,
         priceCurrency: "UAH",
         availability: "https://schema.org/InStock",

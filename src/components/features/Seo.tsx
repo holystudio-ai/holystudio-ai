@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import {
+    DEFAULT_OG_IMAGE,
+    DEFAULT_OG_IMAGE_HEIGHT,
+    DEFAULT_OG_IMAGE_WIDTH,
+    SITE_NAME,
+    SITE_URL,
+} from "@/src/lib/seo.ts";
 
 interface SeoProps {
     title: string;
@@ -8,8 +15,6 @@ interface SeoProps {
     type?: "website" | "article";
     structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
-
-const SITE_NAME = "HOLYSTUDIO";
 
 const upsertMeta = (selector: string, attributes: Record<string, string>) => {
     let element = document.head.querySelector(selector) as HTMLMetaElement | null;
@@ -47,8 +52,7 @@ const Seo: React.FC<SeoProps> = ({
     const location = useLocation();
 
     useEffect(() => {
-        const origin = window.location.origin;
-        const canonicalUrl = new URL(location.pathname || "/", origin).toString();
+        const canonicalUrl = new URL(location.pathname || "/", SITE_URL).toString();
         const fullTitle = `${title} | ${SITE_NAME}`;
 
         document.title = fullTitle;
@@ -86,9 +90,21 @@ const Seo: React.FC<SeoProps> = ({
             property: "og:url",
             content: canonicalUrl,
         });
+        upsertMeta('meta[property="og:image"]', {
+            property: "og:image",
+            content: DEFAULT_OG_IMAGE,
+        });
+        upsertMeta('meta[property="og:image:width"]', {
+            property: "og:image:width",
+            content: DEFAULT_OG_IMAGE_WIDTH,
+        });
+        upsertMeta('meta[property="og:image:height"]', {
+            property: "og:image:height",
+            content: DEFAULT_OG_IMAGE_HEIGHT,
+        });
         upsertMeta('meta[name="twitter:card"]', {
             name: "twitter:card",
-            content: "summary",
+            content: "summary_large_image",
         });
         upsertMeta('meta[name="twitter:title"]', {
             name: "twitter:title",
@@ -97,6 +113,14 @@ const Seo: React.FC<SeoProps> = ({
         upsertMeta('meta[name="twitter:description"]', {
             name: "twitter:description",
             content: description,
+        });
+        upsertMeta('meta[name="twitter:image"]', {
+            name: "twitter:image",
+            content: DEFAULT_OG_IMAGE,
+        });
+        upsertMeta('meta[name="author"]', {
+            name: "author",
+            content: SITE_NAME,
         });
         upsertLink('link[rel="canonical"]', {
             rel: "canonical",
