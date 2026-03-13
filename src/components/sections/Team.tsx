@@ -192,8 +192,7 @@ const Team: React.FC = () => {
                     <div className="mt-8 p-4 md:p-10 bg-zinc-900 flex flex-col gap-8 md:gap-10 border-2 border-zinc-800 relative">
                         <div className="max-w-3xl">
                             <p className="text-zinc-400 text-[14px] md:text-[16px] font-bold uppercase mt-3 leading-snug">
-                                Ми рекламний відео продакшн з досвідом реальної роботи в індустрії. Практикуюча команда,
-                                яка інтегрує АІ в реальні комерційні проекти.
+                                Ми - рекламний відео продакшн з досвідом роботи 10 років в індустрії. Інтегруємо АІ в проекти клієнтів.
                                 <br />
                                 <span className="font-black text-white mt-4 block tracking-widest text-[14px] md:text-[16px] uppercase">
                                     Наші крайні АІ роботи:

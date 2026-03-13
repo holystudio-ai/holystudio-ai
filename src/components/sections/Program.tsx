@@ -112,11 +112,8 @@ const Program: React.FC = () => {
                 <div className="bg-black text-white py-8 px-6 md:py-6 md:px-4 border-2 border-black">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
                         <h2 className="text-2xl md:text-xl font-black font-brutal leading-[0.9] uppercase text-center md:text-left">
-                            Ранні пташки росу п’ють, а пізні - сльози ллють*
+                            АІ не забере твою работу, це зроблять наші студенти
                         </h2>
-                        <p className="text-sm md:text-[14px] font-bold border-l-0 md:border-l-2 border-purple-500 pl-0 md:pl-3 font-brutal opacity-70 text-center md:text-left">
-                            *народна приказка підкреслює, що найкращі результати дістаються тим, хто не зволікає.
-                        </p>
                     </div>
                 </div>
             </div>

@@ -64,11 +64,8 @@ const HomePage = () => {
                             className="bg-black text-white py-8 px-6 border-2 border-white">
                             <div className="flex flex-col gap-6">
                                 <h2 className="text-2xl md:text-4xl font-black font-brutal leading-none uppercase tracking-tighter">
-                                    Першому диня, а останньому лушпиння*
+                                    Спробуй професію майбутнього без ризику
                                 </h2>
-                                <p className="text-xs md:text-sm font-bold border-l-4 border-purple-500 pl-4 font-brutal opacity-80 uppercase max-w-2xl">
-                                    *популярний вираз про важливість швидкості: хто встиг першим, той забрав найкраще.
-                                </p>
                             </div>
                         </div>
 
@@ -92,7 +89,7 @@ const HomePage = () => {
             >
                 <a
                     href="#pricing"
-                    className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white brutalist-shadow transition-all font-brutal inline-block text-center"
+                    className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання
                 </a>

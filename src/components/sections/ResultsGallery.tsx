@@ -30,6 +30,8 @@ const ResultsGallery: React.FC = () => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const videoPreview = studyPhoto1;
 
@@ -71,11 +73,22 @@ const ResultsGallery: React.FC = () => {
     if (!video) return;
 
     try {
+      setIsVideoLoading(true);
+
+      video.load();
       video.currentTime = 0;
-      await video.play();
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+      }
+
+      setIsVideoReady(true);
       setIsVideoPlaying(true);
     } catch (error) {
       console.error("Study video play failed:", error);
+    } finally {
+      setIsVideoLoading(false);
     }
   };
 
@@ -120,22 +133,25 @@ const ResultsGallery: React.FC = () => {
                   <div className="absolute inset-0 bg-black/30" />
 
                   <div className="absolute inset-x-0 top-4 flex justify-center">
-                    <div className="border-2 border-white bg-black/80 px-4 py-2 text-[11px] md:text-sm font-black uppercase text-white font-brutal tracking-tight">
-                      {isVideoReady ? "Натисни щоб подивитися відео" : "Завантажуємо превʼю відео..."}
+                    <div className="border-2 border-white bg-black/80 px-4 py-2 text-[11px] md:text-sm font-black uppercase text-white font-brutal tracking-tight text-center">
+                      {isVideoLoading
+                          ? "Завантажуємо відео..."
+                          : isVideoReady
+                              ? "Натисни щоб подивитися відео"
+                              : "Натисни щоб завантажити і подивитися відео"}
                     </div>
                   </div>
 
                   <button
                       type="button"
                       onClick={handlePlayVideo}
-                      disabled={!isVideoReady}
-                      className={`absolute inset-0 flex items-center justify-center transition ${
-                          isVideoReady ? "cursor-pointer" : "cursor-wait"
-                      }`}
+                      className="absolute inset-0 flex items-center justify-center transition cursor-pointer"
                       aria-label="Play study video"
                   >
                     <div className="flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-full border-4 border-white bg-black/70">
-                      {isVideoReady ? (
+                      {isVideoLoading ? (
+                          <div className="h-8 w-8 rounded-full border-4 border-white/30 border-t-white animate-spin" />
+                      ) : (
                           <svg
                               className="ml-1 h-10 w-10 md:h-12 md:w-12 text-white"
                               fill="currentColor"
@@ -143,8 +159,6 @@ const ResultsGallery: React.FC = () => {
                           >
                             <path d="M8 5v14l11-7z" />
                           </svg>
-                      ) : (
-                          <div className="h-8 w-8 rounded-full border-4 border-white/30 border-t-white animate-spin" />
                       )}
                     </div>
                   </button>
@@ -157,10 +171,27 @@ const ResultsGallery: React.FC = () => {
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="metadata"
                 poster={videoPreview}
                 onLoadedData={() => setIsVideoReady(true)}
                 onCanPlay={() => setIsVideoReady(true)}
+                onPlay={() => {
+                  setIsVideoReady(true);
+                  setIsVideoPlaying(true);
+                  setIsVideoLoading(false);
+                }}
+                onPause={() => setIsVideoPlaying(false)}
+                onWaiting={() => setIsVideoLoading(true)}
+                onPlaying={() => {
+                  setIsVideoReady(true);
+                  setIsVideoPlaying(true);
+                  setIsVideoLoading(false);
+                }}
+                onError={(e) => {
+                  console.error("Video failed to load", e);
+                  setIsVideoLoading(false);
+                  setIsVideoPlaying(false);
+                }}
                 controls={isVideoPlaying}
                 controlsList="nodownload noplaybackrate noremoteplayback"
                 disablePictureInPicture
@@ -179,7 +210,6 @@ const ResultsGallery: React.FC = () => {
             )}
           </div>
 
-          {/* PHOTOS */}
           <div className="relative">
             <div className="grid grid-cols-2 gap-2">
               {visiblePhotos.map((photo, i) => {
