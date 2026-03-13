@@ -1,6 +1,6 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
-import heroImage from "../../assets/images/hero-image.jpg";
+import heroImage from "../../assets/images/hero-image2.jpg";
 
 const blocks = [
     {
@@ -28,16 +28,9 @@ const Hero: React.FC = () => {
     const mainTitle = "НАВЧИСЬ СТВОРЮВАТИ АІ КРЕАТИВИ КІНОШНОЇ ЯКОСТІ З НУЛЯ ЗА 5 ДНІВ.";
 
     return (
-        <section className="pt-32 pb-5 px-4 overflow-x-hidden overflow-y-visible">
+        <section className="pt-20 pb-5 px-4 overflow-x-hidden overflow-y-visible">
             <div className="max-w-7xl mx-auto">
-                <div className="flex w-full">
-                    <div className="ml-auto inline-block bg-white text-black px-4 py-1 font-black text-sm md:text-lg uppercase mb-6 brutalist-border border-black font-brutal">
-                        ІНТЕНСИВ ВІД РЕКЛАМНОГО ВІДЕОПРОДАКШЕНУ
-                    </div>
-                </div>
-
-                <div className="relative min-h-[78svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pb-12 pt-6 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
-                    <img
+                <div className="relative min-h-[56svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pb-8 pt-5 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">                    <img
                         src={heroImage}
                         alt=""
                         aria-hidden="true"
