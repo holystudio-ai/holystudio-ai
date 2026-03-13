@@ -1,9 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import logo from "../../assets/logo/logo.png";
 import {Link} from "react-router-dom";
 
 const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const { body } = document;
+        const previousOverflow = body.style.overflow;
+
+        if (isOpen) {
+            body.style.overflow = "hidden";
+        } else {
+            body.style.overflow = previousOverflow || "";
+        }
+
+        return () => {
+            body.style.overflow = previousOverflow;
+        };
+    }, [isOpen]);
 
     const navLinks = [
         {name: "Кому підходить", href: "#audience"},
@@ -25,7 +40,7 @@ const Header: React.FC = () => {
                 </Link>
 
                 {/* Desktop nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center ml-auto">
                     <nav className="flex gap-8 font-bold text-xs uppercase font-brutal text-white">
                         {navLinks.map((link) => (
                             <a
@@ -39,43 +54,27 @@ const Header: React.FC = () => {
                     </nav>
                 </div>
 
-                <div className="flex items-center gap-2 min-w-0">
-                    <a
-                        href="#pricing"
-                        className="
-    bg-purple-600 text-white font-black uppercase font-brutal
-    brutalist-border border-black brutalist-shadow-hover transition-all
-    px-3 py-2 text-[10px]
-    sm:px-4 sm:py-2.5 sm:text-xs
-    md:px-6 md:py-3 md:text-sm
-    whitespace-normal break-words text-center
-  "
-                    >
-                        Залетіти в навчання
-                    </a>
-
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden flex flex-col gap-1.5 z-50 p-2 shrink-0"
-                        aria-label="Toggle menu"
-                    >
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="md:hidden flex flex-col gap-1.5 z-50 p-2 shrink-0"
+                    aria-label="Toggle menu"
+                >
     <span
         className={`h-1 w-7 bg-white transition-all duration-300 ${
             isOpen ? "rotate-45 translate-y-2.5" : ""
         }`}
     />
-                        <span
-                            className={`h-1 w-7 bg-white transition-all duration-300 ${
-                                isOpen ? "opacity-0" : ""
-                            }`}
-                        />
-                        <span
-                            className={`h-1 w-7 bg-white transition-all duration-300 ${
-                                isOpen ? "-rotate-45 -translate-y-2.5" : ""
-                            }`}
-                        />
-                    </button>
-                </div>
+                    <span
+                        className={`h-1 w-7 bg-white transition-all duration-300 ${
+                            isOpen ? "opacity-0" : ""
+                        }`}
+                    />
+                    <span
+                        className={`h-1 w-7 bg-white transition-all duration-300 ${
+                            isOpen ? "-rotate-45 -translate-y-2.5" : ""
+                        }`}
+                    />
+                </button>
             </div>
 
             {/* Mobile menu overlay */}

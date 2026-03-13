@@ -44,15 +44,12 @@ const ResultsGallery: React.FC = () => {
   };
 
   useEffect(() => {
-    // перші 4 фотки вантажимо одразу
     photos.slice(0, 4).forEach(preloadImage);
   }, []);
 
   useEffect(() => {
-    // поточні 2 фото
     const currentPhotos = photos.slice(index, index + 2);
 
-    // наступні 2 фото наперед
     const nextIndex = index + 2 >= photos.length ? 0 : index + 2;
     const nextPhotos = photos.slice(nextIndex, nextIndex + 2);
 
@@ -108,10 +105,9 @@ const ResultsGallery: React.FC = () => {
       <section className="py-24 px-4 bg-white text-black">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl md:text-6xl font-black font-brutal mb-8 tracking-tighter uppercase leading-none">
-            Приклад фото і відео який ти зможеш повторити
+            РЕЗУЛЬТАТ ЯКИЙ ТИ СТВОРИШ ПІД ЧАС НАВЧАННЯ
           </h2>
 
-          {/* VIDEO */}
           <div className="relative w-full max-w-[360px] md:max-w-[420px] mx-auto aspect-[9/16] border-4 border-black bg-black overflow-hidden mb-2">
             {!isVideoPlaying && (
                 <div className="absolute inset-0 z-20">

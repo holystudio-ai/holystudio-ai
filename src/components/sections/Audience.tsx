@@ -1,4 +1,8 @@
 import React from 'react';
+import photograph from "../../assets/images/photograph.jpg"
+import marketolog from "../../assets/images/marketolog.jpg"
+import beginner from "../../assets/images/beginner.jpg"
+import freelancer from "../../assets/images/freelancer.jpg"
 
 const Audience: React.FC = () => {
     const items = [
@@ -10,7 +14,7 @@ const Audience: React.FC = () => {
                     багатьох інших. Почни з нуля і <span className="font-bold text-white">зроби свою першу AI-роботу вже на інтенсиві.</span>
                 </>
             ),
-            img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=400&h=400&auto=format&fit=crop"
+            img: beginner
         },
         {
             title: "Маркетологи, та інші креативні професії",
@@ -21,7 +25,7 @@ const Audience: React.FC = () => {
                     вони виглядають у твоїй голові.
                 </>
             ),
-            img: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=400&h=400&auto=format&fit=crop"
+            img: marketolog
         },
         {
             title: "Фрілансери",
@@ -32,7 +36,7 @@ const Audience: React.FC = () => {
                     клієнтам візуал, від якого відвисає щелепа.
                 </>
             ),
-            img: "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?q=80&w=400&h=400&auto=format&fit=crop"
+            img: freelancer
         },
         {
             title: "Фотографи, Оператори",
@@ -43,7 +47,7 @@ const Audience: React.FC = () => {
                     без жодних сюрпризів на зйомці.
                 </>
             ),
-            img: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=400&h=400&auto=format&fit=crop"
+            img: photograph
         }
     ];
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Hero from "@/src/components/sections/Hero.tsx";
 import Audience from "@/src/components/sections/Audience.tsx";
 import ResultsGallery from "@/src/components/sections/ResultsGallery.tsx";
@@ -17,6 +17,19 @@ const priceLabel = `${formatPriceUah(coursePriceUah)} грн`;
 const priceValue = String(coursePriceUah);
 
 const HomePage = () => {
+    const [showFloatingCta, setShowFloatingCta] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowFloatingCta(window.scrollY > 96);
+        };
+
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
             <Seo
@@ -35,8 +48,8 @@ const HomePage = () => {
 
                 <Program/>
 
-                <Pricing badge={true} text="ЩОБ СТАТИ РАННЬОЮ ПТАШКОЮ І НЕ ЛИТИ СЛЬОЗИ ПІЗНІШЕ"
-                         title={"спеціальна пропозиція"}/>
+                <Pricing badge={true} text="Не проґав можливість бути першим і зірвати куш $$$"
+                         title={"спеціальна пропозиція"} showTimer/>
 
                 <SkillsSection/>
 
@@ -61,14 +74,29 @@ const HomePage = () => {
 
                         <div className="max-w-2xl mx-auto">
                             <Pricing badge={true} title={"спеціальна пропозиція"}
-                                     text={`${priceLabel} щоб забрати свою диню, а тим хто вагається лишимо тільки лушпиння`}
-                                     id="bottom-pricing" isEmbedded={true}/>
+                                     text={"Ти нічого не втрачаєш, окрім можливості бути першим."}
+                                     id="bottom-pricing" isEmbedded={true} showTimer/>
                         </div>
                     </div>
                 </section>
 
                 <FAQ/>
             </main>
+
+            <div
+                className={`fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 transition-all duration-300 ${
+                    showFloatingCta
+                        ? 'translate-y-0 opacity-100 pointer-events-auto'
+                        : 'translate-y-6 opacity-0 pointer-events-none'
+                }`}
+            >
+                <a
+                    href="#pricing"
+                    className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white brutalist-shadow transition-all font-brutal inline-block text-center"
+                >
+                    Залетіти в навчання
+                </a>
+            </div>
         </div>
     );
 };

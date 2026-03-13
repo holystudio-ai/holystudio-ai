@@ -16,11 +16,11 @@ const blocks = [
     },
     {
         title: "САМ СОБІ РЕЖИСЕР",
-        details: "AI вже стало реальністю: нейромережі замінюють цілі знімальні групи, дозволяючи одній людині, створювати кінематографічні ролики без космічних бюджетів і великих команд",
+        details: "В новій реальності нейромережі дають одній людині можливість створювати контент, з яким заробляють від 1000$ на місяць, навіть початківці",
     },
     {
         title: "НЕ ПРОСПИ...",
-        details: "можливість опанувати генеративний AI зараз, щоб перетворити свої ідеї на професійний контент і зірвати куш $$$ нової цифрової ери, поки інші зволікають.",
+        details: "можливість опанувати генеративний AI зараз, щоб перетворити свої ідеї на професійний контент і зірвати куш $$$ нової цифрової ери, поки інші зволікають",
     },
 ];
 
@@ -72,6 +72,8 @@ const Hero: React.FC = () => {
                     </div>
                 </div>
 
+                <Pricing badge showBonus showTimer text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />
+
                 <div className="flex-box gap-10 items-start mt-12 font-brutal">
                     <div className="flex-box gap-10 items-start mt-12 font-brutal">
                         <div className="flex flex-col gap-6 mt-12">
@@ -99,7 +101,7 @@ const Hero: React.FC = () => {
                                                 {block.title}
                                             </h4>
 
-                                            <p className="text-[14px] sm:text-[16px] md:text-[22px] font-bold leading-tight uppercase">
+                                            <p className="text-[14px] sm:text-[16px] md:text-[22px] leading-tight uppercase">
                                                 {block.details}
                                             </p>
                                         </div>
@@ -115,7 +117,7 @@ const Hero: React.FC = () => {
                                             {block.title}
                                         </h4>
 
-                                        <p className="text-[13px] sm:text-[14px] md:text-[22px] font-bold leading-tight opacity-90">
+                                        <p className="text-[13px] sm:text-[14px] md:text-[22px] leading-tight opacity-90">
                                             {block.details}
                                         </p>
                                     </div>
@@ -123,8 +125,6 @@ const Hero: React.FC = () => {
                             })}
                         </div>
                     </div>
-
-                    <Pricing badge showBonus text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />
                 </div>
             </div>
         </section>
