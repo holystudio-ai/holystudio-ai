@@ -33,7 +33,7 @@ const ResultsGallery: React.FC = () => {
   const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const videoPreview = studyPhoto1;
+  const videoPreview = studyPhoto6;
 
   const preloadImage = (src: string) => {
     if (loadedImages[src]) return;

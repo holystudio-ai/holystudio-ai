@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Hero from "@/src/components/sections/Hero.tsx";
 import Audience from "@/src/components/sections/Audience.tsx";
 import ResultsGallery from "@/src/components/sections/ResultsGallery.tsx";
@@ -9,11 +9,10 @@ import SkillsSection from "@/src/components/sections/SkillsSection.tsx";
 import Guarantee from "@/src/components/sections/Guarantee.tsx";
 import StudentsWorks from "@/src/components/sections/StudentWorks.tsx";
 import FAQ from "@/src/components/sections/FAQ.tsx";
-import { formatPriceUah, coursePriceUah } from '@/src/lib/pricing.ts';
+import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
-import { buildCourseSchema } from "@/src/lib/seo.ts";
+import {buildCourseSchema} from "@/src/lib/seo.ts";
 
-const priceLabel = `${formatPriceUah(coursePriceUah)} грн`;
 const priceValue = String(coursePriceUah);
 
 const HomePage = () => {
@@ -25,7 +24,7 @@ const HomePage = () => {
         };
 
         handleScroll();
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('scroll', handleScroll, {passive: true});
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
