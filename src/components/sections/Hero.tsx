@@ -6,10 +6,13 @@ import offers from "../../assets/images/offers.png";
 const blocks = [
     {
         type: "hero",
-        title:
-            "В НОВІЙ РЕАЛЬНОСТІ НЕЙРОМЕРЕЖІ ДАЮТЬ ОДНІЙ ЛЮДИНІ МОЖЛИВІСТЬ СТВОРЮВАТИ КОНТЕНТ, З ЯКИМ ЗАРОБЛЯЮТЬ ВІД 1000$ НА МІСЯЦЬ, НАВІТЬ ПОЧАТКІВЦІ",
+        titleStart:
+            "В НОВІЙ РЕАЛЬНОСТІ НЕЙРОМЕРЕЖІ ДАЮТЬ ОДНІЙ ЛЮДИНІ МОЖЛИВІСТЬ СТВОРЮВАТИ КОНТЕНТ, З ЯКИМ ",
+        titleLight: "ЗАРОБЛЯЮТЬ ВІД 1000$ НА МІСЯЦЬ",
+        titleEnd: ", НАВІТЬ ПОЧАТКІВЦІ",
     },
     {
+        type: "offer",
         title: "НЕ ПРОСПИ...",
         details: "МОЖЛИВІСТЬ ОПАНУВАТИ ГЕНЕРАТИВНИЙ AI ЗАРАЗ, ЩОБ ПЕРЕТВОРИТИ СВОЇ ІДЕЇ НА ПРОФЕСІЙНИЙ КОНТЕНТ І ЗІРВАТИ КУШ $$$ НОВОЇ ЦИФРОВОЇ ЕРИ, ПОКИ ІНШІ ЗВОЛІКАЮТЬ",
     },
@@ -18,11 +21,13 @@ const blocks = [
 const Hero: React.FC = () => {
     const mainTitle = "НАВЧИСЬ СТВОРЮВАТИ АІ КРЕАТИВИ КІНОШНОЇ ЯКОСТІ З НУЛЯ ЗА 5 ДНІВ.";
 
+    const heroBlock = blocks.find((block) => block.type === "hero");
+    const offerBlock = blocks.find((block) => block.type === "offer");
+
     return (
         <section className="pt-20 pb-5 px-4 overflow-x-hidden overflow-y-visible">
             <div className="max-w-7xl mx-auto">
-                <div
-                    className="relative min-h-[56svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pt-5 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
+                <div className="relative min-h-[56svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pt-5 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
                     <img
                         src={heroImage}
                         alt=""
@@ -33,19 +38,19 @@ const Hero: React.FC = () => {
                         className="absolute inset-0 w-full h-full object-cover object-top"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1]"/>
-                    <div className="absolute inset-0 bg-black/10 z-[1]"/>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1]" />
+                    <div className="absolute inset-0 bg-black/10 z-[1]" />
 
                     <div className="relative z-10 group max-w-full overflow-hidden mt-2 md:mt-0">
                         <h1
                             className="
-                text-[clamp(35px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
-                font-black font-brutal leading-[0.92] md:leading-[0.95]
-                tracking-tighter select-none text-white
-                glitch
-                max-w-full overflow-hidden
-                break-words
-            "
+                                text-[clamp(35px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
+                                font-black font-brutal leading-[0.92] md:leading-[0.95]
+                                tracking-tighter select-none text-white
+                                glitch
+                                max-w-full overflow-hidden
+                                break-words
+                            "
                             data-text={mainTitle}
                         >
                             {mainTitle.split("АІ КРЕАТИВИ").map((part, index) => (
@@ -58,64 +63,43 @@ const Hero: React.FC = () => {
                     </div>
                 </div>
 
-                <Pricing badge showBonus showTimer text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"}/>
+                <Pricing badge showBonus showTimer text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />
 
                 <div className="flex-box gap-10 items-start mt-12 font-brutal">
-                    <div className="flex flex-col gap-6 mt-12">
-                        {blocks.map((block, i) => {
-                            if (block.type === "hero") {
-                                return (
-                                    <div
-                                        key={i}
-                                        className="border-2 border-dashed border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
-                                    >
-                                        <h3 className="text-[18px] sm:text-[22px] md:text-[34px] font-black uppercase leading-[1.05] tracking-tight text-center">
-                                            {block.title}
-                                        </h3>
-                                    </div>
-                                );
-                            }
+                    <div className="flex flex-col gap-6 mt-12 w-full">
+                        {heroBlock && (
+                            <div className="border-2 border-dashed border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white">
+                                <h3 className="text-[18px] sm:text-[22px] md:text-[34px] uppercase leading-[1.05] tracking-tight text-center font-black">
+                                    {heroBlock.titleStart}
+                                    <span className="font-normal">
+                                        {heroBlock.titleLight}
+                                    </span>
+                                    {heroBlock.titleEnd}
+                                </h3>
+                            </div>
+                        )}
 
-                            if (block.type === "result") {
-                                return (
-                                    <div
-                                        key={i}
-                                        className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
-                                    >
-                                        <h4 className="mb-2 text-[20px] sm:text-[24px] md:text-[34px] font-black uppercase leading-none">
-                                            {block.title}
-                                        </h4>
+                        <div className="w-[110%] -ml-[5%] md:w-[120%] md:-ml-[10%] lg:w-[130%] lg:-ml-[15%]">
+                            <img
+                                src={offers}
+                                alt="Special offers"
+                                loading="lazy"
+                                decoding="async"
+                                className="block w-full h-auto object-contain"
+                            />
+                        </div>
 
-                                        <p className="text-[14px] sm:text-[16px] md:text-[22px] leading-tight uppercase">
-                                            {block.details}
-                                        </p>
-                                    </div>
-                                );
-                            }
+                        {offerBlock && (
+                            <div className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white">
+                                <h4 className="text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none mb-1">
+                                    {offerBlock.title}
+                                </h4>
 
-                            return (
-                                <div
-                                    key={i}
-                                    className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white"
-                                >
-                                    <h4 className="text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none mb-1">
-                                        {block.title}
-                                    </h4>
-
-                                    <p className="text-[13px] sm:text-[14px] md:text-[22px] leading-tight opacity-90">
-                                        {block.details}
-                                    </p>
-                                </div>
-                            );
-                        })}
-
-                        <img
-                            src={offers}
-                            alt="Special offers"
-                            loading="lazy"
-                            decoding="async"
-                            className="block w-full h-auto object-contain"
-                        />
+                                <p className="text-[13px] sm:text-[14px] md:text-[22px] leading-tight opacity-90">
+                                    {offerBlock.details}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

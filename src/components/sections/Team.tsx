@@ -12,10 +12,25 @@ import works1 from "../../assets/videos/works1.mp4";
 import works2 from "../../assets/videos/works2.mp4";
 import works3 from "../../assets/videos/works3.mp4";
 import works4 from "../../assets/videos/works4.mp4";
+import works5 from "../../assets/videos/works5.mp4";
+import works6 from "../../assets/videos/works6.mp4";
 import workPoster1 from "../../assets/video-posters/work-poster1.png";
 import workPoster2 from "../../assets/video-posters/work-poster2.png";
 import workPoster3 from "../../assets/video-posters/work-poster3.png";
-import workPoster4 from "../../assets/video-posters/works-poster4.png";
+import workPoster4 from "../../assets/video-posters/work-poster4.png";
+import workPoster5 from "../../assets/video-posters/work-poster5.png";
+import workPoster6 from "../../assets/video-posters/work-poster6.png";
+import companyLogo1 from "../../assets/company-logos/1.png";
+import companyLogo2 from "../../assets/company-logos/2.png";
+import companyLogo3 from "../../assets/company-logos/3.png";
+import companyLogo4 from "../../assets/company-logos/4.png";
+import companyLogo5 from "../../assets/company-logos/5.png";
+import companyLogo6 from "../../assets/company-logos/6.png";
+import companyLogo7 from "../../assets/company-logos/7.png";
+import companyLogo8 from "../../assets/company-logos/8.png";
+import companyLogo9 from "../../assets/company-logos/9.png";
+import companyLogo10 from "../../assets/company-logos/10.png";
+import companyLogo11 from "../../assets/company-logos/11.png";
 
 const Team: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -25,7 +40,7 @@ const Team: React.FC = () => {
         {
             name: "Катя",
             role: "AI Artist",
-            desc: "AI-експерт, яка вивчає нейромережі роками: пройшла шлях від технічної оптимізації до майстерності у створенні контенту. Навчає бачити як інженер і творити як режисер — контролювати кожен кадр через промти, досягаючи фотореалізму у відео та фото.",
+            desc: "AI-експерт: пройшла шлях від технічної оптимізації до майстерності у створенні візуального контенту. Навчає бачити як інженер і творити як режисер — контролювати кожен кадр через промпти, досягаючи фотореалізму у відео та фото.",
             image: Kate
         },
         {
@@ -47,6 +62,21 @@ const Team: React.FC = () => {
         { id: '02', title: 'AFFX ACADEMY', duration: '0:12', tag: 'РЕКЛАМНА КАМПАНІЯ', src: works2, poster: workPoster2 },
         { id: '03', title: 'VERAFIED', duration: '0:30', tag: 'FASHION VIDEO', src: works3, poster: workPoster3 },
         { id: '04', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4, poster: workPoster4 },
+        { id: '05', title: 'MONEX', duration: '0:30', tag: 'КЛІП ДЛЯ КРИПТООБМІНКИ', src: works5, poster: workPoster5 },
+        { id: '06', title: 'PORSCHE', duration: '0:30', tag: 'SPEC AD', src: works6, poster: workPoster6 },
+    ];
+    const companyLogos = [
+        { src: companyLogo1, alt: "Company logo 1" },
+        { src: companyLogo2, alt: "Company logo 2" },
+        { src: companyLogo3, alt: "Company logo 3" },
+        { src: companyLogo4, alt: "Company logo 4" },
+        { src: companyLogo5, alt: "Company logo 5" },
+        { src: companyLogo6, alt: "Company logo 6" },
+        { src: companyLogo7, alt: "Company logo 7" },
+        { src: companyLogo8, alt: "Company logo 8" },
+        { src: companyLogo9, alt: "Company logo 9" },
+        { src: companyLogo10, alt: "Company logo 10" },
+        { src: companyLogo11, alt: "Company logo 11" },
     ];
 
     const scroll = (direction: 'left' | 'right') => {
@@ -332,6 +362,43 @@ const Team: React.FC = () => {
                                 →
                             </button>
                         </div>
+
+
+                            <div className="logo-marquee group relative overflow-hidden border-2 border-zinc-800 bg-black/60 px-0 py-4 md:py-5">
+                                <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 md:w-24 bg-gradient-to-r from-zinc-900 via-zinc-900/75 to-transparent" />
+                                <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 md:w-24 bg-gradient-to-l from-zinc-900 via-zinc-900/75 to-transparent" />
+
+                                <div className="logo-marquee__track flex w-max items-center gap-3 md:gap-5">
+                                    {companyLogos.map((logo, index) => (
+                                        <div
+                                            key={`logo-primary-${index}`}
+                                            className="flex h-[72px] w-[150px] md:h-[88px] md:w-[190px] shrink-0 items-center justify-center border border-white/10 bg-white/[0.03] px-3 py-2 md:px-4 md:py-3 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]"
+                                        >
+                                            <img
+                                                src={logo.src}
+                                                alt={logo.alt}
+                                                className="block max-h-full max-w-full object-contain object-center"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    ))}
+
+                                    {companyLogos.map((logo, index) => (
+                                        <div
+                                            key={`logo-duplicate-${index}`}
+                                            aria-hidden="true"
+                                            className="flex h-[72px] w-[150px] md:h-[88px] md:w-[190px] shrink-0 items-center justify-center border border-white/10 bg-white/[0.03] px-3 py-2 md:px-4 md:py-3 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]"
+                                        >
+                                            <img
+                                                src={logo.src}
+                                                alt=""
+                                                className="block max-h-full max-w-full object-contain object-center"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                     </div>
                 </div>
 
@@ -402,6 +469,20 @@ const Team: React.FC = () => {
 
     .animate-scan-y {
         animation: scan-y 3.5s linear infinite;
+    }
+
+    @keyframes logo-marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    .logo-marquee__track {
+        animation: logo-marquee 32s linear infinite;
+        will-change: transform;
+    }
+
+    .logo-marquee:hover .logo-marquee__track {
+        animation-play-state: paused;
     }
 
     /* У маленькому плеєрі відео заповнює горизонтальну картку */
