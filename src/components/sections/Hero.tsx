@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="w-[110%] -ml-[5%] md:w-[120%] md:-ml-[10%] lg:w-[130%] lg:-ml-[15%]">
+                        <div className="w-[110%] -ml-[5%] md:w-full md:ml-0 lg:w-[85%] lg:mx-auto">
                             <img
                                 src={offers}
                                 alt="Special offers"
