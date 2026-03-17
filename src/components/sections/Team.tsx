@@ -61,8 +61,8 @@ const Team: React.FC = () => {
         { id: '01', title: 'AMIC ENERGY', duration: '0:15', tag: 'РЕКЛАМНИЙ РОЛИК', src: works1, poster: workPoster1 },
         { id: '02', title: 'AFFX ACADEMY', duration: '0:12', tag: 'РЕКЛАМНА КАМПАНІЯ', src: works2, poster: workPoster2 },
         { id: '03', title: 'VERAFIED', duration: '0:30', tag: 'FASHION VIDEO', src: works3, poster: workPoster3 },
-        { id: '04', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4, poster: workPoster4 },
-        { id: '05', title: 'MONEX', duration: '0:30', tag: 'КЛІП ДЛЯ КРИПТООБМІНКИ', src: works5, poster: workPoster5 },
+        { id: '04', title: 'MONEX', duration: '0:30', tag: 'КЛІП ДЛЯ КРИПТООБМІНКИ', src: works5, poster: workPoster5 },
+        { id: '05', title: 'AMIC ENERGY', duration: '0:30', tag: 'BRAND ELEMENT', src: works4, poster: workPoster4 },
         { id: '06', title: 'PORSCHE', duration: '0:30', tag: 'SPEC AD', src: works6, poster: workPoster6 },
     ];
     const companyLogos = [
