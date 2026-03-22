@@ -12,6 +12,7 @@ import FAQ from "@/src/components/sections/FAQ.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
+import {redirectToZeneduPayment} from "@/src/lib/zenedu.ts";
 
 const priceValue = String(coursePriceUah);
 
@@ -86,12 +87,12 @@ const HomePage = () => {
                         : 'translate-y-6 opacity-0 pointer-events-none'
                 }`}
             >
-                <a
-                    href="#pricing"
+                <button
+                    onClick={redirectToZeneduPayment}
                     className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання
-                </a>
+                </button>
             </div>
         </div>
     );
