@@ -1,10 +1,10 @@
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import {trackInitiateCheckout} from '@/src/lib/analytics.ts';
 
-export const HOLYSTUDIO_SITE_URL = 'https://holystudio.ai/';
-export const ZENEDU_DIRECT_PAYMENT_URL = 'https://app.zenedu.io/l/p/rVhvTyQQqq4GlVmU';
-export const ZENEDU_LANDING_URL = 'https://app.zenedu.io/l/qyKGb15vAtWAzUWr';
-export const ZENEDU_BOT_URL = 'https://t.me/HOLYSTUDIO_AI_bot?start=qyKGb15vAtWAzUWr';
+export const HOLYSTUDIO_SITE_URL = import.meta.env.VITE_HOLYSTUDIO_SITE_URL;
+export const ZENEDU_DIRECT_PAYMENT_URL = import.meta.env.VITE_ZENEDU_DIRECT_PAYMENT_URL;
+export const ZENEDU_LANDING_URL = import.meta.env.VITE_ZENEDU_LANDING_URL;
+export const ZENEDU_BOT_URL = import.meta.env.VITE_ZENEDU_BOT_URL;
 
 export function redirectToZeneduPayment() {
     trackInitiateCheckout({

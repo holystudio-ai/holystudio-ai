@@ -14,7 +14,7 @@
     <link rel="canonical" href="https://holystudio.ai/">
     <meta name="format-detection" content="telephone=no">
     <meta property="og:title" content="AI іntensive | HOLYSTUDIO">
-    <meta name="description"
+    <meta property="og:description"
           content="Навчись створювати AI фото та відео кінематографічної якості за 5 днів. Онлайн-інтенсив від HOLYSTUDIO для креаторів і новачків.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://holystudio.ai/">
@@ -28,6 +28,7 @@
     <meta name="twitter:description"
           content="Навчись створювати AI фото та відео кінематографічної якості за 5 днів. Онлайн-інтенсив від HOLYSTUDIO для креаторів і новачків.">
     <meta name="twitter:image" content="https://holystudio.ai/og-image.JPG">
+
     <script type="application/ld+json">
         [
             {
@@ -46,9 +47,89 @@
             }
         ]
     </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !(function(f,b,e,v,n,t,s){
+            if(f.fbq)return;
+            n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;
+            n.push=n;
+            n.loaded=!0;
+            n.version='2.0';
+            n.queue=[];
+            t=b.createElement(e);
+            t.async=!0;
+            t.src=v;
+            s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+        fbq('init', '1743358290241901');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img
+                height="1"
+                width="1"
+                style="display:none"
+                src="https://www.facebook.com/tr?id=1743358290241901&ev=PageView&noscript=1"
+                alt=""
+        />
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- TikTok Pixel Code Start -->
+    <script>
+        !function (w, d, t) {
+            w.TiktokAnalyticsObject=t;
+            var ttq=w[t]=w[t]||[];
+            ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
+            ttq.setAndDefer=function(t,e){
+                t[e]=function(){
+                    t.push([e].concat(Array.prototype.slice.call(arguments,0)));
+                }
+            };
+            for(var i=0;i<ttq.methods.length;i++) {
+                ttq.setAndDefer(ttq,ttq.methods[i]);
+            }
+            ttq.instance=function(t){
+                var e=ttq._i[t]||[];
+                for(var n=0;n<ttq.methods.length;n++) {
+                    ttq.setAndDefer(e,ttq.methods[n]);
+                }
+                return e;
+            };
+            ttq.load=function(e,n){
+                var r="https://analytics.tiktok.com/i18n/pixel/events.js";
+                ttq._i=ttq._i||{};
+                ttq._i[e]=[];
+                ttq._i[e]._u=r;
+                ttq._t=ttq._t||{};
+                ttq._t[e]=+new Date;
+                ttq._o=ttq._o||{};
+                ttq._o[e]=n||{};
+                n=document.createElement("script");
+                n.type="text/javascript";
+                n.async=!0;
+                n.src=r+"?sdkid="+e+"&lib="+t;
+                e=document.getElementsByTagName("script")[0];
+                e.parentNode.insertBefore(n,e);
+            };
+
+            ttq.load('D713J63C77U2ACURRD10');
+            ttq.page();
+        }(window, document, 'ttq');
+    </script>
+    <!-- TikTok Pixel Code End -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@400;700;900&display=swap"
-          rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@400;700;900&display=swap"
+            rel="stylesheet"
+    >
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -99,7 +180,6 @@
             color: #fff;
         }
 
-        /* Noise Grain Overlay */
         .noise {
             position: fixed;
             top: 0;
@@ -112,7 +192,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Glitch Effect - Reduced Intensity Version */
         .glitch {
             position: relative;
             display: block;
@@ -148,105 +227,42 @@
         }
 
         @keyframes glitch-anim {
-            0% {
-                clip-path: inset(15% 0 45% 0);
-                transform: translate(-1px, -1px);
-            }
-            10% {
-                clip-path: inset(70% 0 5% 0);
-                transform: translate(1px, 1px);
-            }
-            20% {
-                clip-path: inset(5% 0 80% 0);
-                transform: translate(-1px, 0px);
-            }
-            30% {
-                clip-path: inset(55% 0 25% 0);
-                transform: translate(1px, -1px);
-            }
-            40% {
-                clip-path: inset(90% 0 0% 0);
-                transform: translate(-1px, 1px);
-            }
-            50% {
-                clip-path: inset(0% 0 100% 0);
-                transform: translate(0px, -1px);
-            }
-            60% {
-                clip-path: inset(45% 0 35% 0);
-                transform: translate(1px, 1px);
-            }
-            70% {
-                clip-path: inset(85% 0 10% 0);
-                transform: translate(-1px, -1px);
-            }
-            80% {
-                clip-path: inset(10% 0 85% 0);
-                transform: translate(1px, 0px);
-            }
-            90% {
-                clip-path: inset(40% 0 30% 0);
-                transform: translate(-1px, 1px);
-            }
-            100% {
-                clip-path: inset(30% 0 60% 0);
-                transform: translate(0px, -1px);
-            }
+            0% { clip-path: inset(15% 0 45% 0); transform: translate(-1px, -1px); }
+            10% { clip-path: inset(70% 0 5% 0); transform: translate(1px, 1px); }
+            20% { clip-path: inset(5% 0 80% 0); transform: translate(-1px, 0px); }
+            30% { clip-path: inset(55% 0 25% 0); transform: translate(1px, -1px); }
+            40% { clip-path: inset(90% 0 0% 0); transform: translate(-1px, 1px); }
+            50% { clip-path: inset(0% 0 100% 0); transform: translate(0px, -1px); }
+            60% { clip-path: inset(45% 0 35% 0); transform: translate(1px, 1px); }
+            70% { clip-path: inset(85% 0 10% 0); transform: translate(-1px, -1px); }
+            80% { clip-path: inset(10% 0 85% 0); transform: translate(1px, 0px); }
+            90% { clip-path: inset(40% 0 30% 0); transform: translate(-1px, 1px); }
+            100% { clip-path: inset(30% 0 60% 0); transform: translate(0px, -1px); }
         }
 
         @keyframes glitch-anim2 {
-            0% {
-                clip-path: inset(0% 0 95% 0);
-                transform: translate(0.5px, 0.5px);
-            }
-            20% {
-                clip-path: inset(90% 0 0% 0);
-                transform: translate(-0.5px, -0.5px);
-            }
-            40% {
-                clip-path: inset(40% 0 50% 0);
-                transform: translate(0.5px, -0.5px);
-            }
-            60% {
-                clip-path: inset(65% 0 20% 0);
-                transform: translate(-0.5px, 0.5px);
-            }
-            80% {
-                clip-path: inset(25% 0 70% 0);
-                transform: translate(0.5px, 0.5px);
-            }
-            100% {
-                clip-path: inset(50% 0 40% 0);
-                transform: translate(-0.5px, -0.5px);
-            }
+            0% { clip-path: inset(0% 0 95% 0); transform: translate(0.5px, 0.5px); }
+            20% { clip-path: inset(90% 0 0% 0); transform: translate(-0.5px, -0.5px); }
+            40% { clip-path: inset(40% 0 50% 0); transform: translate(0.5px, -0.5px); }
+            60% { clip-path: inset(65% 0 20% 0); transform: translate(-0.5px, 0.5px); }
+            80% { clip-path: inset(25% 0 70% 0); transform: translate(0.5px, 0.5px); }
+            100% { clip-path: inset(50% 0 40% 0); transform: translate(-0.5px, -0.5px); }
         }
 
-        /* Loading Bar Animation */
         @keyframes loading-progress {
-            0% {
-                transform: scaleX(0);
-            }
-            20% {
-                transform: scaleX(0.2);
-            }
-            40% {
-                transform: scaleX(0.15);
-            }
-            60% {
-                transform: scaleX(0.7);
-            }
-            85% {
-                transform: scaleX(0.95);
-            }
-            100% {
-                transform: scaleX(1);
-            }
+            0% { transform: scaleX(0); }
+            20% { transform: scaleX(0.2); }
+            40% { transform: scaleX(0.15); }
+            60% { transform: scaleX(0.7); }
+            85% { transform: scaleX(0.95); }
+            100% { transform: scaleX(1); }
         }
 
         .animate-loading-progress {
             animation: loading-progress 3s infinite cubic-bezier(0.65, 0, 0.35, 1);
         }
     </style>
+
     <script type="importmap">
         {
           "imports": {

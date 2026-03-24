@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { formatPriceUah, coursePriceUah } from '@/src/lib/pricing.ts';
-import { redirectToZeneduPayment } from '@/src/lib/zenedu.ts';
+import React, {useEffect, useState} from 'react';
+import {formatPriceUah, coursePriceUah} from '@/src/lib/pricing.ts';
+import {redirectToZeneduPayment} from '@/src/lib/zenedu.ts';
 
 const DISPLAY_PRICE = formatPriceUah(coursePriceUah);
 
@@ -24,7 +24,7 @@ const getTimeLeft = () => {
     const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
 
-    return { hours, minutes, seconds };
+    return {hours, minutes, seconds};
 };
 
 interface PricingProps {
@@ -62,9 +62,11 @@ const Pricing: React.FC<PricingProps> = ({
     }, [showTimer]);
 
     const content = (
-        <div className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden w-full md:max-w-md mx-auto">
+        <div
+            className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden w-full md:max-w-md mx-auto">
             {badge && (
-                <div className="absolute top-0 right-0 bg-white text-red-600 px-3 py-1 font-black uppercase text-[10px] md:text-[11px] leading-none font-brutal z-10 tracking-tight">
+                <div
+                    className="absolute top-0 right-0 bg-white text-red-600 px-3 py-1 font-black uppercase text-[10px] md:text-[11px] leading-none font-brutal z-10 tracking-tight">
                     Limited Offer
                 </div>
             )}
@@ -75,7 +77,8 @@ const Pricing: React.FC<PricingProps> = ({
 
             <div className="flex justify-center items-center gap-4 mb-4">
                 <div className="flex flex-col items-center">
-                    <span className="text-3xl md:text-5xl line-through decoration-black decoration-[2px] text-white/70 font-black font-brutal tracking-tighter">
+                    <span
+                        className="text-3xl md:text-5xl line-through decoration-black decoration-[2px] text-white/70 font-black font-brutal tracking-tighter">
                         4000
                     </span>
                     <span className="text-sm md:text-lg text-white/70 font-black font-brutal">
@@ -84,7 +87,8 @@ const Pricing: React.FC<PricingProps> = ({
                 </div>
 
                 <div className="flex flex-col items-center">
-                    <span className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">
+                    <span
+                        className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">
                         {DISPLAY_PRICE}
                     </span>
                     <span className="text-sm md:text-lg text-white font-black font-brutal leading-none">
@@ -97,17 +101,20 @@ const Pricing: React.FC<PricingProps> = ({
                 <div className="mb-5 border-2 border-white bg-black px-3 py-3 text-white">
                     <div className="flex items-center justify-center gap-2 md:gap-3">
                         <div className="min-w-[72px] border-2 border-white bg-white px-2 py-2 text-center text-black">
-                            <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.hours}</div>
+                            <div
+                                className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.hours}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">год</div>
                         </div>
 
                         <div className="min-w-[72px] border-2 border-white bg-white px-2 py-2 text-center text-black">
-                            <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.minutes}</div>
+                            <div
+                                className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.minutes}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">хв</div>
                         </div>
 
                         <div className="min-w-[72px] border-2 border-white bg-white px-2 py-2 text-center text-black">
-                            <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.seconds}</div>
+                            <div
+                                className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.seconds}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">сек</div>
                         </div>
                     </div>
@@ -115,9 +122,12 @@ const Pricing: React.FC<PricingProps> = ({
             )}
 
             {showBonus && (
-                <div className="bg-black text-white px-3 py-2.5 mb-5 flex items-center gap-3 mx-auto w-full max-w-[440px] border-2 border-white font-sans">
-                    <div className="bg-white text-black w-9 h-9 md:w-10 md:h-10 shrink-0 flex items-center justify-center border-2 border-black">
-                        <span className="relative -top-[1px] text-[32px] md:text-[36px] font-light leading-none">+</span>
+                <div
+                    className="bg-black text-white px-3 py-2.5 mb-5 flex items-center gap-3 mx-auto w-full max-w-[440px] border-2 border-white font-sans">
+                    <div
+                        className="bg-white text-black w-9 h-9 md:w-10 md:h-10 shrink-0 flex items-center justify-center border-2 border-black">
+                        <span
+                            className="relative -top-[1px] text-[32px] md:text-[36px] font-light leading-none">+</span>
                     </div>
 
                     <p className="text-[12px] md:text-[13px] normal-case font-semibold text-left leading-[1.05] tracking-tight">
