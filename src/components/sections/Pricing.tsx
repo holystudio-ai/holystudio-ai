@@ -38,13 +38,13 @@ interface PricingProps {
 }
 
 const Pricing: React.FC<PricingProps> = ({
-    isEmbedded = false,
-    title,
-    text,
-    badge = false,
-    showBonus = false,
-    showTimer = false
-}) => {
+                                             isEmbedded = false,
+                                             title,
+                                             text,
+                                             badge = false,
+                                             showBonus = false,
+                                             showTimer = false
+                                         }) => {
     const [timeLeft, setTimeLeft] = useState(getTimeLeft);
 
     useEffect(() => {
@@ -62,12 +62,9 @@ const Pricing: React.FC<PricingProps> = ({
     }, [showTimer]);
 
     const content = (
-        <div
-            className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden w-full md:max-w-md mx-auto">
-
+        <div className="bg-red-600 brutalist-border border-white p-4 md:p-6 text-center relative overflow-hidden w-full md:max-w-md mx-auto">
             {badge && (
-                <div
-                    className="absolute top-0 right-0 bg-white text-red-600 px-3 py-1 font-black uppercase text-[10px] md:text-[11px] leading-none font-brutal z-10 tracking-tight">
+                <div className="absolute top-0 right-0 bg-white text-red-600 px-3 py-1 font-black uppercase text-[10px] md:text-[11px] leading-none font-brutal z-10 tracking-tight">
                     Limited Offer
                 </div>
             )}
@@ -78,15 +75,21 @@ const Pricing: React.FC<PricingProps> = ({
 
             <div className="flex justify-center items-center gap-4 mb-4">
                 <div className="flex flex-col items-center">
-                    <span
-                        className="text-3xl md:text-5xl line-through decoration-black decoration-[2px] text-white/70 font-black font-brutal tracking-tighter">4000
+                    <span className="text-3xl md:text-5xl line-through decoration-black decoration-[2px] text-white/70 font-black font-brutal tracking-tighter">
+                        4000
                     </span>
-                    <span className="text-sm md:text-lg text-white/70 font-black font-brutal">ГРН</span>
+                    <span className="text-sm md:text-lg text-white/70 font-black font-brutal">
+                        ГРН
+                    </span>
                 </div>
+
                 <div className="flex flex-col items-center">
-                    <span
-                        className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">{DISPLAY_PRICE}</span>
-                    <span className="text-sm md:text-lg text-white font-black font-brutal leading-none">ГРН</span>
+                    <span className="text-3xl md:text-5xl font-black text-white font-brutal tracking-tighter leading-none">
+                        {DISPLAY_PRICE}
+                    </span>
+                    <span className="text-sm md:text-lg text-white font-black font-brutal leading-none">
+                        ГРН
+                    </span>
                 </div>
             </div>
 
@@ -97,10 +100,12 @@ const Pricing: React.FC<PricingProps> = ({
                             <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.hours}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">год</div>
                         </div>
+
                         <div className="min-w-[72px] border-2 border-white bg-white px-2 py-2 text-center text-black">
                             <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.minutes}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">хв</div>
                         </div>
+
                         <div className="min-w-[72px] border-2 border-white bg-white px-2 py-2 text-center text-black">
                             <div className="text-2xl md:text-3xl font-black leading-none font-brutal">{timeLeft.seconds}</div>
                             <div className="mt-1 text-[10px] font-black uppercase font-brutal">сек</div>
