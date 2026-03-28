@@ -1,16 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import studyVideo from "../../assets/videos/study-video.mp4";
 
-import studyPhoto1 from "../../assets/images/study1.jpg";
-import studyPhoto2 from "../../assets/images/study2.jpg";
-import studyPhoto3 from "../../assets/images/study3.jpg";
-import studyPhoto4 from "../../assets/images/study4.jpg";
-import studyPhoto5 from "../../assets/images/study5.jpg";
-import studyPhoto6 from "../../assets/images/study6.jpg";
-import studyPhoto7 from "../../assets/images/study7.jpg";
-import studyPhoto8 from "../../assets/images/study8.jpg";
-import studyPhoto9 from "../../assets/images/study9.jpg";
-import studyPhoto10 from "../../assets/images/study10.jpg";
+import studyPhoto1 from "../../assets/images/study1.webp";
+import studyPhoto2 from "../../assets/images/study2.webp";
+import studyPhoto3 from "../../assets/images/study3.webp";
+import studyPhoto4 from "../../assets/images/study4.webp";
+import studyPhoto5 from "../../assets/images/study5.webp";
+import studyPhoto6 from "../../assets/images/study6.webp";
+import studyPhoto7 from "../../assets/images/study7.webp";
+import studyPhoto8 from "../../assets/images/study8.webp";
+import studyPhoto9 from "../../assets/images/study9.webp";
+import studyPhoto10 from "../../assets/images/study10.webp";
 
 const photos = [
   studyPhoto1,
@@ -25,15 +24,93 @@ const photos = [
   studyPhoto10,
 ];
 
+type VideoEmbedProps = {
+  videoId: string;
+  title: string;
+};
+
+const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isStarted, setIsStarted] = useState(false);
+
+  const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=1&rel=0&playsinline=1&iv_load_policy=3&modestbranding=1`;
+
+  const handleStart = () => {
+    setIsStarted(true);
+
+    const iframeWindow = iframeRef.current?.contentWindow;
+    if (!iframeWindow) return;
+
+    iframeWindow.postMessage(
+        JSON.stringify({
+          event: "command",
+          func: "playVideo",
+          args: [],
+        }),
+        "*"
+    );
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const iframeWindow = iframeRef.current?.contentWindow;
+      if (!iframeWindow) return;
+
+      iframeWindow.postMessage(
+          JSON.stringify({
+            event: "listening",
+            id: videoId,
+          }),
+          "*"
+      );
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [videoId]);
+
+  return (
+      <div className="relative h-full w-full bg-black overflow-hidden">
+        <iframe
+            ref={iframeRef}
+            className="absolute inset-0 h-full w-full"
+            src={embedUrl}
+            title={title}
+            loading="eager"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+        />
+
+        {!isStarted && (
+            <button
+                type="button"
+                onClick={handleStart}
+                aria-label={`Запустити відео ${title}`}
+                className="absolute inset-0 z-10 block h-full w-full"
+            >
+              <img
+                  src={thumbnail}
+                  alt={title}
+                  className="absolute inset-0 h-full w-full object-cover"
+              />
+
+              <div className="absolute inset-0 bg-black/20 transition hover:bg-black/30" />
+
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 shadow-xl md:h-20 md:w-20">
+                  <div className="ml-1 h-0 w-0 border-y-[10px] border-y-transparent border-l-[16px] border-l-white md:border-y-[12px] md:border-l-[20px]" />
+                </div>
+              </div>
+            </button>
+        )}
+      </div>
+  );
+};
+
 const ResultsGallery: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [isVideoReady, setIsVideoReady] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const videoPreview = studyPhoto6;
 
   const preloadImage = (src: string) => {
     if (loadedImages[src]) return;
@@ -51,7 +128,6 @@ const ResultsGallery: React.FC = () => {
 
   useEffect(() => {
     const currentPhotos = photos.slice(index, index + 2);
-
     const nextIndex = index + 2 >= photos.length ? 0 : index + 2;
     const nextPhotos = photos.slice(nextIndex, nextIndex + 2);
 
@@ -63,56 +139,12 @@ const ResultsGallery: React.FC = () => {
   };
 
   const prev = () => {
-    setIndex((prev) => (prev - 2 < 0 ? Math.max(photos.length - 2, 0) : prev - 2));
+    setIndex((prev) =>
+        prev - 2 < 0 ? Math.max(photos.length - 2, 0) : prev - 2
+    );
   };
 
   const visiblePhotos = useMemo(() => photos.slice(index, index + 2), [index]);
-
-  const handlePlayVideo = async () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    try {
-      setIsVideoLoading(true);
-
-      video.load();
-      video.currentTime = 0;
-
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        await playPromise;
-      }
-
-      setIsVideoReady(true);
-      setIsVideoPlaying(true);
-    } catch (error) {
-      console.error("Study video play failed:", error);
-    } finally {
-      setIsVideoLoading(false);
-    }
-  };
-
-  const openFullscreen = async () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    try {
-      if (video.requestFullscreen) {
-        await video.requestFullscreen();
-        return;
-      }
-
-      const safariVideo = video as HTMLVideoElement & {
-        webkitEnterFullscreen?: () => void;
-      };
-
-      if (safariVideo.webkitEnterFullscreen) {
-        safariVideo.webkitEnterFullscreen();
-      }
-    } catch (error) {
-      console.error("Fullscreen failed:", error);
-    }
-  };
 
   return (
       <section className="py-24 px-4 bg-white text-black">
@@ -122,92 +154,10 @@ const ResultsGallery: React.FC = () => {
           </h2>
 
           <div className="relative w-full max-w-[360px] md:max-w-[420px] mx-auto aspect-[9/16] border-4 border-black bg-black overflow-hidden mb-2">
-            {!isVideoPlaying && (
-                <div className="absolute inset-0 z-20">
-                  <img
-                      src={videoPreview}
-                      alt="Video preview"
-                      className="w-full h-full object-contain bg-black"
-                  />
-
-                  <div className="absolute inset-0 bg-black/30" />
-
-                  <div className="absolute inset-x-0 top-4 flex justify-center">
-                    <div className="border-2 border-white bg-black/80 px-4 py-2 text-[11px] md:text-sm font-black uppercase text-white font-brutal tracking-tight text-center">
-                      {isVideoLoading
-                          ? "Завантажуємо відео..."
-                          : isVideoReady
-                              ? "Натисни щоб подивитися відео"
-                              : "Натисни щоб завантажити і подивитися відео"}
-                    </div>
-                  </div>
-
-                  <button
-                      type="button"
-                      onClick={handlePlayVideo}
-                      className="absolute inset-0 flex items-center justify-center transition cursor-pointer"
-                      aria-label="Play study video"
-                  >
-                    <div className="flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-full border-4 border-white bg-black/70">
-                      {isVideoLoading ? (
-                          <div className="h-8 w-8 rounded-full border-4 border-white/30 border-t-white animate-spin" />
-                      ) : (
-                          <svg
-                              className="ml-1 h-10 w-10 md:h-12 md:w-12 text-white"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                          >
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                      )}
-                    </div>
-                  </button>
-                </div>
-            )}
-
-            <video
-                ref={videoRef}
-                src={studyVideo}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                poster={videoPreview}
-                onLoadedData={() => setIsVideoReady(true)}
-                onCanPlay={() => setIsVideoReady(true)}
-                onPlay={() => {
-                  setIsVideoReady(true);
-                  setIsVideoPlaying(true);
-                  setIsVideoLoading(false);
-                }}
-                onPause={() => setIsVideoPlaying(false)}
-                onWaiting={() => setIsVideoLoading(true)}
-                onPlaying={() => {
-                  setIsVideoReady(true);
-                  setIsVideoPlaying(true);
-                  setIsVideoLoading(false);
-                }}
-                onError={(e) => {
-                  console.error("Video failed to load", e);
-                  setIsVideoLoading(false);
-                  setIsVideoPlaying(false);
-                }}
-                controls={isVideoPlaying}
-                controlsList="nodownload noplaybackrate noremoteplayback"
-                disablePictureInPicture
-                className="w-full h-full object-contain bg-black"
+            <VideoEmbed
+                videoId="y5X1Kd0TPa8"
+                title="Study shorts video"
             />
-
-            {isVideoPlaying && (
-                <button
-                    type="button"
-                    onClick={openFullscreen}
-                    className="absolute top-3 left-3 z-30 bg-black/70 text-white border border-white/20 px-3 py-1 text-[10px] md:text-xs font-black uppercase hover:bg-purple-500 hover:text-white transition-all"
-                    aria-label="Fullscreen study video"
-                >
-                  Full
-                </button>
-            )}
           </div>
 
           <div className="relative">
