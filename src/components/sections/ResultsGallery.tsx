@@ -27,9 +27,14 @@ const photos = [
 type VideoEmbedProps = {
   videoId: string;
   title: string;
+  isVertical?: boolean;
 };
 
-const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
+const VideoEmbed: React.FC<VideoEmbedProps> = ({
+                                                 videoId,
+                                                 title,
+                                                 isVertical = false,
+                                               }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [thumbnailSrc, setThumbnailSrc] = useState(
       `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
@@ -120,7 +125,9 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                 onClick={() => setIsOpen(false)}
             >
               <div
-                  className="relative w-full max-w-[1400px]"
+                  className={`relative w-full ${
+                      isVertical ? "max-w-[520px]" : "max-w-[1400px]"
+                  }`}
                   onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -133,7 +140,13 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                 </button>
 
                 <div className="relative w-full overflow-hidden border-4 border-black bg-black shadow-2xl">
-                  <div className="aspect-video w-full">
+                  <div
+                      className={`mx-auto w-full ${
+                          isVertical
+                              ? "aspect-[9/16] max-h-[90vh] max-w-[420px]"
+                              : "aspect-video"
+                      }`}
+                  >
                     <iframe
                         key={`${videoId}-modal`}
                         className="h-full w-full"
@@ -215,6 +228,7 @@ const ResultsGallery: React.FC = () => {
             <VideoEmbed
                 videoId="y5X1Kd0TPa8"
                 title="Study shorts video"
+                isVertical={true}
             />
           </div>
 

@@ -3,9 +3,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 type VideoEmbedProps = {
     videoId: string;
     title: string;
+    isVertical?: boolean;
 };
 
-const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
+const VideoEmbed: React.FC<VideoEmbedProps> = ({
+                                                   videoId,
+                                                   title,
+                                                   isVertical = false,
+                                               }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [thumbnailSrc, setThumbnailSrc] = useState(
         `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
@@ -65,7 +70,7 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
 
     return (
         <>
-            <div className="relative aspect-video w-full bg-black overflow-hidden">
+            <div className="relative h-full w-full overflow-hidden bg-black">
                 <button
                     type="button"
                     onClick={() => setIsOpen(true)}
@@ -96,7 +101,9 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                     onClick={() => setIsOpen(false)}
                 >
                     <div
-                        className="relative w-full max-w-[1400px]"
+                        className={`relative w-full ${
+                            isVertical ? 'max-w-[520px]' : 'max-w-[1400px]'
+                        }`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -109,7 +116,13 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                         </button>
 
                         <div className="relative w-full overflow-hidden border border-white/15 bg-black shadow-2xl">
-                            <div className="aspect-video w-full">
+                            <div
+                                className={`w-full ${
+                                    isVertical
+                                        ? 'aspect-[9/16] max-h-[88vh]'
+                                        : 'aspect-video'
+                                }`}
+                            >
                                 <iframe
                                     key={`${videoId}-modal`}
                                     className="h-full w-full"
@@ -120,6 +133,20 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                                     allowFullScreen
                                 />
                             </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between gap-3">
+                            <p className="truncate text-sm font-black uppercase tracking-wide text-white md:text-base">
+                                {title}
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(false)}
+                                className="shrink-0 border-4 border-white bg-transparent px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
+                            >
+                                Закрити
+                            </button>
                         </div>
                     </div>
                 </div>
