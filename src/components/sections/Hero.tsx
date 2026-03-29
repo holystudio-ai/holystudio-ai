@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
                     <div className="relative z-10 group max-w-full overflow-hidden mt-2 md:mt-0">
                         <h1
                             className="
-                                text-[clamp(35px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
+                                text-[clamp(28px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
                                 font-black font-brutal leading-[0.92] md:leading-[0.95]
                                 tracking-tighter select-none text-white
                                 glitch

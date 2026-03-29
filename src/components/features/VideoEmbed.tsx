@@ -121,20 +121,6 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                                 />
                             </div>
                         </div>
-
-                        <div className="mt-3 flex items-center justify-between gap-3">
-                            <p className="truncate text-sm font-bold uppercase tracking-wide text-white md:text-base">
-                                {title}
-                            </p>
-
-                            <button
-                                type="button"
-                                onClick={() => setIsOpen(false)}
-                                className="shrink-0 border border-white/20 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:border-white hover:bg-white hover:text-black"
-                            >
-                                Закрити
-                            </button>
-                        </div>
                     </div>
                 </div>
             )}

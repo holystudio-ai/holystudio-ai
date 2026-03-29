@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import studyPhoto1 from "../../assets/images/study1.webp";
 import studyPhoto2 from "../../assets/images/study2.webp";
@@ -30,39 +30,35 @@ type VideoEmbedProps = {
 };
 
 const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [isStarted, setIsStarted] = useState(false);
-  const [thumbnailSrc, setThumbnailSrc] = useState(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
-
-  const origin = typeof window !== "undefined" ? `&origin=${encodeURIComponent(window.location.origin)}` : "";
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&controls=1&rel=0&playsinline=1&iv_load_policy=3&modestbranding=1&vq=hd1080${origin}`;
-
-  const handleStart = () => {
-    setIsStarted(true);
-  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [thumbnailSrc, setThumbnailSrc] = useState(
+      `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+  );
 
   useEffect(() => {
     setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
+    setIsOpen(false);
   }, [videoId]);
 
   useEffect(() => {
-    if (!isStarted) return;
+    if (!isOpen) return;
 
-    const timer = setTimeout(() => {
-      const iframeWindow = iframeRef.current?.contentWindow;
-      if (!iframeWindow) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-      iframeWindow.postMessage(
-          JSON.stringify({
-            event: "listening",
-            id: videoId,
-          }),
-          "*"
-      );
-    }, 400);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
-  }, [isStarted, videoId]);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
 
   const handleThumbnailError = () => {
     if (thumbnailSrc.includes("maxresdefault")) {
@@ -75,45 +71,98 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
     }
   };
 
+  const embedUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      autoplay: "1",
+      controls: "1",
+      rel: "0",
+      playsinline: "1",
+      modestbranding: "1",
+      iv_load_policy: "3",
+      fs: "1",
+      hd: "1",
+      enablejsapi: "1",
+    });
+
+    return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+  }, [videoId]);
+
   return (
-      <div className="relative h-full w-full bg-black overflow-hidden">
-        {isStarted && (
-            <iframe
-                ref={iframeRef}
-                className="absolute inset-0 h-full w-full"
-                src={embedUrl}
-                title={title}
-                loading="eager"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
+      <>
+        <div className="relative h-full w-full overflow-hidden bg-black">
+          <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              aria-label={`Відкрити відео ${title}`}
+              className="absolute inset-0 z-10 block h-full w-full"
+          >
+            <img
+                src={thumbnailSrc}
+                alt={title}
+                onError={handleThumbnailError}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
             />
-        )}
 
-        {!isStarted && (
-            <button
-                type="button"
-                onClick={handleStart}
-                aria-label={`Запустити відео ${title}`}
-                className="absolute inset-0 z-10 block h-full w-full"
+            <div className="absolute inset-0 bg-black/20 transition duration-300 hover:bg-black/35" />
+
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 shadow-xl transition-transform duration-300 hover:scale-105 md:h-20 md:w-20">
+                <div className="ml-1 h-0 w-0 border-y-[10px] border-y-transparent border-l-[16px] border-l-white md:border-y-[12px] md:border-l-[20px]" />
+              </div>
+            </div>
+          </button>
+        </div>
+
+        {isOpen && (
+            <div
+                className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 px-4 py-6 md:px-8"
+                onClick={() => setIsOpen(false)}
             >
-              <img
-                  src={thumbnailSrc}
-                  alt={title}
-                  onError={handleThumbnailError}
-                  className="absolute inset-0 h-full w-full object-cover"
-              />
+              <div
+                  className="relative w-full max-w-[1400px]"
+                  onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Закрити відео"
+                    className="absolute -top-12 right-0 z-20 flex h-10 w-10 items-center justify-center border-4 border-black bg-white text-black transition hover:bg-black hover:text-white"
+                >
+                  ✕
+                </button>
 
-              <div className="absolute inset-0 bg-black/20 transition hover:bg-black/30" />
+                <div className="relative w-full overflow-hidden border-4 border-black bg-black shadow-2xl">
+                  <div className="aspect-video w-full">
+                    <iframe
+                        key={`${videoId}-modal`}
+                        className="h-full w-full"
+                        src={embedUrl}
+                        title={title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                    />
+                  </div>
+                </div>
 
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 shadow-xl md:h-20 md:w-20">
-                  <div className="ml-1 h-0 w-0 border-y-[10px] border-y-transparent border-l-[16px] border-l-white md:border-y-[12px] md:border-l-[20px]" />
+                <div className="mt-3 flex items-center justify-between gap-3">
+                  <p className="truncate text-sm font-black uppercase tracking-wide text-white md:text-base">
+                    {title}
+                  </p>
+
+                  <button
+                      type="button"
+                      onClick={() => setIsOpen(false)}
+                      className="shrink-0 border-4 border-white bg-transparent px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
+                  >
+                    Закрити
+                  </button>
                 </div>
               </div>
-            </button>
+            </div>
         )}
-      </div>
+      </>
   );
 };
 
@@ -156,13 +205,13 @@ const ResultsGallery: React.FC = () => {
   const visiblePhotos = useMemo(() => photos.slice(index, index + 2), [index]);
 
   return (
-      <section className="py-24 px-4 bg-white text-black">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-black font-brutal mb-8 tracking-tighter uppercase leading-none">
+      <section className="bg-white px-4 py-24 text-black">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="mb-8 font-brutal text-4xl font-black uppercase leading-none tracking-tighter md:text-6xl">
             РЕЗУЛЬТАТ ЯКИЙ ТИ СТВОРИШ ПІД ЧАС НАВЧАННЯ
           </h2>
 
-          <div className="relative w-full max-w-[360px] md:max-w-[420px] mx-auto aspect-[9/16] border-4 border-black bg-black overflow-hidden mb-2">
+          <div className="relative mx-auto mb-2 aspect-[9/16] w-full max-w-[360px] overflow-hidden border-4 border-black bg-black md:max-w-[420px]">
             <VideoEmbed
                 videoId="y5X1Kd0TPa8"
                 title="Study shorts video"
@@ -177,7 +226,7 @@ const ResultsGallery: React.FC = () => {
                 return (
                     <div
                         key={`${photo}-${i}`}
-                        className="relative w-full aspect-[3/4] border-4 border-black overflow-hidden bg-zinc-100"
+                        className="relative aspect-[3/4] w-full overflow-hidden border-4 border-black bg-zinc-100"
                     >
                       {!isLoaded && (
                           <div className="absolute inset-0 animate-pulse bg-zinc-200" />
@@ -191,7 +240,7 @@ const ResultsGallery: React.FC = () => {
                           onLoad={() =>
                               setLoadedImages((prev) => ({ ...prev, [photo]: true }))
                           }
-                          className={`w-full h-full object-cover transition-opacity duration-300 ${
+                          className={`h-full w-full object-cover transition-opacity duration-300 ${
                               isLoaded ? "opacity-100" : "opacity-0"
                           }`}
                       />
@@ -200,25 +249,25 @@ const ResultsGallery: React.FC = () => {
               })}
             </div>
 
-            <div className="flex justify-center gap-4 mt-3">
+            <div className="mt-3 flex justify-center gap-4">
               <button
                   onClick={prev}
-                  className="w-[180px] border-4 border-black bg-white px-6 py-3 font-black uppercase hover:bg-black hover:text-white transition"
+                  className="w-[180px] border-4 border-black bg-white px-6 py-3 font-black uppercase transition hover:bg-black hover:text-white"
               >
                 Назад
               </button>
 
               <button
                   onClick={next}
-                  className="w-[180px] border-4 border-black bg-black text-white px-6 py-3 font-black uppercase hover:bg-white hover:text-black transition"
+                  className="w-[180px] border-4 border-black bg-black px-6 py-3 font-black uppercase text-white transition hover:bg-white hover:text-black"
               >
                 Далі
               </button>
             </div>
           </div>
 
-          <div className="mt-8 p-6 bg-black text-white border-4 border-purple-500 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-xl font-bold font-brutal">
+          <div className="mt-8 border-4 border-purple-500 bg-black p-6 text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <p className="font-brutal text-xl font-bold">
               Це не просто картинки — це результат покрокового алгоритму, який ми передамо тобі.
             </p>
           </div>
