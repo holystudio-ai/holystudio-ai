@@ -8,8 +8,8 @@ const blocks = [
         type: "hero",
         titleStart:
             "В НОВІЙ РЕАЛЬНОСТІ НЕЙРОМЕРЕЖІ ДАЮТЬ ОДНІЙ ЛЮДИНІ МОЖЛИВІСТЬ СТВОРЮВАТИ КОНТЕНТ, З ЯКИМ ",
-        titleLight: "ЗАРОБЛЯЮТЬ ВІД 1000$ НА МІСЯЦЬ",
-        titleEnd: ", НАВІТЬ ПОЧАТКІВЦІ",
+        titleLight: "ЗАРОБЛЯЮТЬ ВІД 2000$",
+        titleEnd: "",
     },
     {
         type: "offer",
@@ -74,7 +74,7 @@ const Hero: React.FC = () => {
                                     <span className="font-normal">
                                         {heroBlock.titleLight}
                                     </span>
-                                    {heroBlock.titleEnd}
+                                    {heroBlock?.titleEnd}
                                 </h3>
                             </div>
                         )}

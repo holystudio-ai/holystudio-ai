@@ -32,27 +32,22 @@ type VideoEmbedProps = {
 const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isStarted, setIsStarted] = useState(false);
+  const [thumbnailSrc, setThumbnailSrc] = useState(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
 
-  const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=1&rel=0&playsinline=1&iv_load_policy=3&modestbranding=1`;
+  const origin = typeof window !== "undefined" ? `&origin=${encodeURIComponent(window.location.origin)}` : "";
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&controls=1&rel=0&playsinline=1&iv_load_policy=3&modestbranding=1&vq=hd1080${origin}`;
 
   const handleStart = () => {
     setIsStarted(true);
-
-    const iframeWindow = iframeRef.current?.contentWindow;
-    if (!iframeWindow) return;
-
-    iframeWindow.postMessage(
-        JSON.stringify({
-          event: "command",
-          func: "playVideo",
-          args: [],
-        }),
-        "*"
-    );
   };
 
   useEffect(() => {
+    setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
+  }, [videoId]);
+
+  useEffect(() => {
+    if (!isStarted) return;
+
     const timer = setTimeout(() => {
       const iframeWindow = iframeRef.current?.contentWindow;
       if (!iframeWindow) return;
@@ -67,20 +62,33 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [videoId]);
+  }, [isStarted, videoId]);
+
+  const handleThumbnailError = () => {
+    if (thumbnailSrc.includes("maxresdefault")) {
+      setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/sddefault.jpg`);
+      return;
+    }
+
+    if (thumbnailSrc.includes("sddefault")) {
+      setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`);
+    }
+  };
 
   return (
       <div className="relative h-full w-full bg-black overflow-hidden">
-        <iframe
-            ref={iframeRef}
-            className="absolute inset-0 h-full w-full"
-            src={embedUrl}
-            title={title}
-            loading="eager"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-        />
+        {isStarted && (
+            <iframe
+                ref={iframeRef}
+                className="absolute inset-0 h-full w-full"
+                src={embedUrl}
+                title={title}
+                loading="eager"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+            />
+        )}
 
         {!isStarted && (
             <button
@@ -90,8 +98,9 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({ videoId, title }) => {
                 className="absolute inset-0 z-10 block h-full w-full"
             >
               <img
-                  src={thumbnail}
+                  src={thumbnailSrc}
                   alt={title}
+                  onError={handleThumbnailError}
                   className="absolute inset-0 h-full w-full object-cover"
               />
 
