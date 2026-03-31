@@ -7,6 +7,9 @@ import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
 import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
 import TermsOfUse from "@/src/pages/TermsOfUse.tsx";
 import ScrollToTop from "@/src/components/features/ScrollToTop.tsx";
+import IntensiveSmm from "@/src/pages/IntensiveSmm.tsx";
+import IntensivePhotoVideo from "@/src/pages/IntensivePhotoVideo.tsx";
+import Intensive from "@/src/pages/Intensive.tsx";
 
 const App: React.FC = () => {
     return (
@@ -18,6 +21,9 @@ const App: React.FC = () => {
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage/>}/>
                 <Route path="/public-offer" element={<PublicOfferPage/>}/>
                 <Route path="/terms" element={<TermsOfUse/>}/>
+                <Route path="/intensive-smm" element={<IntensiveSmm/>}/>
+                <Route path="/intensive-photo-video" element={<IntensivePhotoVideo/>}/>
+                <Route path="/intensive" element={<Intensive/>}/>
             </Routes>
 
             <Footer/>

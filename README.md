@@ -19,7 +19,7 @@
 
 ## Де лежать константи
 
-- `src/lib/pricing.ts` — ціна `770`
+- `src/lib/pricing.ts` — ціна `490`
 - `src/lib/zenedu.ts` — сайт, direct payment, landing і bot link
 
 ## Локальний запуск

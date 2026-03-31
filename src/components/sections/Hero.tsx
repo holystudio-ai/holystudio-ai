@@ -1,7 +1,6 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
 import heroImage from "../../assets/images/hero-image.webp";
-import mainScreen from "../../assets/images/main-screen.jpg";
 import offers from "../../assets/images/offers.png";
 
 const blocks = [
@@ -30,7 +29,7 @@ const Hero: React.FC = () => {
             <div className="mx-auto max-w-7xl">
                 <div className="overflow-hidden border-4 border-black bg-black">
                     <img
-                        src={mainScreen}
+                        src={heroImage}
                         alt="AI creative course hero"
                         fetchPriority="high"
                         loading="eager"

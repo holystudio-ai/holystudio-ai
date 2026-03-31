@@ -1,4 +1,4 @@
-export const coursePriceUah = 770;
+export const coursePriceUah = 490;
 
 export function formatPriceUah(value: number) {
     return new Intl.NumberFormat('uk-UA', {
