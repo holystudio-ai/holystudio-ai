@@ -1,18 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import Hero from "@/src/components/sections/Hero.tsx";
 import Audience from "@/src/components/sections/Audience.tsx";
-import ResultsGallery from "@/src/components/sections/ResultsGallery.tsx";
-import Team from "@/src/components/sections/Team.tsx";
-import Program from "@/src/components/sections/Program.tsx";
 import Pricing from "@/src/components/sections/Pricing.tsx";
-import SkillsSection from "@/src/components/sections/SkillsSection.tsx";
-import Guarantee from "@/src/components/sections/Guarantee.tsx";
-import StudentsWorks from "@/src/components/sections/StudentWorks.tsx";
-import FAQ from "@/src/components/sections/FAQ.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
 import {redirectToZeneduPayment} from "@/src/lib/zenedu.ts";
+
+const ResultsGallery = lazy(() => import("@/src/components/sections/ResultsGallery.tsx"));
+const Team = lazy(() => import("@/src/components/sections/Team.tsx"));
+const Program = lazy(() => import("@/src/components/sections/Program.tsx"));
+const SkillsSection = lazy(() => import("@/src/components/sections/SkillsSection.tsx"));
+const Guarantee = lazy(() => import("@/src/components/sections/Guarantee.tsx"));
+const StudentsWorks = lazy(() => import("@/src/components/sections/StudentWorks.tsx"));
+const FAQ = lazy(() => import("@/src/components/sections/FAQ.tsx"));
 
 const priceValue = String(coursePriceUah);
 
@@ -42,20 +43,32 @@ const HomePage = () => {
 
                 <Audience/>
 
-                <ResultsGallery/>
+                <Suspense fallback={null}>
+                    <ResultsGallery/>
+                </Suspense>
 
-                <Team/>
+                <Suspense fallback={null}>
+                    <Team/>
+                </Suspense>
 
-                <Program/>
+                <Suspense fallback={null}>
+                    <Program/>
+                </Suspense>
 
                 <Pricing badge={true} text="Не проґав можливість бути першим і зірвати куш $$$"
                          title={"спеціальна пропозиція"} showTimer/>
 
-                <SkillsSection/>
+                <Suspense fallback={null}>
+                    <SkillsSection/>
+                </Suspense>
 
-                <Guarantee/>
+                <Suspense fallback={null}>
+                    <Guarantee/>
+                </Suspense>
 
-                <StudentsWorks/>
+                <Suspense fallback={null}>
+                    <StudentsWorks/>
+                </Suspense>
 
 
                 <section className=" pb-8 px-4 bg-black">
@@ -77,7 +90,9 @@ const HomePage = () => {
                     </div>
                 </section>
 
-                <FAQ/>
+                <Suspense fallback={null}>
+                    <FAQ/>
+                </Suspense>
             </main>
 
             <div
