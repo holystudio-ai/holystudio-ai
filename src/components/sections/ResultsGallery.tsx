@@ -64,7 +64,7 @@ const ResultsGallery: React.FC = () => {
   const visiblePhotos = useMemo(() => photos.slice(index, index + 2), [index]);
 
   return (
-      <section className="bg-white px-4 py-24 text-black">
+      <section className="bg-white px-4 py-14 text-black">
         <div className="mx-auto max-w-7xl">
           <h2 className="mb-8 font-brutal text-4xl font-black uppercase leading-none tracking-tighter md:text-6xl">
             РЕЗУЛЬТАТ ЯКИЙ ТИ СТВОРИШ ПІД ЧАС НАВЧАННЯ

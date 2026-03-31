@@ -42,18 +42,18 @@ const Program: React.FC = () => {
     ];
 
     return (
-        <section id="program" className="pt-12 pb-8 px-4 md:px-6 bg-white text-black">
+        <section id="program" className="pt-12 pb-8 px-2 md:px-6 bg-white text-black">
             <div className="w-full mx-auto">
                 <h2 className="text-4xl md:text-4xl font-black font-brutal mb-8 tracking-tighter uppercase leading-none text-center md:text-left">
                     ПРОГРАМА КУРСУ
                 </h2>
 
                 {/* Сітка програми */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pr-2">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {steps.map((step, idx) => (
                         <div
                             key={idx}
-                            className={`flex flex-col gap-2 p-3 md:p-4 brutalist-border border-black ${
+                            className={`flex flex-col gap-2 p-3 md:p-4 border-4 border-black ${
                                 step.accent ? 'bg-purple-600 text-white' : 'bg-white'
                             } brutalist-shadow transition-transform hover:-translate-y-1`}
                         >
