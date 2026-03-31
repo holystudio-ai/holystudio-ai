@@ -1,6 +1,7 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
 import heroImage from "../../assets/images/hero-image.webp";
+import mainScreen from "../../assets/images/main-screen.jpg";
 import offers from "../../assets/images/offers.png";
 
 const blocks = [
@@ -25,42 +26,17 @@ const Hero: React.FC = () => {
     const offerBlock = blocks.find((block) => block.type === "offer");
 
     return (
-        <section className="pt-20 pb-5 px-4 overflow-x-hidden overflow-y-visible">
-            <div className="max-w-7xl mx-auto">
-                <div className="relative min-h-[56svh] md:min-h-[100dvh] flex flex-col justify-end px-3 pt-5 md:p-8 w-full border-black brutalist-border overflow-hidden bg-black">
+        <section className="overflow-x-hidden px-4 pb-8 pt-20 md:pb-10 md:pt-24">
+            <div className="mx-auto max-w-7xl">
+                <div className="overflow-hidden border-4 border-black bg-black">
                     <img
-                        src={heroImage}
-                        alt=""
-                        aria-hidden="true"
+                        src={mainScreen}
+                        alt="AI creative course hero"
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover object-top"
+                        className="block h-auto max-h-[72svh] w-full object-cover object-center md:max-h-[90svh]"
                     />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1]" />
-                    <div className="absolute inset-0 bg-black/10 z-[1]" />
-
-                    <div className="relative z-10 group max-w-full overflow-hidden mt-2 md:mt-0">
-                        <h1
-                            className="
-                                text-[clamp(28px,8vw,52px)] sm:text-5xl md:text-7xl lg:text-[100px]
-                                font-black font-brutal leading-[0.92] md:leading-[0.95]
-                                tracking-tighter select-none text-white
-                                glitch
-                                max-w-full overflow-hidden
-                                break-words
-                            "
-                            data-text={mainTitle}
-                        >
-                            {mainTitle.split("АІ КРЕАТИВИ").map((part, index) => (
-                                <React.Fragment key={index}>
-                                    {part}
-                                    {index === 0 && <span className="text-purple-500">АІ КРЕАТИВИ</span>}
-                                </React.Fragment>
-                            ))}
-                        </h1>
-                    </div>
                 </div>
 
                 <Pricing badge showBonus showTimer text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />

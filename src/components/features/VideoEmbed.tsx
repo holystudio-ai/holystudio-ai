@@ -4,28 +4,47 @@ type VideoEmbedProps = {
     videoId: string;
     title: string;
     isVertical?: boolean;
+    thumbnail?: string;
 };
 
 const VideoEmbed: React.FC<VideoEmbedProps> = ({
                                                    videoId,
                                                    title,
                                                    isVertical = false,
+                                                   thumbnail,
                                                }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [thumbnailSrc, setThumbnailSrc] = useState(
-        `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+
+    const youtubeThumbnails = useMemo(
+        () => [
+            `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+            `https://img.youtube.com/vi/${videoId}/sddefault.jpg`,
+            `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+        ],
+        [videoId]
     );
 
+    const [thumbnailIndex, setThumbnailIndex] = useState(0);
+
+    const thumbnailSrc = thumbnail || youtubeThumbnails[thumbnailIndex];
+
     useEffect(() => {
-        setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
+        setThumbnailIndex(0);
         setIsOpen(false);
-    }, [videoId]);
+    }, [videoId, thumbnail]);
 
     useEffect(() => {
         if (!isOpen) return;
 
-        const previousOverflow = document.body.style.overflow;
+        const scrollY = window.scrollY;
+
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
         document.body.style.overflow = 'hidden';
+
+        document.documentElement.style.overflow = 'hidden';
 
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -36,20 +55,29 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            document.body.style.overflow = previousOverflow;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.overflow = '';
+
+            document.documentElement.style.overflow = '';
+
+            window.scrollTo(0, scrollY);
+
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [isOpen]);
 
     const handleThumbnailError = () => {
-        if (thumbnailSrc.includes('maxresdefault')) {
-            setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/sddefault.jpg`);
-            return;
-        }
+        if (thumbnail) return;
 
-        if (thumbnailSrc.includes('sddefault')) {
-            setThumbnailSrc(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`);
-        }
+        setThumbnailIndex((prev) => {
+            if (prev < youtubeThumbnails.length - 1) {
+                return prev + 1;
+            }
+            return prev;
+        });
     };
 
     const embedUrl = useMemo(() => {
@@ -106,14 +134,6 @@ const VideoEmbed: React.FC<VideoEmbedProps> = ({
                         }`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button
-                            type="button"
-                            onClick={() => setIsOpen(false)}
-                            aria-label="Закрити відео"
-                            className="absolute -top-12 right-0 z-20 flex h-10 w-10 items-center justify-center border border-white/20 bg-black text-white transition hover:border-white hover:bg-white hover:text-black"
-                        >
-                            ✕
-                        </button>
 
                         <div className="relative w-full overflow-hidden border border-white/15 bg-black shadow-2xl">
                             <div

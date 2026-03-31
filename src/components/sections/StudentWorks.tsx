@@ -5,11 +5,11 @@ import studentWork2 from "../../assets/student-works/2.jpg";
 import studentWork3 from "../../assets/student-works/3.jpg";
 import studentWork4 from "../../assets/student-works/4.jpg";
 import studentWork5 from "../../assets/student-works/5.jpg";
+import studentWork6 from "../../assets/student-works/6.jpg";
+import studentWork7 from "../../assets/student-works/7.jpg";
+import studentWork8 from "../../assets/student-works/8.jpg";
 import studentWork9 from "../../assets/student-works/9.jpg";
 import studentWork10 from "../../assets/student-works/10.jpg";
-import studentWork11 from "../../assets/student-works/11.jpg";
-import studentWork12 from "../../assets/student-works/12.jpg";
-import studentWork13 from "../../assets/student-works/13.jpg";
 
 const StudentsWorks: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -20,11 +20,11 @@ const StudentsWorks: React.FC = () => {
         { id: "03", src: studentWork3, alt: "Student work 3" },
         { id: "04", src: studentWork4, alt: "Student work 4" },
         { id: "05", src: studentWork5, alt: "Student work 5" },
-        { id: "09", src: studentWork9, alt: "Student work 9" },
-        { id: "10", src: studentWork10, alt: "Student work 10" },
-        { id: "11", src: studentWork11, alt: "Student work 11" },
-        { id: "12", src: studentWork12, alt: "Student work 12" },
-        { id: "13", src: studentWork13, alt: "Student work 13" },
+        { id: "09", src: studentWork6, alt: "Student work 6" },
+        { id: "10", src: studentWork7, alt: "Student work 7" },
+        { id: "11", src: studentWork8, alt: "Student work 8" },
+        { id: "12", src: studentWork9, alt: "Student work 9" },
+        { id: "12", src: studentWork10, alt: "Student work 10" },
     ];
 
     const scroll = (direction: "left" | "right") => {
