@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../assets/logo/logo.png';
+import logo from '../../assets/logo/logo.webp';
 import { Link } from "react-router-dom";
 import { FaTiktok } from "react-icons/fa";
 import { FaInstagram, FaThreads } from "react-icons/fa6";

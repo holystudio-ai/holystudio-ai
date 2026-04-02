@@ -1,7 +1,7 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
 import heroImage from "../../assets/images/hero-image.webp";
-import offers from "../../assets/images/offers.png";
+import offers from "../../assets/images/offers.webp";
 
 const blocks = [
     {

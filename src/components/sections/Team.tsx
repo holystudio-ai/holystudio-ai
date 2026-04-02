@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import logoYellow from '../../assets/logo/logo=yellow.png';
+import logoYellow from '../../assets/logo/logo-yellow.png';
 import bgVideo from '../../assets/videos/bg.mp4';
 import instagramLogo from '../../assets/logo/instagram.png';
 import {Link} from 'react-router-dom';

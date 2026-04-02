@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/logo/logo.png";
+import logo from "../../assets/logo/logo.webp";
 import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
