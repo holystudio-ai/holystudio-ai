@@ -7,7 +7,6 @@ export interface Env {
     COURSE_PRICE_UAH: string;
     WFP_MERCHANT_LOGIN: string;
     WFP_MERCHANT_SECRET: string;
-    WFP_MERCHANT_PASSWORD: string;
 }
 
 export function jsonResponse(data: unknown, status = 200): Response {
