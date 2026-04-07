@@ -6,6 +6,7 @@ import {coursePriceUah} from '@/src/lib/pricing.ts';
 const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 const MAX_POLLS = 10;
 const POLL_INTERVAL = 3000; // 3 seconds
+const API_URL = (process.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 type PaymentStatus = 'loading' | 'paid' | 'pending' | 'failed';
 
@@ -26,7 +27,7 @@ const ReturnPage: React.FC = () => {
 
     const checkStatus = useCallback(async () => {
         try {
-            const resp = await fetch(`/api/payment/status?token=${encodeURIComponent(token)}&ref=${encodeURIComponent(ref)}`);
+            const resp = await fetch(`${API_URL}/api/payment/status?token=${encodeURIComponent(token)}&ref=${encodeURIComponent(ref)}`);
             const data = await resp.json();
 
             if (data.status === 'paid') {

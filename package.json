@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "dev": "vite",
+    "dev:server": "cd server && npm run dev",
     "dev:full": "vercel dev --listen 3000",
     "build": "vite build",
     "preview": "vite preview",

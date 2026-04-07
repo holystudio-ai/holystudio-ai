@@ -2,6 +2,7 @@ import {coursePriceUah} from '@/src/lib/pricing.ts';
 import {trackInitiateCheckout, trackLead} from '@/src/lib/analytics.ts';
 
 const WAYFORPAY_URL = 'https://secure.wayforpay.com/pay';
+const API_URL = (process.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 /**
  * Collects browser / device / environment metadata for the user record.
@@ -68,7 +69,7 @@ export async function proceedToPayment(email: string) {
     // Save email + client metadata to users collection
     const clientMeta = collectClientMeta();
     try {
-        await fetch('/api/users', {
+        await fetch(`${API_URL}/api/users`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email, clientMeta}),
@@ -78,7 +79,7 @@ export async function proceedToPayment(email: string) {
     }
 
     // Create WayForPay order
-    const resp = await fetch('/api/payment/create', {
+    const resp = await fetch(`${API_URL}/api/payment/create`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email}),
