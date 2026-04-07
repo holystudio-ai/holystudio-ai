@@ -1,0 +1,7 @@
+name = "holystudio-ai"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[vars]
+# Environment variables are set in the Cloudflare dashboard
+
