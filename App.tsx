@@ -10,12 +10,18 @@ import ScrollToTop from "@/src/components/features/ScrollToTop.tsx";
 import IntensiveSmm from "@/src/pages/IntensiveSmm.tsx";
 import IntensivePhotoVideo from "@/src/pages/IntensivePhotoVideo.tsx";
 import Intensive from "@/src/pages/Intensive.tsx";
+import ThankYou from "@/src/pages/ThankYou.tsx";
+import ReturnPage from "@/src/pages/ReturnPage.tsx";
+import CancelPage from "@/src/pages/CancelPage.tsx";
+import ServicePage from "@/src/pages/ServicePage.tsx";
+import EmailModal from "@/src/components/features/EmailModal.tsx";
 
 const App: React.FC = () => {
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
             <Header/>
             <ScrollToTop/>
+            <EmailModal/>
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage/>}/>
@@ -24,6 +30,10 @@ const App: React.FC = () => {
                 <Route path="/intensive-smm" element={<IntensiveSmm/>}/>
                 <Route path="/intensive-photo-video" element={<IntensivePhotoVideo/>}/>
                 <Route path="/intensive" element={<Intensive/>}/>
+                <Route path="/thank-you" element={<ThankYou/>}/>
+                <Route path="/return-page" element={<ReturnPage/>}/>
+                <Route path="/cancel-page" element={<CancelPage/>}/>
+                <Route path="/service-page" element={<ServicePage/>}/>
             </Routes>
 
             <Footer/>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {formatPriceUah, coursePriceUah} from '@/src/lib/pricing.ts';
-import {redirectToZeneduPayment} from '@/src/lib/zenedu.ts';
+import {redirectToPayment} from '@/src/lib/payment.ts';
 
 const DISPLAY_PRICE = formatPriceUah(coursePriceUah);
 
@@ -142,7 +142,7 @@ const Pricing: React.FC<PricingProps> = ({
 
             <button
                 type="button"
-                onClick={redirectToZeneduPayment}
+                onClick={redirectToPayment}
                 className="w-full bg-white text-black text-sm md:text-base font-black py-2.5 uppercase brutalist-border border-black brutalist-shadow-hover transition-all font-brutal"
             >
                 ОТРИМАТИ ДОСТУП

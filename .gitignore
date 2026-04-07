@@ -19,7 +19,7 @@ dist-ssr
 .env.*
 !.env.example
 
-# Local env files
+# Local .env files
 *.local
 
 # Editor directories and files

@@ -5,7 +5,7 @@ import Pricing from "@/src/components/sections/Pricing.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
-import {redirectToZeneduPayment} from "@/src/lib/zenedu.ts";
+import {redirectToPayment} from "@/src/lib/payment.ts";
 
 const ResultsGallery = lazy(() => import("@/src/components/sections/ResultsGallery.tsx"));
 const Team = lazy(() => import("@/src/components/sections/Team.tsx"));
@@ -103,7 +103,7 @@ const IntensiveSmm = () => {
                 }`}
             >
                 <button
-                    onClick={redirectToZeneduPayment}
+                    onClick={redirectToPayment}
                     className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання
