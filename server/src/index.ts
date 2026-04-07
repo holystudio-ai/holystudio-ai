@@ -18,14 +18,17 @@ validateConfig();
 const app = express();
 
 // CORS — allow frontend origin
+const allowedOrigins = [
+    config.SITE_URL,
+    "http://localhost:5555",
+    "http://localhost:3000",
+    // Render static site & external URLs
+    ...(process.env.RENDER_EXTERNAL_URL ? [process.env.RENDER_EXTERNAL_URL] : []),
+    ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL.replace(/\/+$/, '')] : []),
+].filter(Boolean);
+
 app.use(cors({
-    origin: [
-        config.SITE_URL,
-        "http://localhost:5555",
-        "http://localhost:3000",
-        // Render static site URL (if different from SITE_URL)
-        ...(process.env.RENDER_EXTERNAL_URL ? [process.env.RENDER_EXTERNAL_URL] : []),
-    ],
+    origin: allowedOrigins,
     credentials: true,
 }));
 
