@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "vite",
     "dev:full": "vercel dev --listen 3000",
     "build": "vite build",
@@ -11,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "mongodb": "^7.1.1",
+    "mongodb": "7.1.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-icons": "^5.6.0",
@@ -19,12 +20,14 @@
     "resend": "^6.10.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260405.1",
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vercel/node": "^5.7.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.27",
+    "patch-package": "^8.0.1",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.2",
