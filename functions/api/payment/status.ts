@@ -110,8 +110,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
         return jsonResponse({ status: mappedStatus, orderReference, wfpStatus });
     } catch (err) {
-        console.error('[payment/status] Error:', err);
-        return jsonResponse({ error: 'Internal server error' }, 500);
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error('[payment/status] Error:', msg, err);
+        return jsonResponse({ error: 'Internal server error', debug: msg }, 500);
     }
 };
 
