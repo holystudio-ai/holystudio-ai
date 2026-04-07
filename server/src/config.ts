@@ -12,7 +12,7 @@ export const config = {
     WFP_MERCHANT_SECRET: process.env.WFP_MERCHANT_SECRET || '',
     WFP_MERCHANT_PASSWORD: process.env.WFP_MERCHANT_PASSWORD || '',
     /** Public URL of THIS server (for WayForPay callbacks) */
-    API_URL: (process.env.API_URL || 'http://localhost:3001').replace(/\/+$/, ''),
+    API_URL: (process.env.API_URL || 'https://holystudio-ai.onrender.com').replace(/\/+$/, ''),
 };
 
 export function validateConfig() {

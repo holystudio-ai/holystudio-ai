@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {proceedToPayment} from '@/src/lib/payment.ts';
 
-const API_URL = (process.env.VITE_API_URL || '').replace(/\/+$/, '');
+const API_URL = (process.env.VITE_API_URL || 'https://holystudio-ai.onrender.com').replace(/\/+$/, '');
 
 const REASON_MESSAGES: Record<string, string> = {
     format: 'Введіть коректний email',
