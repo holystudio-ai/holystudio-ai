@@ -5,5 +5,5 @@ compatibility_flags = ["nodejs_compat_v2"]
 
 [vars]
 SITE_URL = "https://holystudio.ai"
-COURSE_PRICE_UAH = "1"
+COURSE_PRICE_UAH = "490"
 RESEND_FROM = "HOLYSTUDIO <noreply@holystudio.ai>"
