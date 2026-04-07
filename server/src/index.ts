@@ -23,6 +23,8 @@ app.use(cors({
         config.SITE_URL,
         "http://localhost:5555",
         "http://localhost:3000",
+        // Render static site URL (if different from SITE_URL)
+        ...(process.env.RENDER_EXTERNAL_URL ? [process.env.RENDER_EXTERNAL_URL] : []),
     ],
     credentials: true,
 }));
