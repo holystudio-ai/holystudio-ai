@@ -51,8 +51,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
         return jsonResponse({ ok: true, found: unpaidUsers.length, sent, failed });
     } catch (err) {
-        console.error('[Cron] Error:', err);
-        return jsonResponse({ error: 'Internal server error' }, 500);
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error('[Cron] Error:', msg, err);
+        return jsonResponse({ error: 'Internal server error', debug: msg }, 500);
     }
 };
 

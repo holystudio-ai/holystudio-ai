@@ -86,8 +86,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
         return jsonResponse({ ok: true, formFields });
     } catch (err) {
-        console.error('[payment/create] Error:', err);
-        return jsonResponse({ error: 'Internal server error' }, 500);
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error('[payment/create] Error:', msg, err);
+        return jsonResponse({ error: 'Internal server error', debug: msg }, 500);
     }
 };
 
