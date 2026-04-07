@@ -60,13 +60,18 @@ const EmailModal: React.FC = () => {
         setLoading(true);
 
         try {
-            // Validate email on server (MX check) — non-blocking if API unavailable
+            // Validate email on server — with 3s timeout, skip if slow
             try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 3000);
+
                 const resp = await fetch(`${API_URL}/api/validate-email`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: trimmed}),
+                    signal: controller.signal,
                 });
+                clearTimeout(timeout);
 
                 if (resp.ok) {
                     const data = await resp.json();
@@ -77,8 +82,8 @@ const EmailModal: React.FC = () => {
                     }
                 }
             } catch {
-                // API unavailable — skip validation, proceed to payment
-                console.warn('[EmailModal] Email validation API unavailable, skipping');
+                // API unavailable or timeout — skip validation, proceed to payment
+                console.warn('[EmailModal] Email validation skipped (timeout/unavailable)');
             }
 
             // Create WayForPay payment and redirect to payment page
