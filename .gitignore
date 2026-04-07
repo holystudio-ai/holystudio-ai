@@ -19,6 +19,9 @@ dist-ssr
 .env.*
 !.env.example
 cloudflare-secrets.txt
+server/.env
+server/dist
+server/node_modules
 
 # Local .env files
 *.local

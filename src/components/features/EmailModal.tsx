@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {proceedToPayment} from '@/src/lib/payment.ts';
 
+const API_URL = (process.env.VITE_API_URL || '').replace(/\/+$/, '');
+
 const REASON_MESSAGES: Record<string, string> = {
     format: 'Введіть коректний email',
     disposable: 'Тимчасові поштові скриньки не приймаються',
@@ -60,7 +62,7 @@ const EmailModal: React.FC = () => {
         try {
             // Validate email on server (MX check) — non-blocking if API unavailable
             try {
-                const resp = await fetch('/api/validate-email', {
+                const resp = await fetch(`${API_URL}/api/validate-email`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: trimmed}),
