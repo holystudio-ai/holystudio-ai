@@ -3,4 +3,7 @@ pages_build_output_dir = "./dist"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat_v2"]
 
-
+[vars]
+SITE_URL = "https://holystudio.ai"
+COURSE_PRICE_UAH = "490"
+RESEND_FROM = "HOLYSTUDIO <noreply@holystudio.ai>"
