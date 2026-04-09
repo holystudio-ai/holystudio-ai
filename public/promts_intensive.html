@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Creative Intensive</title>
     <meta
             name="description"
@@ -41,535 +41,535 @@
     <link rel="preload" href="/fonts/unbounded-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
 
-<style>
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 300 900;
-    font-display: swap;
-    src: url('/fonts/inter-cyrillic.woff2') format('woff2');
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 300 900;
+            font-display: swap;
+            src: url('/fonts/inter-cyrillic.woff2') format('woff2');
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
 
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 300 900;
-    font-display: swap;
-    src: url('/fonts/inter-latin.woff2') format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 300 900;
+            font-display: swap;
+            src: url('/fonts/inter-latin.woff2') format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
 
-  @font-face {
-    font-family: 'Unbounded';
-    font-style: normal;
-    font-weight: 400 900;
-    font-display: swap;
-    src: url('/fonts/unbounded-cyrillic.woff2') format('woff2');
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
+        @font-face {
+            font-family: 'Unbounded';
+            font-style: normal;
+            font-weight: 400 900;
+            font-display: swap;
+            src: url('/fonts/unbounded-cyrillic.woff2') format('woff2');
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
 
-  @font-face {
-    font-family: 'Unbounded';
-    font-style: normal;
-    font-weight: 400 900;
-    font-display: swap;
-    src: url('/fonts/unbounded-latin.woff2') format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
+        @font-face {
+            font-family: 'Unbounded';
+            font-style: normal;
+            font-weight: 400 900;
+            font-display: swap;
+            src: url('/fonts/unbounded-latin.woff2') format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
 
-  :root {
-    --black: #000000;
-    --white: #ffffff;
-    --gray-950: #0a0a0a;
-    --gray-900: #111111;
-    --gray-800: #1a1a1a;
-    --gray-700: #222222;
-    --gray-600: #333333;
-    --gray-400: #666666;
-    --gray-300: #888888;
-    --gray-200: #aaaaaa;
-    --purple: #a855f7;
-    --purple-dark: #9333ea;
-    --purple-deep: #581c87;
-    --purple-dim: rgba(168,85,247,0.12);
-    --purple-border: rgba(168,85,247,0.3);
-  }
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray-950: #0a0a0a;
+            --gray-900: #111111;
+            --gray-800: #1a1a1a;
+            --gray-700: #222222;
+            --gray-600: #333333;
+            --gray-400: #666666;
+            --gray-300: #888888;
+            --gray-200: #aaaaaa;
+            --purple: #a855f7;
+            --purple-dark: #9333ea;
+            --purple-deep: #581c87;
+            --purple-dim: rgba(168,85,247,0.12);
+            --purple-border: rgba(168,85,247,0.3);
+        }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--black);
-    color: var(--white);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
 
-  nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 50;
-      background: var(--black);
-      border-bottom: 2px solid var(--white);
-  }
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            background: var(--black);
+            border-bottom: 2px solid var(--white);
+        }
 
-  .nav-inner {
-      max-width: 80rem;
-      margin: 0 auto;
-      padding: 0 12px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-  }
+        .nav-inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 12px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
 
-  .nav-logo {
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-  }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-  .nav-logo img {
-      height: 50px;
-      width: auto;
-      display: block;
-      transition: all 0.2s ease;
-  }
+        .nav-logo img {
+            height: 50px;
+            width: auto;
+            display: block;
+            transition: all 0.2s ease;
+        }
 
-  @media (min-width: 640px) {
-      .nav-inner {
-          padding: 0 16px;
-      }
-  }
+        @media (min-width: 640px) {
+            .nav-inner {
+                padding: 0 16px;
+            }
+        }
 
-  @media (min-width: 768px) {
-      .nav-inner {
-          height: 80px;
-      }
-  }
+        @media (min-width: 768px) {
+            .nav-inner {
+                height: 80px;
+            }
+        }
 
-  .nav-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-left: auto;
-      font-family: 'Unbounded', sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--black);
-      background: var(--purple);
-      padding: 6px 14px;
-      border-radius: 2px;
-  }
+        .nav-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: auto;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--purple);
+            padding: 6px 14px;
+            border-radius: 2px;
+        }
 
-  /* ── HERO ── */
-  .hero {
-    padding: 100px 32px 64px;
-    max-width: 1280px;
-    margin: 0 auto;
-    position: relative;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 600px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--purple), transparent);
-  }
-  .hero-eyebrow {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--purple);
-    margin-bottom: 20px;
-  }
-  .hero h1 {
-    font-family: 'Unbounded', sans-serif;
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 900;
-    text-transform: uppercase;
-    line-height: 1.05;
-    letter-spacing: -.01em;
-    color: var(--white);
-    margin-bottom: 20px;
-  }
-  .hero-desc {
-    color: var(--gray-300);
-    font-size: 15px;
-    font-weight: 300;
-    max-width: 560px;
-    line-height: 1.75;
-    margin-bottom: 32px;
-  }
-  .hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .hero-tag {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--gray-300);
-    border: 1px solid var(--gray-700);
-    padding: 5px 12px;
-    border-radius: 2px;
-  }
+        /* ── HERO ── */
+        .hero {
+            padding: 100px 32px 64px;
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--purple), transparent);
+        }
+        .hero-eyebrow {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.05;
+            letter-spacing: -.01em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+        .hero-desc {
+            color: var(--gray-300);
+            font-size: 15px;
+            font-weight: 300;
+            max-width: 560px;
+            line-height: 1.75;
+            margin-bottom: 32px;
+        }
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .hero-tag {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+            border: 1px solid var(--gray-700);
+            padding: 5px 12px;
+            border-radius: 2px;
+        }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 32px 80px;
-  }
+        /* ── MAIN ── */
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px 80px;
+        }
 
-  /* ── SECTION LABEL ── */
-  .section-label {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--gray-400);
-    margin: 48px 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--gray-800);
-  }
+        /* ── SECTION LABEL ── */
+        .section-label {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin: 48px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-800);
+        }
 
-  /* ── ACCORDION ── */
-  .accordion { display: flex; flex-direction: column; gap: 4px; }
+        /* ── ACCORDION ── */
+        .accordion { display: flex; flex-direction: column; gap: 4px; }
 
-  .accordion-item {
-    background: var(--gray-900);
-    border: 1px solid var(--gray-800);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: border-color .2s;
-  }
-  .accordion-item.open {
-    border-color: var(--purple-border);
-  }
+        .accordion-item {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: border-color .2s;
+        }
+        .accordion-item.open {
+            border-color: var(--purple-border);
+        }
 
-  .accordion-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 18px 20px;
-    cursor: pointer;
-    user-select: none;
-    transition: background .15s;
-  }
-  .accordion-header:hover { background: var(--gray-800); }
-  .accordion-item.open .accordion-header { background: var(--gray-800); }
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: background .15s;
+        }
+        .accordion-header:hover { background: var(--gray-800); }
+        .accordion-item.open .accordion-header { background: var(--gray-800); }
 
-  .frame-num {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--purple);
-    min-width: 32px;
-    letter-spacing: .05em;
-  }
-  .frame-badge {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    background: var(--purple-dim);
-    color: var(--purple);
-    padding: 3px 10px;
-    border-radius: 2px;
-    border: 1px solid var(--purple-border);
-    white-space: nowrap;
-  }
-  .frame-title {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--white);
-    flex: 1;
-    letter-spacing: .02em;
-    line-height: 1.4;
-  }
-  .chevron {
-    width: 16px; height: 16px;
-    color: var(--gray-400);
-    transition: transform .25s cubic-bezier(.4,0,.2,1);
-    flex-shrink: 0;
-  }
-  .accordion-item.open .chevron { transform: rotate(180deg); color: var(--purple); }
+        .frame-num {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--purple);
+            min-width: 32px;
+            letter-spacing: .05em;
+        }
+        .frame-badge {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            background: var(--purple-dim);
+            color: var(--purple);
+            padding: 3px 10px;
+            border-radius: 2px;
+            border: 1px solid var(--purple-border);
+            white-space: nowrap;
+        }
+        .frame-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--white);
+            flex: 1;
+            letter-spacing: .02em;
+            line-height: 1.4;
+        }
+        .chevron {
+            width: 16px; height: 16px;
+            color: var(--gray-400);
+            transition: transform .25s cubic-bezier(.4,0,.2,1);
+            flex-shrink: 0;
+        }
+        .accordion-item.open .chevron { transform: rotate(180deg); color: var(--purple); }
 
-  .accordion-body {
-    display: none;
-    padding: 0 20px 20px;
-    border-top: 1px solid var(--gray-800);
-  }
-  .accordion-item.open .accordion-body { display: block; }
+        .accordion-body {
+            display: none;
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--gray-800);
+        }
+        .accordion-item.open .accordion-body { display: block; }
 
-  /* ── TABS ── */
-  .tabs-nav {
-    display: flex;
-    gap: 0;
-    margin-bottom: 16px;
-    margin-top: 16px;
-    border-bottom: 1px solid var(--gray-800);
-  }
-  .tab-btn {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    padding: 10px 18px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--gray-400);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: color .15s, border-color .15s, background .15s;
-  }
-  .tab-btn:hover { color: var(--white); background: var(--gray-800); }
-  .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
+        /* ── TABS ── */
+        .tabs-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 16px;
+            margin-top: 16px;
+            border-bottom: 1px solid var(--gray-800);
+        }
+        .tab-btn {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 10px 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: color .15s, border-color .15s, background .15s;
+        }
+        .tab-btn:hover { color: var(--white); background: var(--gray-800); }
+        .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
 
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
 
-  /* ── CONTENT BLOCKS ── */
-  .content-block {
-    background: var(--gray-950);
-    border: 1px solid var(--gray-800);
-    border-radius: 4px;
-    padding: 18px 20px;
-    position: relative;
-  }
-  .content-block.skeleton-block {
-    border-color: rgba(168,85,247,0.2);
-    border-style: dashed;
-    background: rgba(168,85,247,0.04);
-  }
-  .content-block.prompt-block {
-    border-color: rgba(168,85,247,0.25);
-    background: rgba(168,85,247,0.06);
-  }
+        /* ── CONTENT BLOCKS ── */
+        .content-block {
+            background: var(--gray-950);
+            border: 1px solid var(--gray-800);
+            border-radius: 4px;
+            padding: 18px 20px;
+            position: relative;
+        }
+        .content-block.skeleton-block {
+            border-color: rgba(168,85,247,0.2);
+            border-style: dashed;
+            background: rgba(168,85,247,0.04);
+        }
+        .content-block.prompt-block {
+            border-color: rgba(168,85,247,0.25);
+            background: rgba(168,85,247,0.06);
+        }
 
-  .content-text {
-    font-family: 'Inter', monospace;
-    font-size: 12px;
-    line-height: 1.85;
-    color: var(--gray-200);
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .structure-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    line-height: 1.8;
-    color: var(--gray-200);
-    white-space: pre-wrap;
-  }
+        .content-text {
+            font-family: 'Inter', monospace;
+            font-size: 12px;
+            line-height: 1.85;
+            color: var(--gray-200);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .structure-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--gray-200);
+            white-space: pre-wrap;
+        }
 
-  /* ── COPY BTN ── */
-  .copy-btn {
-    position: absolute;
-    top: 12px; right: 12px;
-    font-family: 'Unbounded', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    background: var(--gray-800);
-    color: var(--gray-300);
-    border: 1px solid var(--gray-700);
-    border-radius: 2px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: all .15s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .copy-btn:hover { background: var(--purple); color: var(--white); border-color: var(--purple); }
-  .copy-btn.copied { background: #16a34a; color: var(--white); border-color: #16a34a; }
-  .copy-btn svg { width: 10px; height: 10px; }
+        /* ── COPY BTN ── */
+        .copy-btn {
+            position: absolute;
+            top: 12px; right: 12px;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            background: var(--gray-800);
+            color: var(--gray-300);
+            border: 1px solid var(--gray-700);
+            border-radius: 2px;
+            padding: 5px 12px;
+            cursor: pointer;
+            transition: all .15s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .copy-btn:hover { background: var(--purple); color: var(--white); border-color: var(--purple); }
+        .copy-btn.copied { background: #16a34a; color: var(--white); border-color: #16a34a; }
+        .copy-btn svg { width: 10px; height: 10px; }
 
-  /* ── LANG TABS ── */
-  .lang-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-  .lang-btn {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 2px;
-    border: 1px solid var(--gray-700);
-    background: none;
-    color: var(--gray-400);
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .lang-btn.active, .lang-btn:hover {
-    background: var(--purple);
-    color: var(--white);
-    border-color: var(--purple);
-  }
-  .lang-pane { display: none; }
-  .lang-pane.active { display: block; }
+        /* ── LANG TABS ── */
+        .lang-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .lang-btn {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 2px;
+            border: 1px solid var(--gray-700);
+            background: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            transition: all .15s;
+        }
+        .lang-btn.active, .lang-btn:hover {
+            background: var(--purple);
+            color: var(--white);
+            border-color: var(--purple);
+        }
+        .lang-pane { display: none; }
+        .lang-pane.active { display: block; }
 
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--gray-800);
-    padding: 32px;
-    text-align: center;
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--gray-600);
-  }
-  footer span { color: var(--purple); }
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--gray-800);
+            padding: 32px;
+            text-align: center;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+        footer span { color: var(--purple); }
 
-  /* ── PART DIVIDER ── */
-  .part-divider {
-    margin: 72px 0 0;
-    text-align: center;
-  }
-  .part-divider-line {
-    height: 1px;
-    background: var(--gray-700);
-    margin-bottom: 0;
-  }
-  .part-divider-body {
-    background: var(--gray-900);
-    border: 1px solid var(--gray-700);
-    border-top: none;
-    border-bottom: none;
-    padding: 40px 40px 36px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    position: relative;
-  }
-  .part-badge {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    padding: 5px 16px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .part-badge-done {
-    color: var(--gray-400);
-    background: var(--gray-800);
-    border: 1px solid var(--gray-700);
-  }
-  .part-badge-next {
-    color: var(--black);
-    background: var(--purple);
-    border: 1px solid var(--purple);
-  }
-  .part-divider-title {
-    font-family: 'Unbounded', sans-serif;
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 900;
-    text-transform: uppercase;
-    color: var(--white);
-    line-height: 1.1;
-    letter-spacing: -.01em;
-  }
-  .part-divider-title span { color: var(--gray-400); }
-  .part-divider-arrow {
-    color: var(--purple);
-    opacity: .6;
-    margin: 4px 0;
-  }
+        /* ── PART DIVIDER ── */
+        .part-divider {
+            margin: 72px 0 0;
+            text-align: center;
+        }
+        .part-divider-line {
+            height: 1px;
+            background: var(--gray-700);
+            margin-bottom: 0;
+        }
+        .part-divider-body {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-700);
+            border-top: none;
+            border-bottom: none;
+            padding: 40px 40px 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+        }
+        .part-badge {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .part-badge-done {
+            color: var(--gray-400);
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+        }
+        .part-badge-next {
+            color: var(--black);
+            background: var(--purple);
+            border: 1px solid var(--purple);
+        }
+        .part-divider-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--white);
+            line-height: 1.1;
+            letter-spacing: -.01em;
+        }
+        .part-divider-title span { color: var(--gray-400); }
+        .part-divider-arrow {
+            color: var(--purple);
+            opacity: .6;
+            margin: 4px 0;
+        }
 
-  /* ── ANIM SECTION HEADER ── */
-  .anim-section-header {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-    background: linear-gradient(135deg, rgba(168,85,247,.08) 0%, transparent 60%);
-    border: 1px solid var(--purple-border);
-    border-radius: 4px;
-    padding: 32px 32px 28px;
-    margin: 0 0 8px;
-  }
-  .anim-section-icon {
-    width: 48px; height: 48px;
-    background: var(--purple);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--white);
-  }
-  .anim-section-title {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: var(--white);
-    letter-spacing: -.01em;
-    margin-bottom: 8px;
-  }
-  .anim-section-desc {
-    color: var(--gray-300);
-    font-size: 13px;
-    font-weight: 300;
-    line-height: 1.7;
-    max-width: 600px;
-  }
+        /* ── ANIM SECTION HEADER ── */
+        .anim-section-header {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            background: linear-gradient(135deg, rgba(168,85,247,.08) 0%, transparent 60%);
+            border: 1px solid var(--purple-border);
+            border-radius: 4px;
+            padding: 32px 32px 28px;
+            margin: 0 0 8px;
+        }
+        .anim-section-icon {
+            width: 48px; height: 48px;
+            background: var(--purple);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--white);
+        }
+        .anim-section-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--white);
+            letter-spacing: -.01em;
+            margin-bottom: 8px;
+        }
+        .anim-section-desc {
+            color: var(--gray-300);
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 600px;
+        }
 
-  /* ── ANIM ITEM ACCENT ── */
-  .anim-item { border-color: rgba(168,85,247,.18) !important; }
-  .anim-item.open { border-color: rgba(168,85,247,.5) !important; }
-  .anim-item .accordion-header:hover { background: rgba(168,85,247,.06) !important; }
-  .anim-item.open .accordion-header { background: rgba(168,85,247,.08) !important; }
-  .anim-badge {
-    background: rgba(168,85,247,.15) !important;
-    color: var(--purple) !important;
-    border-color: rgba(168,85,247,.4) !important;
-  }
+        /* ── ANIM ITEM ACCENT ── */
+        .anim-item { border-color: rgba(168,85,247,.18) !important; }
+        .anim-item.open { border-color: rgba(168,85,247,.5) !important; }
+        .anim-item .accordion-header:hover { background: rgba(168,85,247,.06) !important; }
+        .anim-item.open .accordion-header { background: rgba(168,85,247,.08) !important; }
+        .anim-badge {
+            background: rgba(168,85,247,.15) !important;
+            color: var(--purple) !important;
+            border-color: rgba(168,85,247,.4) !important;
+        }
 
-</style>
+    </style>
 </head>
 <body>
 
@@ -583,56 +583,56 @@
 </nav>
 
 <div class="hero">
-  <p class="hero-eyebrow">AI Creative Intensive · Матеріали курсу</p>
-  <h1>Бібліотека<br>промтів</h1>
-  <p class="hero-desc">Всі промти з уроків — структура, шаблон і готовий приклад для кожного кадру. Копіюй і адаптуй під свій проект.</p>
-  <div class="hero-tags">
-    <span class="hero-tag">Кадри 1–10</span>
-    <span class="hero-tag">AI Avatar</span>
-    <span class="hero-tag">Перенос одягу</span>
-    <span class="hero-tag">Blackmagic PYXIS 6K</span>
-    <span class="hero-tag">Kodak Ektachrome 100</span>
-  </div>
+    <p class="hero-eyebrow">AI Creative Intensive · Матеріали курсу</p>
+    <h1>Бібліотека<br>промтів</h1>
+    <p class="hero-desc">Всі промти з уроків — структура, шаблон і готовий приклад для кожного кадру. Копіюй і адаптуй під свій проект.</p>
+    <div class="hero-tags">
+        <span class="hero-tag">Кадри 1–10</span>
+        <span class="hero-tag">AI Avatar</span>
+        <span class="hero-tag">Перенос одягу</span>
+        <span class="hero-tag">Blackmagic PYXIS 6K</span>
+        <span class="hero-tag">Kodak Ektachrome 100</span>
+    </div>
 </div>
 
 <main>
 
-  <p class="section-label">00 · Налаштування помічника</p>
-  <div class="accordion">
-    <div class="accordion-item" id="item-universal">
-      <div class="accordion-header" onclick="toggleItem('item-universal')">
-        <span class="frame-num">∞</span>
-        <span class="frame-badge">Universal</span>
-        <span class="frame-title">Універсальний кінематографічний фреймворк</span>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="accordion-body">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(this,'universal','structure')">Структура</button>
-          <button class="tab-btn" onclick="switchTab(this,'universal','skeleton')">Скелет</button>
-          <button class="tab-btn" onclick="switchTab(this,'universal','prompt')">Готовий промт</button>
-        </div>
-        <div class="tab-pane active" id="universal-structure">
-          <div class="content-block">
-            <p class="structure-text">Налаштування кастомного AI-помічника для роботи з промтами.
+    <p class="section-label">00 · Налаштування помічника</p>
+    <div class="accordion">
+        <div class="accordion-item" id="item-universal">
+            <div class="accordion-header" onclick="toggleItem('item-universal')">
+                <span class="frame-num">∞</span>
+                <span class="frame-badge">Universal</span>
+                <span class="frame-title">Універсальний кінематографічний фреймворк</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="accordion-body">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab(this,'universal','structure')">Структура</button>
+                    <button class="tab-btn" onclick="switchTab(this,'universal','skeleton')">Скелет</button>
+                    <button class="tab-btn" onclick="switchTab(this,'universal','prompt')">Готовий промт</button>
+                </div>
+                <div class="tab-pane active" id="universal-structure">
+                    <div class="content-block">
+                        <p class="structure-text">Налаштування кастомного AI-помічника для роботи з промтами.
 
-Дає модель думки кінорежисера / оператора / VFX-супервайзера.
+                            Дає модель думки кінорежисера / оператора / VFX-супервайзера.
 
-Обовʼязкові елементи кожного промту:
-• Камера (модель, лінза, фокусна відстань, кадрування)
-• Освітлення (джерело, напрям, контраст, поведінка тіней)
-• Плівка (кіноплівка або емуляція)
+                            Обовʼязкові елементи кожного промту:
+                            • Камера (модель, лінза, фокусна відстань, кадрування)
+                            • Освітлення (джерело, напрям, контраст, поведінка тіней)
+                            • Плівка (кіноплівка або емуляція)
 
-Принцип: ультрареалізм · контроль · відтворюваний результат.
-Дублювати всі промти: EN + UA.</p>
-          </div>
-        </div>
-        <div class="tab-pane" id="universal-skeleton">
-          <div class="content-block skeleton-block">
-            <button class="copy-btn" onclick="copyText(this,'univ-skel')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
-            </button>
-            <pre class="content-text" id="univ-skel">UNIVERSAL CINEMATIC PROMPT FRAMEWORK
+                            Принцип: ультрареалізм · контроль · відтворюваний результат.
+                            Дублювати всі промти: EN + UA.</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="universal-skeleton">
+                    <div class="content-block skeleton-block">
+                        <button class="copy-btn" onclick="copyText(this,'univ-skel')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
+                        </button>
+                        <pre class="content-text" id="univ-skel">UNIVERSAL CINEMATIC PROMPT FRAMEWORK
 
 You are a professional film director, cinematographer, and VFX supervisor.
 You think in frames, real-world camera physics, body mechanics, and environmental behavior.
@@ -649,19 +649,19 @@ Lighting (source, direction, contrast, shadow behavior)
 Film (film stock or film emulation)
 
 Core focus: Ultra-realism · Control · Repeatable results</pre>
-          </div>
-        </div>
-        <div class="tab-pane" id="universal-prompt">
-          <div class="lang-tabs">
-            <button class="lang-btn active" onclick="switchLang(this,'univ-p','en')">EN</button>
-            <button class="lang-btn" onclick="switchLang(this,'univ-p','ua')">UA</button>
-          </div>
-          <div class="lang-pane active" id="univ-p-en">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'univ-en')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
-              </button>
-              <pre class="content-text" id="univ-en">UNIVERSAL CINEMATIC PROMPT FRAMEWORK
+                    </div>
+                </div>
+                <div class="tab-pane" id="universal-prompt">
+                    <div class="lang-tabs">
+                        <button class="lang-btn active" onclick="switchLang(this,'univ-p','en')">EN</button>
+                        <button class="lang-btn" onclick="switchLang(this,'univ-p','ua')">UA</button>
+                    </div>
+                    <div class="lang-pane active" id="univ-p-en">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'univ-en')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
+                            </button>
+                            <pre class="content-text" id="univ-en">UNIVERSAL CINEMATIC PROMPT FRAMEWORK
 
 You are a professional film director, cinematographer, and VFX supervisor.
 You think in frames, real-world camera physics, body mechanics, and environmental behavior.
@@ -683,14 +683,14 @@ Core focus: Ultra-realism · Control · Repeatable results
 Prompts are precise, structured, cohesive, and optimized for Nano Banana generation.
 If information is insufficient, ask clarifying questions before generating.
 Duplicate all prompts in 2 languages: Prompt 1 – English, Prompt 2 – Ukrainian.</pre>
-            </div>
-          </div>
-          <div class="lang-pane" id="univ-p-ua">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'univ-ua')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
-              </button>
-              <pre class="content-text" id="univ-ua">Привіт, я надсилаю тобі універсальний промт для налаштування тебе як кастомного помічника. Додай це до своєї бази знань. Також дублюй усі промти 2 мовами: промт 1 — англійською, промт 2 — українською.
+                        </div>
+                    </div>
+                    <div class="lang-pane" id="univ-p-ua">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'univ-ua')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати
+                            </button>
+                            <pre class="content-text" id="univ-ua">Привіт, я надсилаю тобі універсальний промт для налаштування тебе як кастомного помічника. Додай це до своєї бази знань. Також дублюй усі промти 2 мовами: промт 1 — англійською, промт 2 — українською.
 
 Ти — професійний кінорежисер, кінооператор і VFX-супервайзер.
 Ти мислиш кадрами, реальною фізикою камери, механікою тіла і поведінкою середовища.
@@ -709,50 +709,50 @@ Duplicate all prompts in 2 languages: Prompt 1 – English, Prompt 2 – Ukraini
 
 Фокус: ультрареалізм · контроль · відтворюваний результат
 Якщо інформації недостатньо — задай уточнюючі питання перед генерацією.</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <p class="section-label">01 · Базові модулі</p>
-  <div class="accordion" id="acc-base">
+    <p class="section-label">01 · Базові модулі</p>
+    <div class="accordion" id="acc-base">
 
-    <div class="accordion-item" id="item-avatar">
-      <div class="accordion-header" onclick="toggleItem('item-avatar')">
-        <span class="frame-num">A</span>
-        <span class="frame-badge">Avatar</span>
-        <span class="frame-title">Індивідуальний AI аватар</span>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="accordion-body">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(this,'avatar','structure')">Структура</button>
-          <button class="tab-btn" onclick="switchTab(this,'avatar','skeleton')">Скелет</button>
-          <button class="tab-btn" onclick="switchTab(this,'avatar','prompt')">Готовий промт</button>
-        </div>
-        <div class="tab-pane active" id="avatar-structure">
-          <div class="content-block">
-            <p class="structure-text">Структура для створення індивідуального AI-аватара:
+        <div class="accordion-item" id="item-avatar">
+            <div class="accordion-header" onclick="toggleItem('item-avatar')">
+                <span class="frame-num">A</span>
+                <span class="frame-badge">Avatar</span>
+                <span class="frame-title">Індивідуальний AI аватар</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="accordion-body">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab(this,'avatar','structure')">Структура</button>
+                    <button class="tab-btn" onclick="switchTab(this,'avatar','skeleton')">Скелет</button>
+                    <button class="tab-btn" onclick="switchTab(this,'avatar','prompt')">Готовий промт</button>
+                </div>
+                <div class="tab-pane active" id="avatar-structure">
+                    <div class="content-block">
+                        <p class="structure-text">Структура для створення індивідуального AI-аватара:
 
-• Колір і текстура волосся
-• Колір очей
-• Брови, губи, ніс
-• Скули та форма обличчя
-• Типаж / характер персонажа
-• Кадр: портрет по груди
-• Фон
-• Шкіра: ультрареалізм, без ретуші
-• Камера: ARRI Alexa Mini LF, Cooke S4/i 85mm, f/5.6
-• Освітлення: великий розсіяний фронтальний ключ
-• Плівка: Kodak Vision 500T emulation</p>
-          </div>
-        </div>
-        <div class="tab-pane" id="avatar-skeleton">
-          <div class="content-block skeleton-block">
-            <button class="copy-btn" onclick="copyText(this,'av-skel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-            <pre class="content-text" id="av-skel">Professional female portrait based on reference.
+                            • Колір і текстура волосся
+                            • Колір очей
+                            • Брови, губи, ніс
+                            • Скули та форма обличчя
+                            • Типаж / характер персонажа
+                            • Кадр: портрет по груди
+                            • Фон
+                            • Шкіра: ультрареалізм, без ретуші
+                            • Камера: ARRI Alexa Mini LF, Cooke S4/i 85mm, f/5.6
+                            • Освітлення: великий розсіяний фронтальний ключ
+                            • Плівка: Kodak Vision 500T emulation</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="avatar-skeleton">
+                    <div class="content-block skeleton-block">
+                        <button class="copy-btn" onclick="copyText(this,'av-skel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                        <pre class="content-text" id="av-skel">Professional female portrait based on reference.
 
 [ HAIR DESCRIPTION ]
 [ EYE COLOR ]
@@ -779,17 +779,17 @@ Organic grain, smooth highlight roll-off. No HDR, no AI gloss.
 
 Skin: Visible pores · Micro skin texture · Fine facial hair
 Clear eyebrow strands · Natural under-eye texture · No retouching</pre>
-          </div>
-        </div>
-        <div class="tab-pane" id="avatar-prompt">
-          <div class="lang-tabs">
-            <button class="lang-btn active" onclick="switchLang(this,'av-p','en')">EN</button>
-            <button class="lang-btn" onclick="switchLang(this,'av-p','ua')">UA</button>
-          </div>
-          <div class="lang-pane active" id="av-p-en">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'av-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="av-en">Chest-up portrait of the same female athlete, transferred onto a clean white studio background.
+                    </div>
+                </div>
+                <div class="tab-pane" id="avatar-prompt">
+                    <div class="lang-tabs">
+                        <button class="lang-btn active" onclick="switchLang(this,'av-p','en')">EN</button>
+                        <button class="lang-btn" onclick="switchLang(this,'av-p','ua')">UA</button>
+                    </div>
+                    <div class="lang-pane active" id="av-p-en">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'av-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="av-en">Chest-up portrait of the same female athlete, transferred onto a clean white studio background.
 
 Maintain identity and facial structure exactly as reference.
 High tight ponytail. Dark green eyes. Thick light brows with individually visible eyebrow hairs.
@@ -804,12 +804,12 @@ Film: Kodak Vision 500T emulation. Organic grain, smooth highlight roll-off. No 
 Skin: Visible pores · Micro skin texture · Fine facial hair · Clear eyebrow strands · Natural under-eye texture · Minor asymmetries preserved · No retouching
 
 Focus: natural light falloff, real material response (skin oils, cotton fabric), controlled contrast, ultra-real studio realism.</pre>
-            </div>
-          </div>
-          <div class="lang-pane" id="av-p-ua">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'av-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="av-ua">Портрет по груди тієї самої жінки-спортсменки на чистому білому студійному фоні.
+                        </div>
+                    </div>
+                    <div class="lang-pane" id="av-p-ua">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'av-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="av-ua">Портрет по груди тієї самої жінки-спортсменки на чистому білому студійному фоні.
 
 Зберегти ідентичність та структуру обличчя точно за референсом.
 Щільний високий хвіст. Темно-зелені очі. Густі світлі брови з видимими волосками.
@@ -822,45 +822,45 @@ Focus: natural light falloff, real material response (skin oils, cotton fabric),
 Плівка: емуляція Kodak Vision 500T. Органічне зерно, мʼякий roll-off у хайлайтах. Без HDR, без AI-глянцю.
 
 Шкіра: видимі пори, мікротекстура, тонке волосся на обличчі, чіткі брови, природна текстура під очима, без ретуші.</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="accordion-item" id="item-outfit">
-      <div class="accordion-header" onclick="toggleItem('item-outfit')">
-        <span class="frame-num">O</span>
-        <span class="frame-badge">Outfit</span>
-        <span class="frame-title">Перенос одягу на модель</span>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="accordion-body">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(this,'outfit','structure')">Структура</button>
-          <button class="tab-btn" onclick="switchTab(this,'outfit','skeleton')">Скелет</button>
-          <button class="tab-btn" onclick="switchTab(this,'outfit','prompt')">Готовий промт</button>
-        </div>
-        <div class="tab-pane active" id="outfit-structure">
-          <div class="content-block">
-            <p class="structure-text">Два ідентичні кадри однієї моделі — спереду та ззаду.
-Одяг переноситься з фото-референсу без змін.
+        <div class="accordion-item" id="item-outfit">
+            <div class="accordion-header" onclick="toggleItem('item-outfit')">
+                <span class="frame-num">O</span>
+                <span class="frame-badge">Outfit</span>
+                <span class="frame-title">Перенос одягу на модель</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="accordion-body">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab(this,'outfit','structure')">Структура</button>
+                    <button class="tab-btn" onclick="switchTab(this,'outfit','skeleton')">Скелет</button>
+                    <button class="tab-btn" onclick="switchTab(this,'outfit','prompt')">Готовий промт</button>
+                </div>
+                <div class="tab-pane active" id="outfit-structure">
+                    <div class="content-block">
+                        <p class="structure-text">Два ідентичні кадри однієї моделі — спереду та ззаду.
+                            Одяг переноситься з фото-референсу без змін.
 
-• Аутфіт (деталі одягу з референсу)
-• Взуття (деталі з референсу)
-• Шкарпетки · Тканина / матеріал · Тип тіла
+                            • Аутфіт (деталі одягу з референсу)
+                            • Взуття (деталі з референсу)
+                            • Шкарпетки · Тканина / матеріал · Тип тіла
 
-Модель 1: обличчям до камери, руки вздовж тіла
-Модель 2: спиною до камери, голова повернута вбік
+                            Модель 1: обличчям до камери, руки вздовж тіла
+                            Модель 2: спиною до камери, голова повернута вбік
 
-Фон: білий безшовний студійний
-Камера: ARRI Alexa Mini LF, Cooke S4/i 50mm, f/8</p>
-          </div>
-        </div>
-        <div class="tab-pane" id="outfit-skeleton">
-          <div class="content-block skeleton-block">
-            <button class="copy-btn" onclick="copyText(this,'out-skel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-            <pre class="content-text" id="out-skel">Full-body studio image featuring two identical models based strictly on the face from reference photo 1 (identity preserved 100%).
+                            Фон: білий безшовний студійний
+                            Камера: ARRI Alexa Mini LF, Cooke S4/i 50mm, f/8</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="outfit-skeleton">
+                    <div class="content-block skeleton-block">
+                        <button class="copy-btn" onclick="copyText(this,'out-skel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                        <pre class="content-text" id="out-skel">Full-body studio image featuring two identical models based strictly on the face from reference photo 1 (identity preserved 100%).
 
 Outfit: [ OUTFIT DESCRIPTION ]
 Footwear: [ FOOTWEAR DESCRIPTION ]
@@ -875,17 +875,17 @@ Camera: ARRI Alexa Mini LF · Cooke S4/i 50mm · Full-body framing · Aperture: 
 Lighting: large diffused overhead key + soft frontal fill. Gentle floor bounce. No flat lighting.
 Film: Kodak Vision 500T emulation · Organic grain · No HDR · No AI gloss.
 Skin: ultra-real texture, visible pores, no retouching.</pre>
-          </div>
-        </div>
-        <div class="tab-pane" id="outfit-prompt">
-          <div class="lang-tabs">
-            <button class="lang-btn active" onclick="switchLang(this,'out-p','en')">EN</button>
-            <button class="lang-btn" onclick="switchLang(this,'out-p','ua')">UA</button>
-          </div>
-          <div class="lang-pane active" id="out-p-en">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'out-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="out-en">Full-body studio image featuring two identical models based strictly on the face from reference photo 1 (identity preserved 100%).
+                    </div>
+                </div>
+                <div class="tab-pane" id="outfit-prompt">
+                    <div class="lang-tabs">
+                        <button class="lang-btn active" onclick="switchLang(this,'out-p','en')">EN</button>
+                        <button class="lang-btn" onclick="switchLang(this,'out-p','ua')">UA</button>
+                    </div>
+                    <div class="lang-pane active" id="out-p-en">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'out-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="out-en">Full-body studio image featuring two identical models based strictly on the face from reference photo 1 (identity preserved 100%).
 
 Both models wear the exact tennis outfit from reference photo 2: white fitted athletic tank top and green pleated tennis skirt.
 White mid-calf socks with two green stripes and Lacoste logo (reference photo 3).
@@ -901,12 +901,12 @@ Camera: ARRI Alexa Mini LF · Cooke S4/i 50mm · Full-body framing, eye-level ·
 Lighting: large diffused overhead key + soft frontal fill. Gentle floor bounce for natural leg shadows. No flat lighting. No harsh rim. Realistic light falloff.
 Film: Kodak Vision 500T emulation · Organic grain · No HDR · No AI gloss.
 Skin: ultra-real texture, visible pores, natural body texture, no retouching.</pre>
-            </div>
-          </div>
-          <div class="lang-pane" id="out-p-ua">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'out-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="out-ua">Повнорістне студійне фото з двома ідентичними моделями за референсом 1 (ідентичність збережена 100%).
+                        </div>
+                    </div>
+                    <div class="lang-pane" id="out-p-ua">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'out-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="out-ua">Повнорістне студійне фото з двома ідентичними моделями за референсом 1 (ідентичність збережена 100%).
 
 Обидві моделі одягнені в тенісний аутфіт з референсу 2: біла приталена майка та зелена плісирована тенісна спідниця.
 Білі шкарпетки до середини литки з двома зеленими смужками та логотипом Lacoste (референс 3).
@@ -921,86 +921,86 @@ Skin: ultra-real texture, visible pores, natural body texture, no retouching.</p
 Камера: ARRI Alexa Mini LF · 50mm · повний ріст · f/8
 Освітлення: великий розсіяний верхній ключ + мʼяке фронтальне підсвічування. Без плоского світла.
 Плівка: емуляція Kodak Vision 500T · органічне зерно · без HDR · без AI-глянцю.</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <p class="section-label">02 · Кадри курсу</p>
-  <div class="accordion" id="acc-frames"></div>
+    <p class="section-label">02 · Кадри курсу</p>
+    <div class="accordion" id="acc-frames"></div>
 
 
-  <!-- ══ PART DIVIDER ══ -->
-  <div class="part-divider">
-    <div class="part-divider-line"></div>
-    <div class="part-divider-body">
-      <div class="part-badge part-badge-done">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        ЧАСТИНА 01
-      </div>
-      <div class="part-divider-title">ГЕНЕРАЦІЯ<br><span>ЗОБРАЖЕНЬ</span></div>
-      <div class="part-divider-arrow">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-      </div>
-      <div class="part-badge part-badge-next">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        ЧАСТИНА 02
-      </div>
-      <div class="part-divider-title" style="color:var(--purple)">АНІМАЦІЯ<br><span style="color:var(--white)">ВІДЕО</span></div>
-    </div>
-    <div class="part-divider-line" style="background:var(--purple);opacity:.4"></div>
-  </div>
-
-  <div class="anim-section-header" style="margin-top:0">
-    <div class="anim-section-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </div>
-    <div>
-      <p class="hero-eyebrow" style="margin-bottom:6px">Частина 02 · AI Video Animation</p>
-      <h2 class="anim-section-title">Оживлення кадрів</h2>
-      <p class="anim-section-desc">Промти для перетворення статичних зображень на живі кінематографічні кадри. Структура, скелет і готовий промт для кожного відеокадру.</p>
-    </div>
-  </div>
-
-  <p class="section-label" style="color:var(--purple)">03 · Налаштування помічника · Анімація</p>
-  <div class="accordion">
-    <div class="accordion-item anim-item" id="item-anim-univ">
-      <div class="accordion-header" onclick="toggleItem('item-anim-univ')">
-        <span class="frame-num" style="color:var(--purple)">∞</span>
-        <span class="frame-badge anim-badge">Universal · Video</span>
-        <span class="frame-title">Універсальний промт для налаштування помічника · Анімація</span>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="accordion-body">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(this,'auniv','structure')">Структура</button>
-          <button class="tab-btn" onclick="switchTab(this,'auniv','skeleton')">Скелет</button>
-          <button class="tab-btn" onclick="switchTab(this,'auniv','prompt')">Готовий промт</button>
+    <!-- ══ PART DIVIDER ══ -->
+    <div class="part-divider">
+        <div class="part-divider-line"></div>
+        <div class="part-divider-body">
+            <div class="part-badge part-badge-done">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                ЧАСТИНА 01
+            </div>
+            <div class="part-divider-title">ГЕНЕРАЦІЯ<br><span>ЗОБРАЖЕНЬ</span></div>
+            <div class="part-divider-arrow">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </div>
+            <div class="part-badge part-badge-next">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                ЧАСТИНА 02
+            </div>
+            <div class="part-divider-title" style="color:var(--purple)">АНІМАЦІЯ<br><span style="color:var(--white)">ВІДЕО</span></div>
         </div>
-        <div class="tab-pane active" id="auniv-structure">
-          <div class="content-block"><p class="structure-text">Налаштування AI-помічника для роботи з анімацією та відео-генерацією.
+        <div class="part-divider-line" style="background:var(--purple);opacity:.4"></div>
+    </div>
 
-Ти — кінорежисер, оператор і вся знімальна група одночасно.
-Аналізуєш текстовий запит + завантажений кадр (якщо наданий).
-
-Кожен промт містить обовʼязкові блоки:
-• Сцена / Локація
-• Час + Погода
-• Камера (тип руху, швидкість, інерція)
-• Дія (що рухається, фізика, синхрон)
-• Стиль / Настрій
-• Технічні нотатки (стабільність геометрії, логотипи, артефакти)
-
-Мета: контрольований, повторюваний, кінематографічний результат.
-Формат: Prompt (EN) + Explanation (UA).</p>
-          </div>
+    <div class="anim-section-header" style="margin-top:0">
+        <div class="anim-section-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
-        <div class="tab-pane" id="auniv-skeleton">
-          <div class="content-block skeleton-block">
-            <button class="copy-btn" onclick="copyText(this,'auniv-sk')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-            <pre class="content-text" id="auniv-sk">SCENE / LOCATION [ ]
+        <div>
+            <p class="hero-eyebrow" style="margin-bottom:6px">Частина 02 · AI Video Animation</p>
+            <h2 class="anim-section-title">Оживлення кадрів</h2>
+            <p class="anim-section-desc">Промти для перетворення статичних зображень на живі кінематографічні кадри. Структура, скелет і готовий промт для кожного відеокадру.</p>
+        </div>
+    </div>
+
+    <p class="section-label" style="color:var(--purple)">03 · Налаштування помічника · Анімація</p>
+    <div class="accordion">
+        <div class="accordion-item anim-item" id="item-anim-univ">
+            <div class="accordion-header" onclick="toggleItem('item-anim-univ')">
+                <span class="frame-num" style="color:var(--purple)">∞</span>
+                <span class="frame-badge anim-badge">Universal · Video</span>
+                <span class="frame-title">Універсальний промт для налаштування помічника · Анімація</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="accordion-body">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab(this,'auniv','structure')">Структура</button>
+                    <button class="tab-btn" onclick="switchTab(this,'auniv','skeleton')">Скелет</button>
+                    <button class="tab-btn" onclick="switchTab(this,'auniv','prompt')">Готовий промт</button>
+                </div>
+                <div class="tab-pane active" id="auniv-structure">
+                    <div class="content-block"><p class="structure-text">Налаштування AI-помічника для роботи з анімацією та відео-генерацією.
+
+                        Ти — кінорежисер, оператор і вся знімальна група одночасно.
+                        Аналізуєш текстовий запит + завантажений кадр (якщо наданий).
+
+                        Кожен промт містить обовʼязкові блоки:
+                        • Сцена / Локація
+                        • Час + Погода
+                        • Камера (тип руху, швидкість, інерція)
+                        • Дія (що рухається, фізика, синхрон)
+                        • Стиль / Настрій
+                        • Технічні нотатки (стабільність геометрії, логотипи, артефакти)
+
+                        Мета: контрольований, повторюваний, кінематографічний результат.
+                        Формат: Prompt (EN) + Explanation (UA).</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="auniv-skeleton">
+                    <div class="content-block skeleton-block">
+                        <button class="copy-btn" onclick="copyText(this,'auniv-sk')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                        <pre class="content-text" id="auniv-sk">SCENE / LOCATION [ ]
 TIME / WEATHER [ ]
 CHARACTERS / OBJECTS [ ]
 ACTION [ ]
@@ -1009,17 +1009,17 @@ CAMERA [ ]
 LIGHTING [ ]
 STYLE / MOOD [ ]
 TECHNICAL NOTES [ ]</pre>
-          </div>
-        </div>
-        <div class="tab-pane" id="auniv-prompt">
-          <div class="lang-tabs">
-            <button class="lang-btn active" onclick="switchLang(this,'auniv-p','en')">EN</button>
-            <button class="lang-btn" onclick="switchLang(this,'auniv-p','ua')">UA</button>
-          </div>
-          <div class="lang-pane active" id="auniv-p-en">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'auniv-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="auniv-en">You are a film director, cinematographer, and the entire production crew at the same time: directing, camera, lighting, composition, movement, scene blocking, artistic style, and technical quality.
+                    </div>
+                </div>
+                <div class="tab-pane" id="auniv-prompt">
+                    <div class="lang-tabs">
+                        <button class="lang-btn active" onclick="switchLang(this,'auniv-p','en')">EN</button>
+                        <button class="lang-btn" onclick="switchLang(this,'auniv-p','ua')">UA</button>
+                    </div>
+                    <div class="lang-pane active" id="auniv-p-en">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'auniv-en')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="auniv-en">You are a film director, cinematographer, and the entire production crew at the same time: directing, camera, lighting, composition, movement, scene blocking, artistic style, and technical quality.
 
 Your task is to: analyze my text request + the uploaded frame (if provided) and generate a clear, structured prompt for AI animation / AI video generation.
 
@@ -1038,12 +1038,12 @@ Response format:
 2. Explanation (UA) — same prompt adapted into Ukrainian
 
 Work as a professional production crew that knows exactly which shot needs to be created.</pre>
-            </div>
-          </div>
-          <div class="lang-pane" id="auniv-p-ua">
-            <div class="content-block prompt-block">
-              <button class="copy-btn" onclick="copyText(this,'auniv-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
-              <pre class="content-text" id="auniv-ua">Ти — кінорежисер, кінооператор і вся знімальна група одночасно.
+                        </div>
+                    </div>
+                    <div class="lang-pane" id="auniv-p-ua">
+                        <div class="content-block prompt-block">
+                            <button class="copy-btn" onclick="copyText(this,'auniv-ua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копіювати</button>
+                            <pre class="content-text" id="auniv-ua">Ти — кінорежисер, кінооператор і вся знімальна група одночасно.
 
 Твоє завдання: проаналізувати мій запит + завантажений кадр (якщо є) і згенерувати чіткий структурований промт для AI-анімації / відео-генерації.
 
@@ -1060,15 +1060,15 @@ Work as a professional production crew that knows exactly which shot needs to be
 Формат відповіді:
 1. Prompt (EN) — готовий промт для AI
 2. Explanation (UA) — той самий промт українською</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <p class="section-label" style="color:var(--purple)">04 · Анімація кадрів</p>
-  <div class="accordion" id="acc-anim"></div>
+    <p class="section-label" style="color:var(--purple)">04 · Анімація кадрів</p>
+    <div class="accordion" id="acc-anim"></div>
 
 </main>
 
@@ -1076,48 +1076,48 @@ Work as a professional production crew that knows exactly which shot needs to be
 
 <script>
 
-const frames = [
-  {
-    id:'f1', num:'01', badge:'Top-down',
-    title:'Аерокадр тенісного корту — Lake Como',
-    structure:`1. СЮЖЕТ: top-down аерокадр ґрунтового тенісного корту, оточеного вілою на озері Комо.
+    const frames = [
+        {
+            id:'f1', num:'01', badge:'Top-down',
+            title:'Аерокадр тенісного корту — Lake Como',
+            structure:`1. СЮЖЕТ: top-down аерокадр ґрунтового тенісного корту, оточеного вілою на озері Комо.
 3. РАКУРС: строгий вертикальний top-down 90°, без нахилу та перспективних викривлень.
 4. ФОН: кам'яні тераси, балюстради, озеро у верхній частині кадру.
 5. СТИЛЬ: Європейське аристократичне літо. Тиха розкіш. Геометрія, мінімалізм.
 6. СВІТЛО: пізня золота година, жорстке направлене низьке сонце, довгі графічні тіні.
 7. КАМЕРА: ARRI Alexa Mini LF, дрон, 50mm еквівалент, емуляція Kodak Vision 500T.`,
-    skeleton:`{
+            skeleton:`{
   "scene": " ",
   "camera": " ",
   "lighting": " ",
   "film": " ",
   "mood": " "
 }`,
-    en:`{
+            en:`{
   "scene": "Strict vertical top-down aerial view of a perfectly centered clay tennis court with rich burnt-orange surface and precise white lines, surrounded by a historic Italian villa complex on Lake Como. Stone terraces, balustrades, pale aged limestone. Deep blue lake visible in upper frame. No modern elements.",
   "camera": "ARRI Alexa Mini LF, drone-mounted, 90° vertical, static frame, 50mm equivalent, no tilt, no distortion",
   "lighting": "Late golden hour, hard low sun, long graphic shadows across court, natural light only, deep contrast, controlled highlight roll-off",
   "film": "Kodak Vision 500T emulation, organic grain, warm midtones, soft roll-off, no HDR, no digital sharpening",
   "mood": "European aristocratic summer, quiet luxury, perfect symmetry, clean geometry, premium cinematic look"
 }`,
-    ua:`Точний вертикальний top-down аеровигляд ідеально центрованого ґрунтового тенісного корту з насиченим вигоріло-помаранчевим покриттям і точною білою розміткою. Навколо — історичний італійський вілловий комплекс на озері Комо: кам'яні тераси, балюстради, світлий вапняк із патиною часу. Глибока синя вода озера видна у верхній частині кадру. Жодних сучасних елементів.
+            ua:`Точний вертикальний top-down аеровигляд ідеально центрованого ґрунтового тенісного корту з насиченим вигоріло-помаранчевим покриттям і точною білою розміткою. Навколо — історичний італійський вілловий комплекс на озері Комо: кам'яні тераси, балюстради, світлий вапняк із патиною часу. Глибока синя вода озера видна у верхній частині кадру. Жодних сучасних елементів.
 
 Камера: ARRI Alexa Mini LF, дрон, 90° вертикально, статичний кадр, еквівалент 50mm, без нахилу, без дисторсії.
 Освітлення: пізня золота година, жорстке низьке сонце, довгі графічні тіні по корту, лише природне світло, глибокий контраст.
 Плівка: емуляція Kodak Vision 500T, органічне зерно, теплі середні тони, без HDR.
 Настрій: Європейське аристократичне літо, тиха розкіш, ідеальна симетрія, преміальний кінематографічний вигляд.`
-  },
-  {
-    id:'f2', num:'02', badge:'Walking',
-    title:'Ноги тенісистки в русі (кадр знизу пояса)',
-    structure:`1. СЮЖЕТ: дівчина впевнено йде по тенісному корту, тримає ракетку збоку.
+        },
+        {
+            id:'f2', num:'02', badge:'Walking',
+            title:'Ноги тенісистки в русі (кадр знизу пояса)',
+            structure:`1. СЮЖЕТ: дівчина впевнено йде по тенісному корту, тримає ракетку збоку.
 2. ПОЗА: крок вперед, одна нога на землі повною стопою, друга позаду з піднятою пʼятою.
 3. КАДР: нижче талії до стоп. Фокус — ноги, низ спідниці, носки, кросівки.
 4. ФОН: теракотовий корт повністю у розфокусі.
 5. СТИЛЬ: fashion editorial, спортивна естетика, легкість і рух.
 6. СВІТЛО: золота година заходу, бокове, мʼякі тіні від ніг на корті.
 7. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1127,7 +1127,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Girl from provided reference with very slim, toned athletic tennis legs. Lightweight tennis skirt with only a thin white waistband stripe and minimal green fabric visible at top edge of frame. White socks from reference. Sneakers exactly as reference. Tennis racket from photo reference 2 with black Lacoste crocodile logo positioned vertically on the string bed exactly as in reference.",
   "action": "Model walking directly toward camera on central frontal axis. One foot fully planted flat on ground. Second foot behind with heel lifted and toes pushing off. Knees slightly bent. Extremely lean, defined thighs and calves occupying approximately 80% of frame. Skirt barely visible at top of frame. Racket hanging relaxed at side.",
   "environment": "Terracotta clay tennis court fully in soft blur. Granular texture subtly visible. No additional objects.",
@@ -1137,7 +1137,7 @@ const frames = [
   "mood": "Forward confidence, grounded control, physical clarity.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain, neutral tones with slightly cooler shadows. No HDR, no AI gloss."
 }`,
-    ua:`Дівчина з наданого референсу з дуже стрункими, підтягнутими ногами тенісистки. Легка тенісна спідниця, білі носки та кросівки з референсу. Тенісна ракетка з логотипом Lacoste.
+            ua:`Дівчина з наданого референсу з дуже стрункими, підтягнутими ногами тенісистки. Легка тенісна спідниця, білі носки та кросівки з референсу. Тенісна ракетка з логотипом Lacoste.
 
 Дія: модель іде прямо на камеру. Одна нога на землі повною стопою, друга позаду з піднятою пʼятою. Стрункі ноги займають ~80% кадру. Ракетка вільно опущена збоку.
 
@@ -1148,18 +1148,18 @@ const frames = [
 
 Освітлення: золота година, бокове сонячне світло. Мʼякі тіні від ніг і взуття.
 Якість: емуляція Kodak Ektachrome 100, легкий вінтажний glow, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f3', num:'03', badge:'Foreshortening',
-    title:'Тенісистка лежить на корті (підошва домінує)',
-    structure:`1. СЮЖЕТ: fashion editorial, дівчина лежить на тенісному корті в сильній перспективній позі.
+        },
+        {
+            id:'f3', num:'03', badge:'Foreshortening',
+            title:'Тенісистка лежить на корті (підошва домінує)',
+            structure:`1. СЮЖЕТ: fashion editorial, дівчина лежить на тенісному корті в сильній перспективній позі.
 2. ПОЗА: голова у верхній частині кадру біля сітки, одна нога витягнута прямо в камеру — підошва займає 50% кадру. Рука тримає козирок кепки.
 3. РАКУРС: від підошви до обличчя. Підошва = 50% площі кадру.
 4. ФОН: теракотовий корт, біла тенісна сітка біля голови (м'яко нефокусована).
 5. СТИЛЬ: fashion editorial, спортивна естетика. Clean, modern, controlled.
 6. СВІТЛО: золота година, мʼяке тепле природне.
 7. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1169,7 +1169,7 @@ const frames = [
   "mood": " ",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain, neutral palette with slightly cooler shadows. No HDR, no artificial over-sharpening, no AI gloss. Ultra-realistic anatomy and material physics."
 }`,
-    en:`{
+            en:`{
   "subject": "Young athletic woman with slim toned tennis physique. White sleeveless tennis tank. Short white tennis skirt with built-in white shorts. White sneakers with massive sole (sole dominant element). Hair in high ponytail. White tennis cap. Natural sporty editorial makeup.",
   "action": "Model lying on outdoor clay tennis court in strong foreshortened pose. One leg fully extended toward camera; sneaker sole occupies exactly 50% of the frame, fully visible and not cropped. Sole critically sharp with clearly readable tread structure and brand logo. Second leg slightly bent. One hand holding cap visor. Realistic anatomy.",
   "environment": "Outdoor terracotta-orange clay tennis court with visible granular texture. White tennis net near head area, softly blurred. No additional objects.",
@@ -1179,7 +1179,7 @@ const frames = [
   "mood": "Calm control, athletic confidence, editorial clarity.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, sharpness on sole only, fine clean grain, no HDR, no AI gloss."
 }`,
-    ua:`Молода спортивна дівчина в тенісному аутфіті: біла майка, тенісна спідниця з білими шортами під нею, білі масивні кросівки, волосся у щільному хвості, біла кепка поверх хвоста, натуральний макіяж.
+            ua:`Молода спортивна дівчина в тенісному аутфіті: біла майка, тенісна спідниця з білими шортами під нею, білі масивні кросівки, волосся у щільному хвості, біла кепка поверх хвоста, натуральний макіяж.
 
 Дія: модель лежить на теракотовому ґрунтовому корті в сильній перспективній позі. Одна нога повністю витягнута до камери — підошва кросівка займає 50% кадру, чітка та нескорочена. Підошва в максимальній різкості з видимою структурою протектора та логотипом. Друга нога злегка зігнута. Одна рука тримає козирок кепки.
 
@@ -1190,17 +1190,17 @@ const frames = [
 
 Освітлення: золота година, тепле природне напрямлене світло, мʼякий перехід тіней.
 Якість: емуляція Kodak Ektachrome 100, легкий vitage glow, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f4', num:'04', badge:'Minimal',
-    title:'Тенісний мʼяч у повітрі (top-down, графіка)',
-    structure:`1. СЮЖЕТ: один білий тенісний мʼяч завис у повітрі над перетином ліній корту.
+        },
+        {
+            id:'f4', num:'04', badge:'Minimal',
+            title:'Тенісний мʼяч у повітрі (top-down, графіка)',
+            structure:`1. СЮЖЕТ: один білий тенісний мʼяч завис у повітрі над перетином ліній корту.
 2. РАКУРС: строгий top-down 90°. Плоска, абстрактна, постерна композиція.
 3. ФОН: теракотовий корт, дрібнозерниста текстура, білі лінії, без людей.
 4. СТИЛЬ: art-house, fashion/design editorial, заморожений момент тиші.
 5. СВІТЛО: золота година, бічне низьке сонце ~15° над горизонтом. Тінь від мʼяча — чітка овальна.
 6. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime 50mm.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1210,7 +1210,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Minimalist geometric tennis court scene. No people. One branded white tennis ball suspended slightly above the surface.",
   "action": "The ball floats directly above the intersection of two white court lines. It does not touch the clay. A clearly separated oval shadow appears below and slightly offset from the ball, consistent with low-angle sunset light.",
   "environment": "Terracotta clay tennis court: matte surface, fine granular texture, subtle imperfections. Crisp white court lines intersect beneath the ball. No additional objects.",
@@ -1220,7 +1220,7 @@ const frames = [
   "mood": "Silence, warmth, suspended time, architectural stillness.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain, neutral tones. No HDR, no artificial sharpening, no stylization."
 }`,
-    ua:`Мінімалістична геометрична сцена тенісного корту. Без людей. Один брендовий білий тенісний мʼяч злегка завис над поверхнею.
+            ua:`Мінімалістична геометрична сцена тенісного корту. Без людей. Один брендовий білий тенісний мʼяч злегка завис над поверхнею.
 
 Мʼяч зависає прямо над перетином двох білих ліній розмітки. Не торкається глини. Чітка овальна тінь під мʼячем, зміщена вбік відповідно до кута сонця.
 
@@ -1231,18 +1231,18 @@ const frames = [
 
 Освітлення: золота година, бічне сонце ~15° над горизонтом. Довгі геометричні тіні по глині. Тінь від мʼяча — чітка овальна.
 Якість: емуляція Kodak Ektachrome 100, легкий vintage glow, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f5', num:'05', badge:'Dynamic',
-    title:'Дівчина перегинається через сітку',
-    structure:`1. СЮЖЕТ: дівчина перевалилася через тенісну сітку, щоб підняти білий мʼяч.
+        },
+        {
+            id:'f5', num:'05', badge:'Dynamic',
+            title:'Дівчина перегинається через сітку',
+            structure:`1. СЮЖЕТ: дівчина перевалилася через тенісну сітку, щоб підняти білий мʼяч.
 2. ПОЗА: корпус нахилений через сітку, одна нога на корті, інша піднята і зігнута в коліні, рука тягнеться до мʼяча.
 3. РАКУРС: вертикальний, рівень стегон, кут вздовж сітки ~20–25°. Сітка на передньому плані в різкості.
 4. ФОН: теракотовий корт, мармурова огорожа у розфокусі (референс 2).
 5. СТИЛЬ: luxury tennis fashion editorial, спонтанний реалізм.
 6. СВІТЛО: золота година, бокове, тіні від сітки та ніг на корті.
 7. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime 50mm + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1252,7 +1252,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Athletic young woman wearing the exact tennis outfit from photo reference 3: white tennis skirt, matching top, high white socks with logo, same sneaker model and color. Body proportions natural and realistic.",
   "action": "She is leaning over the tennis net exactly as in photo reference 1. Upper body tilted forward across the net. One leg firmly grounded on clay court. Second leg lifted backward and bent at the knee. One hand reaching down to pick up a white tennis ball. Pose unstable but controlled, frozen mid-action.",
   "environment": "Terracotta tennis court from photo reference 2. Marble balustrade and villa architecture visible in background but fully out of focus. Net through center of frame in sharp focus, partially covering the body.",
@@ -1262,7 +1262,7 @@ const frames = [
   "mood": "Controlled instability, athletic elegance, spontaneous realism.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled contrast, fine clean grain. No HDR, no AI gloss, no deformation."
 }`,
-    ua:`Спортивна молода жінка в тенісному аутфіті з референсу 3: біла тенісна спідниця, майка, білі носки з логотипом, кросівки.
+            ua:`Спортивна молода жінка в тенісному аутфіті з референсу 3: біла тенісна спідниця, майка, білі носки з логотипом, кросівки.
 
 Дія: вона перегинається через тенісну сітку точно як на референсі 1. Верхня частина тіла нахилена через сітку, ноги по інший бік. Одна нога твердо стоїть на корті. Друга піднята назад і зігнута в коліні. Рука тягнеться підняти білий тенісний мʼяч. Поза нестабільна, але контрольована, заморожена в момент руху.
 
@@ -1273,18 +1273,18 @@ const frames = [
 
 Освітлення: золота година, бокове. Тіні від сітки та ніг на глині.
 Якість: емуляція Kodak Ektachrome 100, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f6', num:'06', badge:'Product',
-    title:'Режисерський стілець із ракетками (предметний кадр)',
-    structure:`1. СЮЖЕТ: статична предметна сцена — дерев'яний режисерський стілець із написом LACOSTE, дві ракетки та корзина мʼячів.
+        },
+        {
+            id:'f6', num:'06', badge:'Product',
+            title:'Режисерський стілець із ракетками (предметний кадр)',
+            structure:`1. СЮЖЕТ: статична предметна сцена — дерев'яний режисерський стілець із написом LACOSTE, дві ракетки та корзина мʼячів.
 2. СТІЛЕЦЬ: класичний дерев'яний, теплий, напис LACOSTE на спинці чітко.
 3. РАКЕТКИ: спираються на стілець (референс 2), логотип на сітці та butt cap.
 4. МʼЯЧІ: металева корзина з білими мʼячами, логотип на кожному, кілька розкидані.
 5. ЛОКАЦІЯ: теракотовий корт, чорна тенісна сітка на фоні.
 6. РАКУРС: ~30° збоку, камера трохи вище сидіння, нахил –10°/–15°.
 7. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1294,7 +1294,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Static luxury tennis fashion editorial scene without people. Classic wooden director-style tennis chair with warm wood frame and light fabric seat and backrest. Clean and premium condition.",
   "action": "Chair positioned slightly angled matching reference. LACOSTE printed clearly on the backrest, centered. Two premium tennis rackets leaning against the chair (reference photo 2): identical shape, color, styling. Visible logo on string bed. Crocodile logo on butt cap (reference photo 3). Metal basket with white tennis balls, logo visible. Several balls scattered naturally on court.",
   "environment": "Terracotta clay tennis court with realistic granular texture. Black tennis net stretched in background forming graphic backdrop. No people. No additional objects.",
@@ -1304,7 +1304,7 @@ const frames = [
   "mood": "Quiet luxury, brand presence, stillness, precision, aesthetic control.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain. No HDR, no AI gloss."
 }`,
-    ua:`Статична luxury tennis fashion editorial сцена без людей. Класичний дерев'яний режисерський тенісний стілець із теплою деревʼяною рамою та світлою тканиною. Напис LACOSTE на спинці — чіткий, рівний, читабельний. Дві преміальні тенісні ракетки спираються на стілець (референс 2): логотип на сітці та крокодил на butt cap (референс 3). Металева корзина з білими тенісними мʼячами з логотипом. Кілька мʼячів розкидано на корті.
+            ua:`Статична luxury tennis fashion editorial сцена без людей. Класичний дерев'яний режисерський тенісний стілець із теплою деревʼяною рамою та світлою тканиною. Напис LACOSTE на спинці — чіткий, рівний, читабельний. Дві преміальні тенісні ракетки спираються на стілець (референс 2): логотип на сітці та крокодил на butt cap (референс 3). Металева корзина з білими тенісними мʼячами з логотипом. Кілька мʼячів розкидано на корті.
 
 Локація: теракотовий корт із зернистою текстурою. Чорна тенісна сітка на фоні. Без людей.
 Стиль: luxury tennis fashion editorial. Спокійна, преміальна, брендова атмосфера.
@@ -1312,18 +1312,18 @@ const frames = [
 
 Освітлення: золота година, бокове. Мʼякі чіткі тіні від стільця, ракеток та мʼячів.
 Якість: емуляція Kodak Ektachrome 100, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f7', num:'07', badge:'Still-life',
-    title:'Сумка та пляшка на кутку сітки',
-    structure:`1. СЮЖЕТ: мінімалістична предметна сцена — кут тенісної сітки, сумка висить на опорі, пляшка біля основи.
+        },
+        {
+            id:'f7', num:'07', badge:'Still-life',
+            title:'Сумка та пляшка на кутку сітки',
+            structure:`1. СЮЖЕТ: мінімалістична предметна сцена — кут тенісної сітки, сумка висить на опорі, пляшка біля основи.
 2. СІТКА: чорна, зверху біла смужка, вертикальна масивна металева стійка.
 3. СУМКА: точно з референсу — колір, форма, розмір, логотип і текст чітко читабельні.
 4. ПЛЯШКА: з референсу, вертикальна, біля основи стійки.
 5. ПОКРИТТЯ: теракотовий корт, чітка розмітка, без людей.
 6. РАКУРС: рівень талії/грудей, легкий боковий кут ~20°.
 7. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime 50mm.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1333,7 +1333,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Static luxury tennis fashion-editorial product scene. Main focus: corner of a tennis net structure with a hanging green tote bag and a water bottle placed beside the post.",
   "action": "Black tennis net centered, forming a strong geometric axis. White top tape clearly visible. Solid vertical metal corner post. Green tote bag identical to reference hangs from the corner post. Fabric naturally sagging, handles under tension. Logo and text perfectly readable. Water bottle stands upright beside the post (not under the bag). Bottle clearly visible in full form.",
   "environment": "Tennis court surface exactly as reference: accurate court lines, realistic granular texture. No people.",
@@ -1343,7 +1343,7 @@ const frames = [
   "mood": "Quiet luxury, material authenticity, evening calm.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain. No HDR, no AI gloss."
 }`,
-    ua:`Статична luxury tennis fashion-editorial предметна сцена. Головний фокус — кут тенісної сітки з підвішеною зеленою сумкою та пляшкою біля стійки.
+            ua:`Статична luxury tennis fashion-editorial предметна сцена. Головний фокус — кут тенісної сітки з підвішеною зеленою сумкою та пляшкою біля стійки.
 
 Чорна тенісна сітка по центру — сильна геометрична вісь. Біла верхня стрічка. Масивна вертикальна металева стійка. Зелена сумка-шопер точно як референс: тканина природно провисає, ручки під натягом, логотип і текст чітко читабельні. Пляшка стоїть вертикально біля стійки.
 
@@ -1353,17 +1353,17 @@ const frames = [
 
 Освітлення: золота година, бокове. Мʼякі тіні від сітки, сумки та пляшки.
 Якість: емуляція Kodak Ektachrome 100, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f8', num:'08', badge:'Squat',
-    title:'Низький сід тенісистки (акцент на ноги і кросівки)',
-    structure:`1. СЮЖЕТ: дівчина присідає дуже низько на тенісному корті.
+        },
+        {
+            id:'f8', num:'08', badge:'Squat',
+            title:'Низький сід тенісистки (акцент на ноги і кросівки)',
+            structure:`1. СЮЖЕТ: дівчина присідає дуже низько на тенісному корті.
 2. ПОЗА: дуже низький сід — пʼяти торкаються землі, коліна максимально зігнуті, стегна паралельні землі. Одна рука вільно звисає, друга на коліні. Спина рівна.
 3. КАДР: від середини торсу до взуття. Обличчя поза кадром. Акцент — ноги та кросівки.
 4. ФОН: теракотовий корт, чорна сітка трохи розфокусована.
 5. СТИЛЬ: fashion editorial, спортивна естетика, мінімалістичний.
 6. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1373,7 +1373,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Young athletic woman with slim, toned tennis physique. Outfit exactly as photo reference 1. Sneakers exactly as photo reference 2. Defined calves and thighs.",
   "action": "Model squatting very low exactly like reference pose. Heels lifted but forefoot fully pressed against the clay surface. Both sneakers fully grounded and stable. Knees deeply bent, thighs nearly parallel to ground. Torso slightly leaning forward. One arm hanging naturally between legs. Other arm resting on knee. Back straight. Clear muscle tension in calves and thighs. Stable, frozen posture.",
   "environment": "Terracotta clay tennis court with clearly visible granular texture. Black tennis net in background, slightly out of focus. No additional objects.",
@@ -1383,7 +1383,7 @@ const frames = [
   "mood": "Controlled strength, grounded stability, physical presence.",
   "quality": "Kodak Ektachrome 100 emulation. Slight vintage cinematic character, soft highlight glow, controlled sharpness, fine clean grain. No HDR, no AI gloss."
 }`,
-    ua:`Молода спортивна жінка зі стрункою підтягнутою фігурою. Одяг точно з референсу 1, кросівки точно з референсу 2.
+            ua:`Молода спортивна жінка зі стрункою підтягнутою фігурою. Одяг точно з референсу 1, кросівки точно з референсу 2.
 
 Дія: модель присідає дуже низько точно як поза-референс. Обидва кросівки твердо стоять на глині, природний розподіл ваги. Коліна глибоко зігнуті, стегна майже паралельні землі. Корпус злегка нахилений вперед. Одна рука вільно звисає між ногами. Спина рівна. Чітке напруження мʼязів литок і стегон.
 
@@ -1394,17 +1394,17 @@ const frames = [
 
 Освітлення: золота година, бокове. Мʼякі тіні від ніг і взуття на глині.
 Якість: емуляція Kodak Ektachrome 100, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f9', num:'09', badge:'Portrait',
-    title:'Портрет з ракеткою перед обличчям (тінь від струн)',
-    structure:`1. СЮЖЕТ: fashion editorial портрет дівчини з тенісною ракеткою перед обличчям — тінь від струн на шкірі.
+        },
+        {
+            id:'f9', num:'09', badge:'Portrait',
+            title:'Портрет з ракеткою перед обличчям (тінь від струн)',
+            structure:`1. СЮЖЕТ: fashion editorial портрет дівчини з тенісною ракеткою перед обличчям — тінь від струн на шкірі.
 2. КАДР: щільний портрет вище грудей. Обличчя по центру.
 3. РАКЕТКА: вертикально, дуже близько до обличчя, трохи вліво, частково перекриває обличчя та одне око. Логотип крокодила точно з референсу.
 4. ТІНІ: чітка геометрична сітчаста тінь від струн — через лоб, очі, щоку, ніс.
 5. СТИЛЬ: fashion editorial, без гламуру, без ретуші.
 6. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1414,7 +1414,7 @@ const frames = [
   "mood": " ",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain, neutral palette. Ultra-detailed skin texture (pores, eyelashes, lips). No HDR, no AI gloss, no facial distortion."
 }`,
-    en:`{
+            en:`{
   "subject": "Young athletic woman. Face must match the provided reference exactly — identical facial structure, lips, eyes, nose, jawline, proportions. Hair pulled back into a sleek high ponytail. Minimal natural sporty makeup. No stylization.",
   "action": "Tight chest-up portrait. Face centered in frame, head straight. A tennis racket (exactly replicated from reference, including crocodile logo) positioned vertically very close to the face, slightly shifted left. The racket hoop partially covers one side of the face and one eye.",
   "environment": "Terracotta clay tennis court background with visible fine granular texture. Background softly blurred but color and texture clearly recognizable. No additional objects.",
@@ -1424,7 +1424,7 @@ const frames = [
   "mood": "Controlled strength, quiet confidence, editorial clarity.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness, fine clean grain. Ultra-detailed skin texture (pores, eyelashes, lips). No HDR, no AI gloss, no facial distortion."
 }`,
-    ua:`Молода спортивна жінка. Обличчя точно відтворене з наданого референсу — структура, губи, очі, ніс, лінія щелепи, пропорції. Волосся у гладкому високому хвості. Мінімальний натуральний спортивний макіяж.
+            ua:`Молода спортивна жінка. Обличчя точно відтворене з наданого референсу — структура, губи, очі, ніс, лінія щелепи, пропорції. Волосся у гладкому високому хвості. Мінімальний натуральний спортивний макіяж.
 
 Дія: щільний портрет вище грудей. Обличчя по центру. Тенісна ракетка (точно з референсу, включаючи логотип крокодила) вертикально дуже близько до обличчя, трохи зміщена вліво. Обід ракетки частково перекриває одну сторону обличчя та одне око.
 
@@ -1435,11 +1435,11 @@ const frames = [
 
 Освітлення: золота година, бокове. Чітка геометрична тінь від струн ракетки на лобі, оці, щоці та частково носі.
 Якість: емуляція Kodak Ektachrome 100, ультрадеталізація шкіри, без HDR, без AI-глянцю.`
-  },
-  {
-    id:'f10', num:'10', badge:'Symmetry',
-    title:'Дівчина на стільці з газетою (симетрія, акцент ноги)',
-    structure:`1. СЮЖЕТ: дівчина сидить на дерев'яному тенісному стільці, тримає газету (закриває обличчя). Симетрична статична композиція.
+        },
+        {
+            id:'f10', num:'10', badge:'Symmetry',
+            title:'Дівчина на стільці з газетою (симетрія, акцент ноги)',
+            structure:`1. СЮЖЕТ: дівчина сидить на дерев'яному тенісному стільці, тримає газету (закриває обличчя). Симетрична статична композиція.
 2. СТІЛЕЦЬ: точно з референсу, фронтально до камери.
 3. ПОЗА: ідеально рівна спина, нога на нозі, плечі симетричні.
 4. ГАЗЕТА: рівно по центру, закриває обличчя, краї паралельні лініям кадру.
@@ -1447,7 +1447,7 @@ const frames = [
 6. КОРЗИНКА: з мʼячами збоку від стільця, не порушує симетрію.
 7. ФОН: дуже розфокусований і затемнений. Сітка та корт — лише силуети.
 8. КАМЕРА: Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime 65mm + Kodak Ektachrome 100.`,
-    skeleton:`{
+            skeleton:`{
   "subject": " ",
   "action": " ",
   "environment": " ",
@@ -1457,7 +1457,7 @@ const frames = [
   "mood": " ",
   "quality": " "
 }`,
-    en:`{
+            en:`{
   "subject": "Young athletic woman seated on a minimalist wooden tennis chair, perfectly centered in frame. Wearing a white tennis outfit, high white socks and sneakers identical to reference.",
   "action": "She sits upright with perfectly straight posture. Shoulders level and symmetrical. One leg crossed elegantly over the other. She holds a large newspaper perfectly centered in front of her face, fully covering it. Newspaper edges parallel to frame borders. Static, controlled composition.",
   "environment": "Terracotta tennis court. Basket with tennis balls to the side and behind the chair. Background: heavily blurred and slightly underexposed. Net and trees only readable as soft silhouettes. No additional objects.",
@@ -1467,7 +1467,7 @@ const frames = [
   "mood": "Control, calm authority, structured elegance.",
   "quality": "Kodak Ektachrome 100 emulation. Subtle vintage glow, controlled sharpness on legs and footwear, fine grain. No HDR, no AI gloss."
 }`,
-    ua:`Молода спортивна жінка сидить на мінімалістичному дерев'яному тенісному стільці, ідеально по центру кадру. Білий тенісний аутфіт, білі носки та кросівки з референсу.
+            ua:`Молода спортивна жінка сидить на мінімалістичному дерев'яному тенісному стільці, ідеально по центру кадру. Білий тенісний аутфіт, білі носки та кросівки з референсу.
 
 Дія: сидить рівно, ідеальна пряма постава. Плечі рівні та симетричні. Одна нога елегантно закладена на іншу. Тримає велику газету точно по центру перед обличчям, повністю закриває його. Краї газети паралельні межам кадру. Статична, контрольована композиція.
 
@@ -1478,16 +1478,16 @@ const frames = [
 
 Освітлення: золота година, низьке переднє бокове світло. Тепле сонячне світло тільки на ноги і взуття. Фон темніший.
 Якість: емуляція Kodak Ektachrome 100, без HDR, без AI-глянцю.`
-  }
-];
+        }
+    ];
 
-// Build frames accordion
-const container = document.getElementById('acc-frames');
-frames.forEach(f => {
-  const item = document.createElement('div');
-  item.className = 'accordion-item';
-  item.id = `item-${f.id}`;
-  item.innerHTML = `
+    // Build frames accordion
+    const container = document.getElementById('acc-frames');
+    frames.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'accordion-item';
+        item.id = `item-${f.id}`;
+        item.innerHTML = `
     <div class="accordion-header" onclick="toggleItem('item-${f.id}')">
       <span class="frame-num">${f.num}</span>
       <span class="frame-badge">${f.badge}</span>
@@ -1528,38 +1528,38 @@ frames.forEach(f => {
         </div>
       </div>
     </div>`;
-  container.appendChild(item);
-});
+        container.appendChild(item);
+    });
 
-function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function toggleItem(id){ document.getElementById(id).classList.toggle('open'); }
-function switchTab(btn,fid,tab){
-  btn.closest('.tabs-nav').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  btn.closest('.accordion-body').querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  document.getElementById(`${fid}-${tab}`).classList.add('active');
-}
-function switchLang(btn,prefix,lang){
-  btn.closest('.lang-tabs').querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  btn.closest('.tab-pane').querySelectorAll('.lang-pane').forEach(p=>p.classList.remove('active'));
-  document.getElementById(`${prefix}-${lang}`).classList.add('active');
-}
-function copyText(btn,id){
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
-    const o=btn.innerHTML;
-    btn.classList.add('copied');
-    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Скопійовано';
-    setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML=o; },2000);
-  });
-}
+    function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function toggleItem(id){ document.getElementById(id).classList.toggle('open'); }
+    function switchTab(btn,fid,tab){
+        btn.closest('.tabs-nav').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        btn.closest('.accordion-body').querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+        document.getElementById(`${fid}-${tab}`).classList.add('active');
+    }
+    function switchLang(btn,prefix,lang){
+        btn.closest('.lang-tabs').querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        btn.closest('.tab-pane').querySelectorAll('.lang-pane').forEach(p=>p.classList.remove('active'));
+        document.getElementById(`${prefix}-${lang}`).classList.add('active');
+    }
+    function copyText(btn,id){
+        navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+            const o=btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Скопійовано';
+            setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML=o; },2000);
+        });
+    }
 
-// ── Animation frames data ────────────────────────────────────────────────────
-const animFrames = [
-  {
-    id:'a1', num:'01', badge:'Drone · Dolly',
-    title:'Аерокадр тенісного корту — Lake Como',
-    structure:`СЦЕНА / ЛОКАЦІЯ: Luxury historic villa, класична архітектура, берег озера Комо. Великий теракотовий тенісний корт на терасі між будівлею та водою. Озеро, гірський ландшафт.
+    // ── Animation frames data ────────────────────────────────────────────────────
+    const animFrames = [
+        {
+            id:'a1', num:'01', badge:'Drone · Dolly',
+            title:'Аерокадр тенісного корту — Lake Como',
+            structure:`СЦЕНА / ЛОКАЦІЯ: Luxury historic villa, класична архітектура, берег озера Комо. Великий теракотовий тенісний корт на терасі між будівлею та водою. Озеро, гірський ландшафт.
 
 ЧАС + ПОГОДА: Golden hour, пізній після обід. Чисте небо, тепле середземноморське повітря.
 
@@ -1572,7 +1572,7 @@ const animFrames = [
 ДІЯ: Статична сцена без персонажів. Повільний проліт камери вперед. Легка природна хвиля на озері.
 
 СТИЛЬ: Cinematic, luxury, calm, Italian summer.`,
-    skeleton:`SCENE / ENVIRONMENT [ ]
+            skeleton:`SCENE / ENVIRONMENT [ ]
 TIME / WEATHER [ ]
 ACTION [ ]
 COMPOSITION [ ]
@@ -1580,7 +1580,7 @@ CAMERA [ ]
 LIGHTING [ ]
 STYLE / MOOD [ ]
 TECHNICAL NOTES [ ]`,
-    en:`SCENE / LOCATION
+            en:`SCENE / LOCATION
 Historic Italian lakefront villa with classical architecture. Large terracotta clay tennis court on a terrace between the villa and the lake. Calm lake and distant mountains in background. Clear sky.
 
 TIME / WEATHER
@@ -1620,7 +1620,7 @@ Film emulation: Kodak Ektachrome 100. Fine film grain. Controlled contrast.
 Ultra-realistic water physics. Accurate clay texture with visible granular surface.
 No HDR, no artificial sharpening.
 Natural ambient sound: gentle water, distant quiet evening.`,
-    ua:`СЦЕНА / ЛОКАЦІЯ
+            ua:`СЦЕНА / ЛОКАЦІЯ
 Історична вілла на березі озера Комо, класична архітектура. Великий теракотовий тенісний корт на терасі між вілою та озером. Спокійне озеро і далекі гори у фоні. Чисте небо.
 
 ЧАС / ПОГОДА
@@ -1640,11 +1640,11 @@ Natural ambient sound: gentle water, distant quiet evening.`,
 
 ТЕХНІЧНІ НОТАТКИ
 Вигляд Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime. Емуляція Kodak Ektachrome 100. Без HDR. Реалістична фізика води. Органічне кінозерно.`
-  },
-  {
-    id:'a2', num:'02', badge:'Handheld · Walking',
-    title:'Ноги тенісистки в русі — handheld tracking',
-    structure:`СЦЕНА / ЛОКАЦІЯ: Терасовий ґрунтовий тенісний корт. Теплий теракот, без сторонніх обʼєктів. Фон мʼяко розмитий.
+        },
+        {
+            id:'a2', num:'02', badge:'Handheld · Walking',
+            title:'Ноги тенісистки в русі — handheld tracking',
+            structure:`СЦЕНА / ЛОКАЦІЯ: Терасовий ґрунтовий тенісний корт. Теплий теракот, без сторонніх обʼєктів. Фон мʼяко розмитий.
 
 ЧАС + ПОГОДА: Golden hour. Тепле стабільне світло, без вітру.
 
@@ -1655,7 +1655,7 @@ Natural ambient sound: gentle water, distant quiet evening.`,
 ДІЯ: Дівчина повільно і впевнено йде прямо на камеру. Кожен крок плавний. Кросівки природно контактують з ґрунтом. Ракетка майже нерухома. Тінь від ракетки змінюється фізично коректно.
 
 СТИЛЬ: Cinematic fashion editorial. Елегантність, впевненість, тілесна присутність.`,
-    skeleton:`SCENE / LOCATION [ ]
+            skeleton:`SCENE / LOCATION [ ]
 TIME / WEATHER [ ]
 CHARACTER / OBJECTS [ ]
 ACTION [ ]
@@ -1664,7 +1664,7 @@ CAMERA [ ]
 LIGHTING [ ]
 STYLE / MOOD [ ]
 TECHNICAL NOTES [ ]`,
-    en:`SCENE / LOCATION
+            en:`SCENE / LOCATION
 Terrace clay tennis court near a historic Mediterranean villa. Warm terracotta surface, clean and uninterrupted. Background softly blurred with subtle Mediterranean depth. No additional objects.
 
 TIME / WEATHER
@@ -1707,7 +1707,7 @@ Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime look. Kodak Ektachrome 100 
 Fine organic film grain. No foot deformation during stride cycle. No texture flicker.
 Accurate clay interaction. Stable racket geometry (no string warping).
 Natural ambient sound: subtle clay crunch under steps, warm quiet Mediterranean evening.`,
-    ua:`СЦЕНА / ЛОКАЦІЯ
+            ua:`СЦЕНА / ЛОКАЦІЯ
 Терасовий ґрунтовий корт біля середземноморської вілли. Тепла теракотова поверхня, чиста. Фон мʼяко розмитий. Без зайвих обʼєктів.
 
 ЧАС / ПОГОДА
@@ -1724,11 +1724,11 @@ Handheld tracking назад зі швидкістю моделі. Природ�
 
 ТЕХНІЧНІ НОТАТКИ
 Вигляд Blackmagic PYXIS 6K. Емуляція Kodak Ektachrome 100. Без деформації стоп. Без мерехтіння текстур. Точна фізика контакту з глиною.`
-  },
-  {
-    id:'a3', num:'03', badge:'Orbit · Close-up',
-    title:'Підошва кросівка — handheld orbit + рух волосся',
-    structure:`СЦЕНА: Ґрунтовий корт. Фон повністю дефокусований, нейтральний.
+        },
+        {
+            id:'a3', num:'03', badge:'Orbit · Close-up',
+            title:'Підошва кросівка — handheld orbit + рух волосся',
+            structure:`СЦЕНА: Ґрунтовий корт. Фон повністю дефокусований, нейтральний.
 
 КАМЕРА: Handheld orbit дуже близько до підошви. Короткий контрольований радіус. Strict object lock на підошву. Легке «дихання» камери. Без відʼїзду.
 
@@ -1737,13 +1737,13 @@ Handheld tracking назад зі швидкістю моделі. Природ�
 ДІЯ: Камера повільно рухається по орбіті навколо підошви. Підошва статична. Дівчина у фоні повільно поправляє волосся — рух тільки пальців і волосся за інерцією. Тіло нерухоме.
 
 СТИЛЬ: Cinematic fashion product shot. Premium, tactile, controlled.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 CAMERA [ ]
 FRAMING [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court. Background fully defocused into warm neutral texture. Golden hour side light.
+            en:`SCENE Terracotta clay court. Background fully defocused into warm neutral texture. Golden hour side light.
 
 CAMERA
 Handheld orbit. Camera positioned very close to sneaker sole.
@@ -1768,7 +1768,7 @@ TECH
 Maximum sole geometry stability. No logo drift. No tread deformation. No motion blur.
 Controlled depth of field. Camera motion minimal and object-subordinated.
 Natural sound: quiet warm court atmosphere.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт. Фон повністю дефокусований, нейтральний. Золоте бокове світло.
 
 КАМЕРА
@@ -1782,11 +1782,11 @@ Cinematic fashion product shot. Преміальність, тактильніс
 
 ТЕХНІЧНІ НОТАТКИ
 Максимальна стабільність геометрії підошви. Без дрейфу лого. Без деформації протектора. Без motion blur.`
-  },
-  {
-    id:'a4', num:'04', badge:'Static · Physics',
-    title:'Тенісний мʼяч — падіння та відскок',
-    structure:`СЦЕНА: Top-down вид на теракотовий корт. Білі лінії по центру. Тільки поверхня корту у кадрі.
+        },
+        {
+            id:'a4', num:'04', badge:'Static · Physics',
+            title:'Тенісний мʼяч — падіння та відскок',
+            structure:`СЦЕНА: Top-down вид на теракотовий корт. Білі лінії по центру. Тільки поверхня корту у кадрі.
 
 КАМЕРА: Повністю статична. Locked frame зверху (90°). Без тряски, без зуму.
 
@@ -1795,12 +1795,12 @@ Cinematic fashion product shot. Преміальність, тактильніс
 ДІЯ: Мʼяч повільно падає під дією гравітації. Тінь стежить і зменшується відповідно. Один чіткий удар об корт → легкий пил. Пружний відскок назад на початкову висоту. Тінь синхронно розширюється. Один відскок, без повторів.
 
 СТИЛЬ: Minimal, graphic, premium. Фокус на матеріалі і бренді.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 OBJECTS [ ]
 ACTION [ ]
 COMPOSITION [ ]
 TECH [ ]`,
-    en:`SCENE Top-down terracotta clay court, white lines intersect at center, no extra elements.
+            en:`SCENE Top-down terracotta clay court, white lines intersect at center, no extra elements.
 LIGHT Golden hour, low warm sun, stable lighting, soft defined shadow.
 CAMERA Static 90° overhead, locked frame, no shake, no zoom. 50mm equivalent.
 
@@ -1826,7 +1826,7 @@ Logo fully stable and readable throughout. No warping, no flicker, no motion blu
 Accurate clay surface physics. Correct bounce arc.
 Single dry impact sound — clean clay hit, no echo.
 Kodak Ektachrome 100 emulation. Fine grain.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Top-down теракотовий корт. Білі лінії перетинаються по центру. Нічого зайвого.
 
 КАМЕРА
@@ -1840,11 +1840,11 @@ Top-down теракотовий корт. Білі лінії перетинаю
 
 ТЕХНІЧНІ НОТАТКИ
 Лого стабільне і читабельне весь час. Без деформацій, без мерехтіння. Точна фізика відскоку. Один сухий звук удару.`
-  },
-  {
-    id:'a5', num:'05', badge:'Dolly · Balance',
-    title:'Дівчина перегинається через сітку — підйом мʼяча',
-    structure:`СЦЕНА: Теракотовий корт, сітка по центру кадру. Фон — корт і архітектура в мʼякому дефокусі.
+        },
+        {
+            id:'a5', num:'05', badge:'Dolly · Balance',
+            title:'Дівчина перегинається через сітку — підйом мʼяча',
+            structure:`СЦЕНА: Теракотовий корт, сітка по центру кадру. Фон — корт і архітектура в мʼякому дефокусі.
 
 КАМЕРА: Slow dolly forward. Дуже повільний короткий рух вперед вздовж лінії сітки. Без панорамування, без зміни висоти.
 
@@ -1853,14 +1853,14 @@ Top-down теракотовий корт. Білі лінії перетинаю
 ДІЯ: Дівчина плавно підіймає один мʼяч, що майже торкається її долоні. Повільно тягне мʼяч до грудей. Сітка злегка хвилюється від напруги тіла. Нога, що піднята, мʼяко згинається в коліні для балансу. Всі рухи повільні, природні і контрольовані.
 
 СТИЛЬ: Cinematic fashion editorial. Контроль, баланс, тілесна точність.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 CAMERA [ ]
 FRAMING [ ]
 OBJECTS [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court near historic villa. Golden hour warm stable light.
+            en:`SCENE Terracotta clay court near historic villa. Golden hour warm stable light.
 
 CAMERA Slow smooth dolly forward along the line of net. No pan, no tilt, no height change.
 
@@ -1880,7 +1880,7 @@ STYLE Cinematic fashion editorial. Balance, lightness, control. Calm premium moo
 
 TECH No anatomical distortion. No sliding foot. No net flicker. Accurate weight distribution.
 Smooth camera inertia only. Kodak Ektachrome 100. Fine organic grain.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт біля вілли. Золота година. Стабільне тепле світло.
 
 КАМЕРА
@@ -1894,18 +1894,18 @@ Cinematic fashion editorial. Баланс, легкість, контроль. �
 
 ТЕХНІЧНІ НОТАТКИ
 Без анатомічних спотворень. Без ковзання ноги. Без мерехтіння сітки. Точний розподіл ваги.`
-  },
-  {
-    id:'a6', num:'06', badge:'Orbit · Product',
-    title:'Режисерський стілець — радіальний orbit',
-    structure:`СЦЕНА: Теракотовий корт без видимого далекого фону. Деревʼяний тенісний стілець у центрі. Корзина з мʼячами поруч.
+        },
+        {
+            id:'a6', num:'06', badge:'Orbit · Product',
+            title:'Режисерський стілець — радіальний orbit',
+            structure:`СЦЕНА: Теракотовий корт без видимого далекого фону. Деревʼяний тенісний стілець у центрі. Корзина з мʼячами поруч.
 
 КАМЕРА: Orbit radial dolly. Камера рухається по невеликій коловій траєкторії навколо стільця. Object lock на стілець весь час. Без підйому / опускання. Фон — тільки теракот, нічого нового не розкривається.
 
 ДІЯ: Стілець і всі обʼєкти повністю статичні. Лише камера рухається. Логотипи LACOSTE і крокодил на стільці та мʼячах — стабільні і читабельні. Тіні стільця фізично коректні під час руху камери.
 
 СТИЛЬ: Luxury product shot. Cinematic, premium, clean.`,
-    skeleton:`SCENE / LOCATION [ ]
+            skeleton:`SCENE / LOCATION [ ]
 TIME / WEATHER [ ]
 ACTION [ ]
 COMPOSITION [ ]
@@ -1913,7 +1913,7 @@ CAMERA [ ]
 LIGHTING [ ]
 STYLE / MOOD [ ]
 TECHNICAL NOTES [ ]`,
-    en:`SCENE / LOCATION
+            en:`SCENE / LOCATION
 Terracotta clay tennis court. No visible distant background — frame filled only with warm clay surface.
 Centered wooden tennis umpire chair with natural wood frame and light fabric seat.
 Metal basket filled with branded tennis balls beside the chair.
@@ -1947,7 +1947,7 @@ Blackmagic PYXIS 6K + Panavision Ultra Vintage Prime look. Kodak Ektachrome 100 
 Maximum geometric stability. No logo deformation. No texture flicker. No fabric warping.
 Clean clay texture with visible granular detail.
 Natural ambient sound: subtle clay ambience, warm quiet evening.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт. Тільки тепла глиняна поверхня у кадрі — без фону. Деревʼяний тенісний стілець по центру. Металева корзина з мʼячами поруч. Кілька мʼячів розкидані на глині.
 
 КАМЕРА
@@ -1961,25 +1961,25 @@ Luxury premium product shot. Кінематографічний, елегант�
 
 ТЕХНІЧНІ НОТАТКИ
 Максимальна геометрична стабільність. Без дрейфу лого. Без деформації тканини. Без мерехтіння.`
-  },
-  {
-    id:'a7', num:'07', badge:'Orbit · Flare',
-    title:'Сумка на стійці сітки — handheld orbit + lens flare',
-    structure:`СЦЕНА: Ґрунтовий корт. Сітка на передньому плані. На стійці висить canvas-сумка LACOSTE. Позаду — середземноморська вілла мʼяко розмита.
+        },
+        {
+            id:'a7', num:'07', badge:'Orbit · Flare',
+            title:'Сумка на стійці сітки — handheld orbit + lens flare',
+            structure:`СЦЕНА: Ґрунтовий корт. Сітка на передньому плані. На стійці висить canvas-сумка LACOSTE. Позаду — середземноморська вілла мʼяко розмита.
 
 КАМЕРА: Handheld orbit навколо сумки. Короткий контрольований радіус. Strict object lock. Легке «дихання» handheld. Без зуму, без підйому. Додатково: делікатний cinematic lens flare від золотого сонця — змінюється тільки при русі камери, ніколи не перекриває лого.
 
 ДІЯ: Всі обʼєкти статичні. Тільки камера рухається. Flare деліkatно змінює інтенсивність залежно від кута руху. Лого LACOSTE 1933 — стабільне і читабельне.
 
 СТИЛЬ: Luxury product editorial. Cinematic, premium, timeless. Середземноморська елегантність.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 LIGHT [ ]
 CAMERA [ ]
 OBJECTS [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court. Net in foreground, post center. White canvas bag hanging on post.
+            en:`SCENE Terracotta clay court. Net in foreground, post center. White canvas bag hanging on post.
 Soft defocused Mediterranean villa background. No new elements.
 
 LIGHT Golden hour, warm low sun, soft accurate shadows from net and post.
@@ -1998,7 +1998,7 @@ STYLE Luxury product editorial. Premium Mediterranean atmosphere. Calm, timeless
 
 TECH No logo warping. No canvas deformation. No net flicker.
 Stable geometry. Soft controlled flare. No exposure shifts. Kodak Ektachrome 100.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт. Сітка на передньому плані. Біла canvas-сумка LACOSTE на стійці. Вілла у мʼякому розфокусі позаду.
 
 ОСВІТЛЕННЯ
@@ -2012,11 +2012,11 @@ Handheld orbit навколо сумки. Мінімальний радіус. S
 
 ТЕХНІЧНІ НОТАТКИ
 Без деформації лого. Без деформації canvas-текстури. Без мерехтіння сітки. Soft controlled flare — без агресивних артефактів.`
-  },
-  {
-    id:'a8', num:'08', badge:'Static · Gaze',
-    title:'Присідання тенісистки — погляд у камеру',
-    structure:`СЦЕНА: Теракотовий корт. Сітка і фон у мʼякому дефокусі. Золота година.
+        },
+        {
+            id:'a8', num:'08', badge:'Static · Gaze',
+            title:'Присідання тенісистки — погляд у камеру',
+            structure:`СЦЕНА: Теракотовий корт. Сітка і фон у мʼякому дефокусі. Золота година.
 
 КАМЕРА: Static handheld. Легке природне «дихання». Без руху позиції.
 
@@ -2025,14 +2025,14 @@ Handheld orbit навколо сумки. Мінімальний радіус. S
 ДІЯ: Дівчина у розслабленій позі присідання. Дивиться прямо в камеру — спокійний, сильний, спортивний погляд. Тіло практично нерухоме. Мʼяке дихання видно у плечах і ключицях. Кросівки статичні і добре читаються.
 
 СТИЛЬ: Cinematic fashion editorial. Спокійна сила, впевненість, контроль.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 CAMERA [ ]
 FRAMING [ ]
 OBJECTS [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court. Net softly defocused. Golden hour warm stable light.
+            en:`SCENE Terracotta clay court. Net softly defocused. Golden hour warm stable light.
 
 CAMERA Static handheld. Subtle natural micro-breathing only. No positional movement.
 
@@ -2049,7 +2049,7 @@ STYLE Cinematic fashion editorial. Quiet strength. Athletic confidence. Premium 
 
 TECH No anatomical distortion. No foot sliding. No fabric flicker. Stable shadows.
 Zero motion blur. Natural skin texture. Controlled depth of field. Kodak Ektachrome 100.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт. Сітка у мʼякому розфокусі. Золота година. Тепле стабільне світло.
 
 КАМЕРА
@@ -2063,11 +2063,11 @@ Cinematic fashion editorial. Спокійна сила. Спортивна вп�
 
 ТЕХНІЧНІ НОТАТКИ
 Без анатомічних спотворень. Без ковзання стоп. Без мерехтіння тканини. Стабільні тіні. Без motion blur.`
-  },
-  {
-    id:'a9', num:'09', badge:'Static · Blink',
-    title:'Портрет з ракеткою — погляд і одне моргання',
-    structure:`СЦЕНА: Теракотовий корт, фон у теплому дефокусі. Тінь від струн ракетки на обличчі. Золота година.
+        },
+        {
+            id:'a9', num:'09', badge:'Static · Blink',
+            title:'Портрет з ракеткою — погляд і одне моргання',
+            structure:`СЦЕНА: Теракотовий корт, фон у теплому дефокусі. Тінь від струн ракетки на обличчі. Золота година.
 
 КАМЕРА: Повністю статична. Без handheld, без мікрорухів.
 
@@ -2076,7 +2076,7 @@ Cinematic fashion editorial. Спокійна сила. Спортивна вп�
 ДІЯ: Дівчина тримає очний контакт з камерою. Спокійне, контрольоване дихання ледь помітне у ключицях. Одне повільне природне моргання обома очима одночасно. Без руху голови. Без змін виразу обличчя. Тінь від струн ракетки стабільна.
 
 СТИЛЬ: Cinematic fashion portrait. Precision, control, graphic shadow interplay.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 LIGHT [ ]
 CAMERA [ ]
 FRAMING [ ]
@@ -2084,7 +2084,7 @@ OBJECTS [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court, background fully defocused into warm texture.
+            en:`SCENE Terracotta clay court, background fully defocused into warm texture.
 
 LIGHT Golden hour low side light. Racket strings cast sharp geometric shadow across half of the face.
 Light stable, no exposure shifts.
@@ -2106,7 +2106,7 @@ STYLE Cinematic fashion portrait. Precision, control, athletic elegance. Graphic
 
 TECH No facial distortion. No shadow flicker. Sharp string shadow geometry stable throughout.
 Natural skin texture. No motion blur. Stable focus locked on eyes. Kodak Ektachrome 100.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт, фон у теплому дефокусі. Золота година. Чітка геометрична тінь від струн ракетки на половині обличчя.
 
 КАМЕРА
@@ -2120,11 +2120,11 @@ Cinematic fashion portrait. Точність, контроль, атлетичн
 
 ТЕХНІЧНІ НОТАТКИ
 Без спотворень обличчя. Без мерехтіння тіні. Геометрія тіні від струн стабільна. Природна текстура шкіри. Без motion blur. Фокус заблокований на очах.`
-  },
-  {
-    id:'a10', num:'10', badge:'Dolly · Surreal',
-    title:'Дівчина з газетою і крокодил на корті',
-    structure:`СЦЕНА: Теракотовий корт. Деревʼяний стілець по центру. Корзина з мʼячами поруч. Фон — корт і зелень у мʼякому дефокусі.
+        },
+        {
+            id:'a10', num:'10', badge:'Dolly · Surreal',
+            title:'Дівчина з газетою і крокодил на корті',
+            structure:`СЦЕНА: Теракотовий корт. Деревʼяний стілець по центру. Корзина з мʼячами поруч. Фон — корт і зелень у мʼякому дефокусі.
 
 КАМЕРА: Dolly backwards. Повільний, рівний відʼїзд. Без панорамування, без зміни висоти.
 
@@ -2133,14 +2133,14 @@ Cinematic fashion portrait. Точність, контроль, атлетичн
 ДІЯ: Дівчина сидить майже нерухомо, читає газету. Верхній кросівок злегка погойдується (розслаблений рух гомілковостопа). Крокодил повільно проходить зліва направо — природна хода, хвіст хитається з інерцією, кожен крок залишає легкий відбиток і піднімає пил. Дівчина не реагує. Крокодил виходить з кадру справа.
 
 СТИЛЬ: Cinematic fashion editorial з делікатним сюрреалістичним контрастом.`,
-    skeleton:`SCENE [ ]
+            skeleton:`SCENE [ ]
 CAMERA [ ]
 FRAMING [ ]
 OBJECTS [ ]
 ACTION [ ]
 STYLE [ ]
 TECH [ ]`,
-    en:`SCENE Terracotta clay court. Wooden chair centered. Wire basket with tennis balls on the right.
+            en:`SCENE Terracotta clay court. Wooden chair centered. Wire basket with tennis balls on the right.
 Golden hour warm stable light.
 
 CAMERA Slow smooth dolly backward. Linear, constant speed. No pan, no tilt, no height change.
@@ -2171,7 +2171,7 @@ TECH Realistic crocodile anatomy and weight physics. Correct shadow direction an
 Accurate ground contact and dust physics. No scale mismatch.
 No motion blur artifacts. Stable exposure throughout.
 Kodak Ektachrome 100 emulation. Fine organic grain.`,
-    ua:`СЦЕНА
+            ua:`СЦЕНА
 Теракотовий корт. Деревʼяний стілець по центру. Корзина з мʼячами праворуч. Фон у мʼякому дефокусі. Золота година.
 
 КАМЕРА
@@ -2187,17 +2187,17 @@ Cinematic fashion editorial з делікатним сюрреалістични
 
 ТЕХНІЧНІ НОТАТКИ
 Реалістична анатомія і фізика ваги крокодила. Правильний напрям і масштаб тіні. Точна фізика контакту з землею і пилу. Без scale mismatch.`
-  }
-];
+        }
+    ];
 
-// Build animation accordion
-const animContainer = document.getElementById('acc-anim');
-if (animContainer) {
-  animFrames.forEach(f => {
-    const item = document.createElement('div');
-    item.className = 'accordion-item anim-item';
-    item.id = `item-${f.id}`;
-    item.innerHTML = `
+    // Build animation accordion
+    const animContainer = document.getElementById('acc-anim');
+    if (animContainer) {
+        animFrames.forEach(f => {
+            const item = document.createElement('div');
+            item.className = 'accordion-item anim-item';
+            item.id = `item-${f.id}`;
+            item.innerHTML = `
       <div class="accordion-header" onclick="toggleItem('item-${f.id}')">
         <span class="frame-num" style="color:var(--purple)">${f.num}</span>
         <span class="frame-badge anim-badge">${f.badge}</span>
@@ -2238,9 +2238,9 @@ if (animContainer) {
           </div>
         </div>
       </div>`;
-    animContainer.appendChild(item);
-  });
-}
+            animContainer.appendChild(item);
+        });
+    }
 
 </script>
 </body>

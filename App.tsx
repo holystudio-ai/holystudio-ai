@@ -15,6 +15,7 @@ import ReturnPage from "@/src/pages/ReturnPage.tsx";
 import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
 import EmailModal from "@/src/components/features/EmailModal.tsx";
+import PromptsIntensiveRedirect from "@/src/pages/PromptsIntensiveRedirect.tsx";
 
 const App: React.FC = () => {
     return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
                 <Route path="/intensive-smm" element={<IntensiveSmm/>}/>
                 <Route path="/intensive-photo-video" element={<IntensivePhotoVideo/>}/>
                 <Route path="/intensive" element={<Intensive/>}/>
+                <Route path="/prompts_intensive.html" element={<PromptsIntensiveRedirect/>}/>
                 <Route path="/thank-you" element={<ThankYou/>}/>
                 <Route path="/return-page" element={<ReturnPage/>}/>
                 <Route path="/cancel-page" element={<CancelPage/>}/>
