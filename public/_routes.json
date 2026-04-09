@@ -4,6 +4,7 @@
   "exclude": [
     "/assets/*",
     "/fonts/*",
+    "/*.html",
     "/*.png",
     "/*.jpg",
     "/*.jpeg",
