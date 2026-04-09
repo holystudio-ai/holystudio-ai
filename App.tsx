@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '@/src/components/layout/Header.tsx';
 import Footer from '@/src/components/layout/Footer.tsx';
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from '@/src/pages/Home.tsx';
 import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
 import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
@@ -15,28 +15,39 @@ import ReturnPage from "@/src/pages/ReturnPage.tsx";
 import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
 import EmailModal from "@/src/components/features/EmailModal.tsx";
+import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
 
 const App: React.FC = () => {
+    const location = useLocation();
+
+    const isPromtsIntensiveHtmlPage =
+        location.pathname === "/promts_intensive.html";
+
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
-            <Header/>
-            <ScrollToTop/>
-            <EmailModal/>
+            {!isPromtsIntensiveHtmlPage && <Header />}
+            <ScrollToTop />
+            {!isPromtsIntensiveHtmlPage && <EmailModal />}
+
             <Routes>
-                <Route path="/" element={<HomePage/>}/>
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage/>}/>
-                <Route path="/public-offer" element={<PublicOfferPage/>}/>
-                <Route path="/terms" element={<TermsOfUse/>}/>
-                <Route path="/intensive-smm" element={<IntensiveSmm/>}/>
-                <Route path="/intensive-photo-video" element={<IntensivePhotoVideo/>}/>
-                <Route path="/intensive" element={<Intensive/>}/>
-                <Route path="/thank-you" element={<ThankYou/>}/>
-                <Route path="/return-page" element={<ReturnPage/>}/>
-                <Route path="/cancel-page" element={<CancelPage/>}/>
-                <Route path="/service-page" element={<ServicePage/>}/>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                <Route path="/public-offer" element={<PublicOfferPage />} />
+                <Route path="/terms" element={<TermsOfUse />} />
+                <Route path="/intensive-smm" element={<IntensiveSmm />} />
+                <Route path="/intensive-photo-video" element={<IntensivePhotoVideo />} />
+                <Route path="/intensive" element={<Intensive />} />
+                <Route path="/thank-you" element={<ThankYou />} />
+                <Route path="/return-page" element={<ReturnPage />} />
+                <Route path="/cancel-page" element={<CancelPage />} />
+                <Route path="/service-page" element={<ServicePage />} />
+                <Route
+                    path="/promts_intensive.html"
+                    element={<PromtsIntensiveHtmlPage />}
+                />
             </Routes>
 
-            <Footer/>
+            {!isPromtsIntensiveHtmlPage && <Footer />}
         </div>
     );
 };
