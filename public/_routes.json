@@ -2,10 +2,8 @@
   "version": 1,
   "include": ["/*"],
   "exclude": [
-    "/promts_intensive.html",
     "/assets/*",
     "/fonts/*",
-    "/*.html",
     "/*.png",
     "/*.jpg",
     "/*.jpeg",
