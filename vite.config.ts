@@ -9,7 +9,7 @@ function copyPromptsIntensiveHtml() {
         name: 'copy-prompts-intensive-html',
         closeBundle() {
             const sourceFile = path.resolve(__dirname, 'public/promts_intensive.html');
-            const outputFile = path.resolve(__dirname, 'dist/prompts_intensive.html');
+            const outputFile = path.resolve(__dirname, 'dist/promts_intensive.html');
 
             if (fs.existsSync(sourceFile)) {
                 fs.copyFileSync(sourceFile, outputFile);

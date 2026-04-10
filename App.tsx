@@ -18,16 +18,10 @@ import EmailModal from "@/src/components/features/EmailModal.tsx";
 import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
 
 const App: React.FC = () => {
-    const location = useLocation();
-
-    const isPromtsIntensiveHtmlPage =
-        location.pathname === "/promts_intensive.html";
 
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
-            {!isPromtsIntensiveHtmlPage && <Header />}
             <ScrollToTop />
-            {!isPromtsIntensiveHtmlPage && <EmailModal />}
 
             <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -41,13 +35,8 @@ const App: React.FC = () => {
                 <Route path="/return-page" element={<ReturnPage />} />
                 <Route path="/cancel-page" element={<CancelPage />} />
                 <Route path="/service-page" element={<ServicePage />} />
-                <Route
-                    path="/promts_intensive.html"
-                    element={<PromtsIntensiveHtmlPage />}
-                />
             </Routes>
 
-            {!isPromtsIntensiveHtmlPage && <Footer />}
         </div>
     );
 };

@@ -5,6 +5,8 @@
     "/assets/*",
     "/fonts/*",
     "/*.html",
+    "/promts_intensive",
+    "/promts_intensive/",
     "/*.png",
     "/*.jpg",
     "/*.jpeg",
