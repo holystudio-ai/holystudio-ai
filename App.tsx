@@ -37,6 +37,7 @@ const App: React.FC = () => {
                 <Route path="/service-page" element={<ServicePage />} />
             </Routes>
 
+            <EmailModal />
         </div>
     );
 };
