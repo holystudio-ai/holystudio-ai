@@ -23,6 +23,8 @@ const App: React.FC = () => {
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
             <ScrollToTop />
 
+            <Header/>
+
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
@@ -36,6 +38,8 @@ const App: React.FC = () => {
                 <Route path="/cancel-page" element={<CancelPage />} />
                 <Route path="/service-page" element={<ServicePage />} />
             </Routes>
+
+            <Footer/>
 
             <EmailModal />
         </div>
