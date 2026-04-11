@@ -37,6 +37,7 @@ const App: React.FC = () => {
                 <Route path="/return-page" element={<ReturnPage />} />
                 <Route path="/cancel-page" element={<CancelPage />} />
                 <Route path="/service-page" element={<ServicePage />} />
+                <Route path="/promts_intensive" element={<PromtsIntensiveHtmlPage />} />
             </Routes>
 
             <Footer/>
