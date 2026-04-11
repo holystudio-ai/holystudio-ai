@@ -2,7 +2,7 @@ import {coursePriceUah} from '@/src/lib/pricing.ts';
 import {trackInitiateCheckout, trackLead} from '@/src/lib/analytics.ts';
 
 const WAYFORPAY_URL = 'https://secure.wayforpay.com/pay';
-const API_URL = (process.env.VITE_API_URL || 'https://holystudio-ai.onrender.com').replace(/\/+$/, '');
+const API_URL = 'https://holystudio-ai.onrender.com';
 
 /**
  * Collects browser / device / environment metadata for the user record.
