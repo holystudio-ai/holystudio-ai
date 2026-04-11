@@ -1,18 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {BrowserRouter, useLocation} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import App from './App';
-import {trackPageView} from '@/src/lib/analytics.ts';
-
-function AnalyticsPageTracker() {
-    const location = useLocation();
-
-    useEffect(() => {
-        trackPageView();
-    }, [location.pathname, location.search]);
-
-    return null;
-}
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -24,7 +13,6 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <AnalyticsPageTracker/>
             <App/>
         </BrowserRouter>
     </React.StrictMode>

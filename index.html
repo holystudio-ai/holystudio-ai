@@ -68,6 +68,25 @@
 
         fbq('init', '1743358290241901');
         fbq('track', 'PageView');
+
+        // SPA: re-fire PageView on client-side navigation (History API)
+        (function() {
+            var origPush = history.pushState;
+            var origReplace = history.replaceState;
+            function onNav() {
+                if (window.fbq) { fbq('track', 'PageView'); }
+                if (window.ttq && window.ttq.page) { ttq.page(); }
+            }
+            history.pushState = function() {
+                origPush.apply(this, arguments);
+                onNav();
+            };
+            history.replaceState = function() {
+                origReplace.apply(this, arguments);
+                onNav();
+            };
+            window.addEventListener('popstate', onNav);
+        })();
     </script>
     <!-- End Meta Pixel Code -->
 
@@ -282,6 +301,10 @@
     </script>
 </head>
 <body>
+<noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1743358290241901&ev=PageView&noscript=1" />
+</noscript>
 <div class="noise"></div>
 <div id="root"></div>
 <script type="module" src="/index.tsx"></script>
