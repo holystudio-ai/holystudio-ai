@@ -2,6 +2,14 @@
 
 Лендінг на `Vite + React` з checkout-потоком через **WayForPay**.
 
+| | URL |
+|--|-----|
+| 🌐 **Сайт** | https://holystudio.ai |
+| 🔧 **Backend API** | https://holystudio-ai.onrender.com |
+| 📦 **GitHub** | https://github.com/holystudio-ai/holystudio-ai |
+
+**Base URL для всіх API-запитів:** `https://holystudio-ai.onrender.com`
+
 ---
 
 ## Що зараз працює
@@ -54,6 +62,10 @@
 ---
 
 ## API Endpoints
+
+> **Base URL:** `https://holystudio-ai.onrender.com`  
+> Всі шляхи нижче відносні до цього URL.  
+> Наприклад: `POST https://holystudio-ai.onrender.com/api/payment/prepare`
 
 ### `POST /api/payment/prepare`
 
@@ -188,7 +200,7 @@ GET /api/bot/verify-token?token=a1b2c3d4e5f6...
 Для тестування без реальної оплати використовуй токен **`dev-test-holy`**:
 
 ```
-GET /api/bot/verify-token?token=dev-test-holy
+GET https://holystudio-ai.onrender.com/api/bot/verify-token?token=dev-test-holy
 ```
 
 Цей токен:
@@ -198,8 +210,10 @@ GET /api/bot/verify-token?token=dev-test-holy
 - ❌ **Не працює в production** (`NODE_ENV=production`)
 - Повертає `email: "dev@holystudio.ai"`, `orderReference: "HOLY-DEV-TEST-000"`
 
-Для SmartSender тесту: в Request URL впиши `https://holystudio.ai/api/bot/verify-token?token=dev-test-holy`  
-(або `http://localhost:5555/api/bot/verify-token?token=dev-test-holy` для локального тесту)
+**Тестові посилання:**
+- **Backend (Render):** `https://holystudio-ai.onrender.com/api/bot/verify-token?token=dev-test-holy`
+- **Локально:** `http://localhost:5555/api/bot/verify-token?token=dev-test-holy`
+- **SmartSender:** використай будь-яке з посилань вище в полі Request URL
 
 
 **Response (успіх):**
@@ -242,7 +256,7 @@ import requests
 def verify_access_token(token: str) -> dict:
     """Перевіряє одноразовий токен доступу після оплати."""
     resp = requests.post(
-        "https://holystudio.ai/api/bot/verify-token",
+        "https://holystudio-ai.onrender.com/api/bot/verify-token",
         json={"token": token},
         timeout=10,
     )
@@ -271,7 +285,7 @@ else:
 **Приклад використання в боті (Node.js):**
 ```javascript
 async function verifyAccessToken(token) {
-  const resp = await fetch("https://holystudio.ai/api/bot/verify-token", {
+  const resp = await fetch("https://holystudio-ai.onrender.com/api/bot/verify-token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token }),
@@ -412,7 +426,7 @@ SmartSender дозволяє робити External Request з чатбот-фл�
 | Поле | Значення |
 |------|----------|
 | **Method** | `GET` |
-| **Request URL** | `https://holystudio.ai/api/bot/verify-token` |
+| **Request URL** | `https://holystudio-ai.onrender.com/api/bot/verify-token` |
 
 **Вкладка Query:**
 
@@ -466,7 +480,7 @@ SmartSender дозволяє робити External Request з чатбот-фл�
 
 Для тесту можна вручну відкрити в браузері:
 ```
-https://holystudio.ai/api/bot/verify-token?token=YOUR_TEST_TOKEN
+https://holystudio-ai.onrender.com/api/bot/verify-token?token=dev-test-holy
 ```
 
 Якщо токен валідний, побачите:
