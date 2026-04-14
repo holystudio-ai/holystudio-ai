@@ -12,6 +12,7 @@ import paymentReturnRouter from "./routes/payment/return.js";
 import paymentServiceRouter from "./routes/payment/service.js";
 import paymentStatusRouter from "./routes/payment/status.js";
 import cronCheckUnpaidRouter from "./routes/cron/check-unpaid.js";
+import botVerifyTokenRouter from "./routes/bot/verify-token.js";
 
 validateConfig();
 
@@ -48,6 +49,7 @@ app.use("/api/payment/return", paymentReturnRouter);
 app.use("/api/payment/service", paymentServiceRouter);
 app.use("/api/payment/status", paymentStatusRouter);
 app.use("/api/cron/check-unpaid", cronCheckUnpaidRouter);
+app.use("/api/bot/verify-token", botVerifyTokenRouter);
 
 // Graceful shutdown
 function shutdown() {
