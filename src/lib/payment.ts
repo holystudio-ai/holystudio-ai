@@ -2,11 +2,105 @@ import {coursePriceUah} from '@/src/lib/pricing.ts';
 import {trackInitiateCheckout, trackLead} from '@/src/lib/analytics.ts';
 
 const WAYFORPAY_URL = 'https://secure.wayforpay.com/pay';
-const API_URL = 'https://holystudio-ai.onrender.com';
+const API_URL = process.env.VITE_API_URL ? process.env.VITE_API_URL.replace(/\/+$/, '') : '';
+
+// ── Pre-prepared payment cache ──────────────────────────────────
+
+interface PreparedPayment {
+    formFields: Record<string, string>;
+    token: string;
+    orderReference: string;
+    expiresAt: number;
+}
+
+let preparedPayment: PreparedPayment | null = null;
+let preparePromise: Promise<PreparedPayment | null> | null = null;
 
 /**
- * Collects browser / device / environment metadata for the user record.
+ * TTL buffer: re-prepare if less than 2 minutes remain.
  */
+const TTL_BUFFER_MS = 2 * 60 * 1000;
+
+function isPreparedValid(): boolean {
+    return !!preparedPayment && Date.now() < preparedPayment.expiresAt - TTL_BUFFER_MS;
+}
+
+/**
+ * Pre-generate WayForPay payment form fields.
+ * Called automatically on page load. Can also be called manually.
+ * The result is cached and reused until it expires (~14 min).
+ */
+export async function preparePayment(): Promise<PreparedPayment | null> {
+    // Return existing if still valid
+    if (isPreparedValid()) return preparedPayment;
+
+    // Dedupe concurrent calls
+    if (preparePromise) return preparePromise;
+
+    preparePromise = (async () => {
+        try {
+            const resp = await fetch(`${API_URL}/api/payment/prepare`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            });
+
+            if (!resp.ok) {
+                console.warn('[Payment] Prepare failed:', resp.status);
+                return null;
+            }
+
+            const json = await resp.json();
+
+            if (!json.ok || !json.formFields) {
+                console.warn('[Payment] Invalid prepare response:', json);
+                return null;
+            }
+
+            preparedPayment = {
+                formFields: json.formFields,
+                token: json.token,
+                orderReference: json.orderReference,
+                expiresAt: json.expiresAt || Date.now() + 14 * 60 * 1000,
+            };
+
+            console.log('[Payment] Pre-prepared order:', json.orderReference);
+            return preparedPayment;
+        } catch (err) {
+            console.warn('[Payment] Prepare error:', err);
+            return null;
+        } finally {
+            preparePromise = null;
+        }
+    })();
+
+    return preparePromise;
+}
+
+/**
+ * Schedule background re-preparation before expiry.
+ */
+function scheduleReprepare() {
+    if (!preparedPayment) return;
+    const ttl = preparedPayment.expiresAt - TTL_BUFFER_MS - Date.now();
+    if (ttl > 0) {
+        setTimeout(() => {
+            preparedPayment = null;
+            preparePayment();
+        }, ttl);
+    }
+}
+
+// ── Auto-prepare on page load ───────────────────────────────────
+
+if (typeof window !== 'undefined') {
+    // Small delay so it doesn't compete with critical page resources
+    setTimeout(() => {
+        preparePayment().then(scheduleReprepare);
+    }, 1500);
+}
+
+// ── Client metadata ─────────────────────────────────────────────
+
 function collectClientMeta(): Record<string, unknown> {
     const nav = navigator as any;
     const conn = nav.connection || nav.mozConnection || nav.webkitConnection;
@@ -37,20 +131,30 @@ function collectClientMeta(): Record<string, unknown> {
     };
 }
 
+// ── Public API ──────────────────────────────────────────────────
+
 /**
  * Opens the email collection modal.
  * Called by all "Отримати доступ" buttons across the site.
  */
 export function redirectToPayment() {
+    // Ensure we have a prepared form (prepare in background if not)
+    if (!isPreparedValid()) {
+        preparePayment();
+    }
     window.dispatchEvent(new CustomEvent('open-payment-modal'));
 }
 
 /**
  * Called after the user submits their email in the modal.
- * 1. Fires Lead + InitiateCheckout analytics
- * 2. Saves email + device info to DB
- * 3. Creates WayForPay order on the server (with HMAC signature)
- * 4. Auto-submits a hidden form → redirects to WayForPay payment page
+ *
+ * FAST PATH (pre-prepared):
+ *   1. Add clientEmail to cached formFields
+ *   2. Fire-and-forget: save user + update order email
+ *   3. Immediately submit form to WayForPay → instant redirect
+ *
+ * FALLBACK PATH (if prepare failed):
+ *   Uses the old /api/payment/create flow (slower but reliable)
  */
 export async function proceedToPayment(email: string) {
     const analyticsPayload = {
@@ -60,48 +164,79 @@ export async function proceedToPayment(email: string) {
         contentId: 'holy-ai-intensive',
     };
 
-    // Fire Lead event (FB Lead + TikTok SubmitForm + SmartSender identify)
+    // Fire analytics events
     trackLead(email, analyticsPayload);
-
-    // Fire InitiateCheckout (FB + TikTok)
     trackInitiateCheckout(analyticsPayload);
 
-    // Save email + client metadata to users collection
+    // Collect metadata for user record
     const clientMeta = collectClientMeta();
-    try {
-        await fetch(`${API_URL}/api/users`, {
+
+    // Try to use pre-prepared form (fast path)
+    let formFields: Record<string, string> | null = null;
+    let orderReference: string | null = null;
+
+    if (isPreparedValid() && preparedPayment) {
+        formFields = {...preparedPayment.formFields, clientEmail: email};
+        orderReference = preparedPayment.orderReference;
+
+        // Fire-and-forget: save user + update order with email
+        fetch(`${API_URL}/api/users`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, clientMeta}),
+            body: JSON.stringify({email, clientMeta, orderReference}),
+        }).catch(() => {});
+
+        // Update order with email (fire-and-forget)
+        fetch(`${API_URL}/api/payment/create`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, orderReference, updateOnly: true}),
+        }).catch(() => {});
+
+        // Invalidate cache so next payment gets a fresh form
+        preparedPayment = null;
+    } else {
+        // Fallback: old flow — save user + create order synchronously
+        try {
+            await fetch(`${API_URL}/api/users`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, clientMeta}),
+            });
+        } catch (e) {
+            console.warn('[Payment] Failed to save email:', e);
+        }
+
+        const resp = await fetch(`${API_URL}/api/payment/create`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email}),
         });
-    } catch (e) {
-        console.warn('[Payment] Failed to save email:', e);
+
+        if (!resp.ok) {
+            const text = await resp.text().catch(() => 'Unknown error');
+            console.error('[Payment] Create order failed:', resp.status, text);
+            throw new Error(`Payment creation failed (${resp.status})`);
+        }
+
+        const json = await resp.json();
+
+        if (!json.formFields) {
+            console.error('[Payment] No formFields in response:', json);
+            throw new Error('Invalid payment response');
+        }
+
+        formFields = json.formFields;
     }
 
-    // Create WayForPay order
-    const resp = await fetch(`${API_URL}/api/payment/create`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email}),
-    });
+    // Submit form to WayForPay → immediate redirect
+    submitWayForPayForm(formFields!);
+}
 
-    if (!resp.ok) {
-        const text = await resp.text().catch(() => 'Unknown error');
-        console.error('[Payment] Create order failed:', resp.status, text);
-        throw new Error(`Payment creation failed (${resp.status})`);
-    }
-
-    const json = await resp.json();
-
-    if (!json.formFields) {
-        console.error('[Payment] No formFields in response:', json);
-        throw new Error('Invalid payment response');
-    }
-
-    const {formFields} = json;
-
-
-    // Create and auto-submit hidden form → redirect to WayForPay payment page
+/**
+ * Creates and auto-submits a hidden form that redirects to WayForPay.
+ */
+function submitWayForPayForm(formFields: Record<string, string>) {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = WAYFORPAY_URL;

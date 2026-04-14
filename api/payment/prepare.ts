@@ -21,46 +21,35 @@ function generateOrderReference(): string {
     return `HOLY-${ts}-${rand}`;
 }
 
+/**
+ * POST /api/payment/prepare
+ *
+ * Pre-generates WayForPay payment form fields WITHOUT requiring the user's email.
+ * Email (clientEmail) is NOT part of the WayForPay HMAC signature, so we can
+ * safely generate the signed form fields ahead of time.
+ *
+ * The frontend calls this on page load and caches the result. When the user
+ * enters their email and clicks "pay", the email is added to the cached
+ * form fields and the form is submitted instantly — zero wait time.
+ *
+ * Returns: { ok, formFields, token, orderReference, expiresAt }
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
-        const { email, orderReference: existingOrderRef, updateOnly } = req.body ?? {};
-
-        if (!email || typeof email !== 'string') {
-            return res.status(400).json({ error: 'Email is required' });
-        }
-
-        const normalizedEmail = email.trim().toLowerCase();
-
-        // If updateOnly — just attach email to an existing prepared order
-        if (updateOnly && existingOrderRef) {
-            const db = await getDb();
-            await db.collection('orders').updateOne(
-                { orderReference: existingOrderRef },
-                {
-                    $set: {
-                        email: normalizedEmail,
-                        status: 'created',
-                        updatedAt: new Date(),
-                    },
-                }
-            );
-            return res.status(200).json({ ok: true, updated: true });
-        }
-
         const orderReference = generateOrderReference();
         const orderDate = Math.floor(Date.now() / 1000);
 
-        // Generate a secure token to identify the user on return
+        // Secure token to identify the user on return
         const token = crypto.randomBytes(32).toString('hex');
 
-        // Build returnUrl → API endpoint that accepts WayForPay POST and redirects to SPA
+        // returnUrl — WayForPay will POST here after payment
         const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
 
-        // Build signature string
+        // Build HMAC signature (clientEmail is NOT included in the signature)
         const signatureData = [
             MERCHANT_LOGIN,
             MERCHANT_DOMAIN,
@@ -75,40 +64,48 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         const merchantSignature = hmacMd5(signatureData, MERCHANT_SECRET);
 
-        // WayForPay form fields
+        // Form fields — clientEmail will be added by the frontend
         const formFields: Record<string, string> = {
             merchantAccount: MERCHANT_LOGIN,
             merchantDomainName: MERCHANT_DOMAIN,
-            merchantSignature: merchantSignature,
-            orderReference: orderReference,
+            merchantSignature,
+            orderReference,
             orderDate: String(orderDate),
             amount: String(PRODUCT_PRICE),
             currency: CURRENCY,
             productName: PRODUCT_NAME,
             productCount: '1',
             productPrice: String(PRODUCT_PRICE),
-            clientEmail: normalizedEmail,
             returnUrl,
             serviceUrl: `${SITE_URL}/api/payment/service`,
             defaultPaymentSystem: 'card',
             orderTimeout: '900',
         };
 
-        // Save order to MongoDB with token
+        // Save order to MongoDB (without email — will be updated later)
         const db = await getDb();
         await db.collection('orders').insertOne({
             orderReference,
             token,
-            email: normalizedEmail,
+            email: null, // will be set when user enters email
             amount: PRODUCT_PRICE,
             currency: CURRENCY,
-            status: 'created',
+            status: 'prepared',
             createdAt: new Date(),
         });
 
-        return res.status(200).json({ ok: true, formFields });
+        // Form is valid for ~14 minutes (WayForPay orderTimeout is 900s = 15min)
+        const expiresAt = Date.now() + 14 * 60 * 1000;
+
+        return res.status(200).json({
+            ok: true,
+            formFields,
+            token,
+            orderReference,
+            expiresAt,
+        });
     } catch (err) {
-        console.error('[payment/create] Error:', err);
+        console.error('[payment/prepare] Error:', err);
         return res.status(500).json({ error: 'Internal server error' });
     }
 }

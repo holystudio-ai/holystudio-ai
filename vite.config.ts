@@ -44,7 +44,9 @@ export default defineConfig(({ mode }) => {
             'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
             'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
             'process.env.COURSE_PRICE_UAH': JSON.stringify(env.COURSE_PRICE_UAH || '490'),
-            'process.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL || ''),
+            // In dev mode, always use empty string (relative URLs → local Vite dev API plugin).
+            // In production build, use VITE_API_URL from env (e.g. https://holystudio-ai.onrender.com).
+            'process.env.VITE_API_URL': JSON.stringify(mode === 'development' ? '' : (env.VITE_API_URL || '')),
         },
         resolve: {
             alias: {

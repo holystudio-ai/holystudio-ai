@@ -14,6 +14,11 @@ function getEnv(key, fallback) {
     return process.env[key] || fallback;
 }
 
+/** Strip trailing slashes from URLs */
+function trimUrl(url) {
+    return url.replace(/\/+$/, '');
+}
+
 const MERCHANT_DOMAIN = 'holystudio.ai';
 const PRODUCT_NAME = 'AI Інтенсив HOLYSTUDIO';
 const CURRENCY = 'UAH';
@@ -154,6 +159,121 @@ export default function devApiPlugin() {
                 }
             });
 
+            // POST /api/payment/prepare — pre-generate payment form fields (no email needed)
+            server.middlewares.use('/api/payment/prepare', async (req, res, next) => {
+                if (req.method !== 'POST') return next();
+
+                const MERCHANT_LOGIN = getEnv('WFP_MERCHANT_LOGIN', 'holystudio_ai');
+                const MERCHANT_SECRET = getEnv('WFP_MERCHANT_SECRET', '');
+                const SITE_URL = trimUrl(getEnv('SITE_URL', 'http://localhost:5555'));
+                const PRODUCT_PRICE = Number(getEnv('COURSE_PRICE_UAH', '490'));
+
+                const ts = Date.now();
+                const rand = crypto.randomBytes(4).toString('hex');
+                const orderReference = `HOLY-${ts}-${rand}`;
+                const orderDate = Math.floor(Date.now() / 1000);
+
+                const token = crypto.randomBytes(32).toString('hex');
+                const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
+
+                const signatureData = [
+                    MERCHANT_LOGIN, MERCHANT_DOMAIN, orderReference, orderDate,
+                    PRODUCT_PRICE, CURRENCY, PRODUCT_NAME, 1, PRODUCT_PRICE,
+                ].join(';');
+                const merchantSignature = hmacMd5(signatureData, MERCHANT_SECRET);
+
+                const formFields = {
+                    merchantAccount: MERCHANT_LOGIN,
+                    merchantDomainName: MERCHANT_DOMAIN,
+                    merchantSignature,
+                    orderReference,
+                    orderDate: String(orderDate),
+                    amount: String(PRODUCT_PRICE),
+                    currency: CURRENCY,
+                    productName: PRODUCT_NAME,
+                    productCount: '1',
+                    productPrice: String(PRODUCT_PRICE),
+                    returnUrl,
+                    serviceUrl: `${SITE_URL}/api/payment/service`,
+                    defaultPaymentSystem: 'card',
+                    orderTimeout: '900',
+                };
+
+                try {
+                    const db = await getDb();
+                    await db.collection('orders').insertOne({
+                        orderReference,
+                        token,
+                        email: null,
+                        amount: PRODUCT_PRICE,
+                        currency: CURRENCY,
+                        status: 'prepared',
+                        createdAt: new Date(),
+                    });
+                } catch (err) {
+                    console.error('[dev-api] Failed to save prepared order:', err);
+                }
+
+                const expiresAt = Date.now() + 14 * 60 * 1000;
+                console.log('[dev-api] Payment prepared:', orderReference, '| price:', PRODUCT_PRICE, 'UAH');
+                return sendJson(res, 200, { ok: true, formFields, token, orderReference, expiresAt });
+            });
+
+            // GET|POST /api/bot/verify-token — one-time bot access token verification
+            server.middlewares.use('/api/bot/verify-token', async (req, res, next) => {
+                let botToken = '';
+                if (req.method === 'GET') {
+                    const url = new URL(req.url, 'http://localhost');
+                    botToken = (url.searchParams.get('token') || '').trim();
+                } else if (req.method === 'POST') {
+                    const body = await parseBody(req);
+                    botToken = (body.token || '').trim();
+                } else {
+                    return next();
+                }
+
+                if (!botToken) {
+                    return sendJson(res, 400, { valid: false, reason: 'missing_token' });
+                }
+
+                // Dev test token — reusable, never expires, no DB lookup
+                if (botToken === 'dev-test-holy') {
+                    console.log('[dev-api] DEV TEST TOKEN used (reusable)');
+                    return sendJson(res, 200, {
+                        valid: true,
+                        email: 'dev@holystudio.ai',
+                        orderReference: 'HOLY-DEV-TEST-000',
+                        _dev: true,
+                    });
+                }
+
+                try {
+                    const db = await getDb();
+                    const order = await db.collection('orders').findOne({ botAccessToken: botToken });
+
+                    if (!order) {
+                        return sendJson(res, 200, { valid: false, reason: 'not_found' });
+                    }
+                    if (order.botAccessTokenUsedAt) {
+                        return sendJson(res, 200, { valid: false, reason: 'already_used' });
+                    }
+                    if (order.status !== 'paid') {
+                        return sendJson(res, 200, { valid: false, reason: 'not_paid' });
+                    }
+
+                    await db.collection('orders').updateOne(
+                        { _id: order._id },
+                        { $set: { botAccessTokenUsedAt: new Date(), updatedAt: new Date() } }
+                    );
+
+                    console.log('[dev-api] Bot token verified for order:', order.orderReference);
+                    return sendJson(res, 200, { valid: true, email: order.email || null, orderReference: order.orderReference });
+                } catch (err) {
+                    console.error('[dev-api] Bot verify error:', err);
+                    return sendJson(res, 500, { valid: false, reason: 'server_error' });
+                }
+            });
+
             // POST /api/payment/create
             server.middlewares.use('/api/payment/create', async (req, res, next) => {
                 if (req.method !== 'POST') return next();
@@ -166,8 +286,23 @@ export default function devApiPlugin() {
 
                 const MERCHANT_LOGIN = getEnv('WFP_MERCHANT_LOGIN', 'holystudio_ai');
                 const MERCHANT_SECRET = getEnv('WFP_MERCHANT_SECRET', '');
-                const SITE_URL = getEnv('SITE_URL', 'http://localhost:5555');
+                const SITE_URL = trimUrl(getEnv('SITE_URL', 'http://localhost:5555'));
                 const PRODUCT_PRICE = Number(getEnv('COURSE_PRICE_UAH', '490'));
+
+                // updateOnly mode — just attach email to existing prepared order
+                if (body.updateOnly && body.orderReference) {
+                    try {
+                        const db = await getDb();
+                        await db.collection('orders').updateOne(
+                            { orderReference: body.orderReference },
+                            { $set: { email, status: 'created', updatedAt: new Date() } }
+                        );
+                        console.log('[dev-api] Order updated with email:', body.orderReference, email);
+                    } catch (err) {
+                        console.error('[dev-api] Failed to update order:', err);
+                    }
+                    return sendJson(res, 200, { ok: true, updated: true });
+                }
 
                 const ts = Date.now();
                 const rand = crypto.randomBytes(4).toString('hex');
@@ -225,7 +360,7 @@ export default function devApiPlugin() {
 
             // POST|GET /api/payment/return — WayForPay redirects user here, we redirect to SPA
             server.middlewares.use('/api/payment/return', async (req, res, next) => {
-                const SITE_URL = getEnv('SITE_URL', 'http://localhost:5555');
+                const SITE_URL = trimUrl(getEnv('SITE_URL', 'http://localhost:5555'));
                 const url = new URL(req.url, 'http://localhost');
                 const token = url.searchParams.get('token') || '';
                 const ref = url.searchParams.get('ref') || '';
@@ -289,7 +424,7 @@ export default function devApiPlugin() {
                                 );
                             }
                         }
-                        return sendJson(res, 200, { status: 'paid', orderReference, email });
+                        return sendJson(res, 200, { status: 'paid', orderReference, email, botAccessToken: order.botAccessToken || null });
                     }
 
                     // Check WayForPay API for payment status
@@ -344,7 +479,8 @@ export default function devApiPlugin() {
                                 );
                             }
                         }
-                        return sendJson(res, 200, { status: 'paid', orderReference, email });
+                        const updatedOrder = await db.collection('orders').findOne({ orderReference });
+                        return sendJson(res, 200, { status: 'paid', orderReference, email, botAccessToken: updatedOrder?.botAccessToken || null });
                     }
 
                     const mappedStatus = wfpStatus === 'InProcessing' ? 'pending' : 'failed';
@@ -413,6 +549,14 @@ export default function devApiPlugin() {
                     );
 
                     if (transactionStatus === 'Approved' && userEmail) {
+                        // Generate one-time bot access token
+                        const botAccessToken = crypto.randomBytes(16).toString('hex');
+                        await db.collection('orders').updateOne(
+                            { orderReference },
+                            { $set: { botAccessToken, botAccessTokenUsedAt: null } }
+                        );
+                        console.log('[dev-api] Generated botAccessToken for order:', orderReference);
+
                         // Mark user as paid
                         await db.collection('users').updateOne(
                             { email: userEmail },

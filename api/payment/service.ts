@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import { getDb } from '../_lib/db';
 import { sendAccessEmail } from '../_lib/email';
 
+const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
+
 const MERCHANT_SECRET = process.env.WFP_MERCHANT_SECRET!;
 
 function hmacMd5(data: string, secret: string): string {
@@ -87,6 +89,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         );
 
         if (transactionStatus === 'Approved' && userEmail) {
+            // Generate one-time bot access token
+            const botAccessToken = crypto.randomBytes(16).toString('hex');
+
+            // Save botAccessToken to the order
+            await db.collection('orders').updateOne(
+                { orderReference },
+                {
+                    $set: {
+                        botAccessToken,
+                        botAccessTokenUsedAt: null,
+                    },
+                }
+            );
+            console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
+
             // Mark user as paid
             const result = await db.collection('users').updateOne(
                 { email: userEmail },
@@ -119,12 +136,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 console.log(`[Service URL] Also marked order email "${orderEmail}" as paid. Matched: ${result2.matchedCount}`);
             }
 
-            // Send access email (only if not already sent)
+            // Send access email with one-time bot token (only if not already sent)
             const emailTarget = userEmail || orderEmail;
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    await sendAccessEmail(emailTarget, orderReference || '');
+                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
+                    await sendAccessEmail(emailTarget, orderReference || '', botLink);
                     await db.collection('users').updateOne(
                         { email: emailTarget },
                         { $set: { accessEmailSentAt: new Date() } }

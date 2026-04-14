@@ -56,6 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 status: 'paid',
                 orderReference,
                 email: userEmail,
+                botAccessToken: order.botAccessToken || null,
             });
         }
 
@@ -78,10 +79,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             // Mark user as paid + send email
             await markUserPaid(db, userEmail, orderReference);
 
+            // Re-read order to get botAccessToken (may have been set by service webhook)
+            const updatedOrder = await db.collection('orders').findOne({ orderReference });
+
             return res.status(200).json({
                 status: 'paid',
                 orderReference,
                 email: userEmail,
+                botAccessToken: updatedOrder?.botAccessToken || null,
             });
         }
 

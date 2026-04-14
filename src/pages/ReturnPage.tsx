@@ -6,7 +6,7 @@ import {coursePriceUah} from '@/src/lib/pricing.ts';
 const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 const MAX_POLLS = 10;
 const POLL_INTERVAL = 3000; // 3 seconds
-const API_URL = (process.env.VITE_API_URL || 'https://holystudio-ai.onrender.com').replace(/\/+$/, '');
+const API_URL = process.env.VITE_API_URL ? process.env.VITE_API_URL.replace(/\/+$/, '') : '';
 
 type PaymentStatus = 'loading' | 'paid' | 'pending' | 'failed';
 
@@ -17,13 +17,17 @@ const ReturnPage: React.FC = () => {
 
     const [status, setStatus] = useState<PaymentStatus>(token && ref ? 'loading' : 'failed');
     const [pollCount, setPollCount] = useState(0);
+    const [botAccessToken, setBotAccessToken] = useState<string | null>(null);
 
-    // Build unique Telegram deep-link
+    // Build unique Telegram deep-link — use botAccessToken if available, fallback to orderReference
     const telegramLink = useMemo(() => {
+        if (botAccessToken) {
+            return `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(botAccessToken)}`;
+        }
         return ref
             ? `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(ref)}`
             : `https://t.me/${TELEGRAM_BOT}`;
-    }, [ref]);
+    }, [ref, botAccessToken]);
 
     const checkStatus = useCallback(async () => {
         try {
@@ -32,6 +36,9 @@ const ReturnPage: React.FC = () => {
 
             if (data.status === 'paid') {
                 setStatus('paid');
+                if (data.botAccessToken) {
+                    setBotAccessToken(data.botAccessToken);
+                }
                 return true; // stop polling
             } else if (data.status === 'pending') {
                 setStatus('pending');

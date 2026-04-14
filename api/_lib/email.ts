@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const SITE_URL = process.env.SITE_URL || 'https://holystudio.ai';
+const SITE_URL = (process.env.SITE_URL || 'https://holystudio.ai').replace(/\/+$/, '');
 const FROM = process.env.RESEND_FROM || 'HOLYSTUDIO <noreply@holystudio.ai>';
 
 function buildReminderHtml(siteUrl: string): string {
@@ -90,8 +90,8 @@ export async function sendReminderEmail(to: string): Promise<boolean> {
 
 const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 
-function buildAccessHtml(orderReference: string): string {
-    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(orderReference)}`;
+function buildAccessHtml(orderReference: string, botLink?: string): string {
+    const finalBotLink = botLink || `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(orderReference)}`;
     return `
 <!DOCTYPE html>
 <html lang="uk">
@@ -124,7 +124,7 @@ function buildAccessHtml(orderReference: string): string {
 <tr><td style="padding:28px 28px 12px 28px;">
   <table width="100%" cellpadding="0" cellspacing="0">
   <tr><td align="center">
-    <a href="${botLink}" target="_blank" style="display:block;width:100%;background-color:#2AABEE;color:#ffffff;text-align:center;padding:16px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:-0.3px;border:3px solid #ffffff;">
+    <a href="${finalBotLink}" target="_blank" style="display:block;width:100%;background-color:#2AABEE;color:#ffffff;text-align:center;padding:16px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:-0.3px;border:3px solid #ffffff;">
       ✈️ Отримати доступ до курсу
     </a>
   </td></tr>
@@ -159,13 +159,13 @@ function buildAccessHtml(orderReference: string): string {
 </html>`.trim();
 }
 
-export async function sendAccessEmail(to: string, orderReference: string): Promise<boolean> {
+export async function sendAccessEmail(to: string, orderReference: string, botLink?: string): Promise<boolean> {
     try {
         const { error } = await resend.emails.send({
             from: FROM,
             to,
             subject: 'Доступ до курсу — HOLYSTUDIO 🎉',
-            html: buildAccessHtml(orderReference),
+            html: buildAccessHtml(orderReference, botLink),
         });
 
         if (error) {
