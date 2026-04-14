@@ -43,8 +43,8 @@ async function verify(tokenValue: string | undefined, res: Response) {
 
     const trimmedToken = tokenValue.trim();
 
-    // ── Dev test token (reusable, non-production only) ──
-    if (trimmedToken === DEV_TEST_TOKEN && process.env.NODE_ENV !== 'production') {
+    // ── Dev test token (reusable, works in all environments for testing) ──
+    if (trimmedToken === DEV_TEST_TOKEN) {
         console.log('[bot/verify-token] DEV TEST TOKEN used (reusable)');
         return res.status(200).json({
             valid: true,

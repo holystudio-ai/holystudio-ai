@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getDb } from '../_lib/db';
 
 /**
- * Reusable dev/test token. Works only when NODE_ENV !== 'production'.
+ * Reusable dev/test token. Works in all environments for testing.
  * Use it in the browser or SmartSender to test the flow without real payment:
  *   GET /api/bot/verify-token?token=dev-test-holy
  */
@@ -20,7 +20,7 @@ const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
  * GET is supported for SmartSender External Request compatibility.
  * POST is supported for programmatic bot integrations.
  *
- * Special: token "dev-test-holy" is reusable and always returns valid (non-production only).
+ * Special: token "dev-test-holy" is reusable and always returns valid.
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== 'POST' && req.method !== 'GET') {
@@ -42,8 +42,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         const trimmedToken = tokenValue.trim();
 
-        // ── Dev test token (reusable, non-production only) ──
-        if (trimmedToken === DEV_TEST_TOKEN && process.env.NODE_ENV !== 'production') {
+        // ── Dev test token (reusable, works in all environments) ──
+        if (trimmedToken === DEV_TEST_TOKEN) {
             console.log('[bot/verify-token] DEV TEST TOKEN used (reusable)');
             return res.status(200).json({
                 valid: true,
