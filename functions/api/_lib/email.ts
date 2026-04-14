@@ -173,7 +173,8 @@ export async function sendReminderEmail(
 export async function sendAccessEmail(
     to: string,
     orderReference: string,
-    env: { RESEND_API_KEY: string; RESEND_FROM: string }
+    env: { RESEND_API_KEY: string; RESEND_FROM: string },
+    botLink?: string,
 ): Promise<boolean> {
     try {
         const resend = getResend(env.RESEND_API_KEY);
@@ -183,7 +184,7 @@ export async function sendAccessEmail(
             from,
             to,
             subject: 'Доступ до курсу — HOLYSTUDIO 🎉',
-            html: buildAccessHtml(orderReference),
+            html: buildAccessHtml(orderReference, botLink),
         });
 
         if (error) {

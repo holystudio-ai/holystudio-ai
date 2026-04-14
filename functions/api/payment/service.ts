@@ -65,6 +65,21 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         );
 
         if (transactionStatus === 'Approved' && userEmail) {
+            // Generate one-time bot access token
+            const botAccessToken = randomBytes(16);
+
+            // Save botAccessToken to the order
+            await db.collection('orders').updateOne(
+                { orderReference },
+                {
+                    $set: {
+                        botAccessToken,
+                        botAccessTokenUsedAt: null,
+                    },
+                }
+            );
+            console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
+
             await db.collection('users').updateOne(
                 { email: userEmail },
                 {
@@ -91,7 +106,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    await sendAccessEmail(emailTarget, orderReference || '', env);
+                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
+                    await sendAccessEmail(emailTarget, orderReference || '', env, botLink);
                     await db.collection('users').updateOne(
                         { email: emailTarget },
                         { $set: { accessEmailSentAt: new Date() } }
