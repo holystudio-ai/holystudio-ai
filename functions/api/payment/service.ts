@@ -1,7 +1,9 @@
 import { Env, jsonResponse } from '../_lib/types';
-import { hmacMd5 } from '../_lib/crypto';
+import { hmacMd5, generateBotToken } from '../_lib/crypto';
 import { getDb } from '../_lib/db';
 import { sendAccessEmail } from '../_lib/email';
+
+const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
     const { request, env } = context;
@@ -65,8 +67,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         );
 
         if (transactionStatus === 'Approved' && userEmail) {
-            // Generate one-time bot access token
-            const botAccessToken = randomBytes(16);
+            // Generate one-time bot access token with tk_ prefix
+            const botAccessToken = generateBotToken();
 
             // Save botAccessToken to the order
             await db.collection('orders').updateOne(

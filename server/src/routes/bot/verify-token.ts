@@ -6,7 +6,7 @@ const router = Router();
 /**
  * Reusable dev/test token. Works only when NODE_ENV !== 'production'.
  */
-const DEV_TEST_TOKEN = 'dev-test-holy';
+const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
 const DEV_TEST_EMAIL = 'dev@holystudio.ai';
 const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
 

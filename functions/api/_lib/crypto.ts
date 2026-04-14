@@ -14,6 +14,17 @@ export function randomBytes(size: number): string {
 }
 
 /**
+ * Generate a bot access token: tk_ + 24 alphanumeric chars.
+ */
+export function generateBotToken(): string {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const buf = new Uint8Array(24);
+    crypto.getRandomValues(buf);
+    const random = Array.from(buf).map(b => chars[b % chars.length]).join('');
+    return `tk_${random}`;
+}
+
+/**
  * HMAC-MD5 — required by WayForPay.
  * Web Crypto API does NOT support MD5, so we use a pure JS implementation.
  */

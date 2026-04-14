@@ -89,8 +89,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         );
 
         if (transactionStatus === 'Approved' && userEmail) {
-            // Generate one-time bot access token
-            const botAccessToken = crypto.randomBytes(16).toString('hex');
+            // Generate one-time bot access token with tk_ prefix
+            const botAccessToken = 'tk_' + crypto.randomBytes(12).toString('base64url').toLowerCase().slice(0, 24);
 
             // Save botAccessToken to the order
             await db.collection('orders').updateOne(

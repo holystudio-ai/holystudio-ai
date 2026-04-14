@@ -4,9 +4,9 @@ import { getDb } from '../_lib/db';
 /**
  * Reusable dev/test token. Works in all environments for testing.
  * Use it in the browser or SmartSender to test the flow without real payment:
- *   GET /api/bot/verify-token?token=dev-test-holy
+ *   GET /api/bot/verify-token?token=tk_devtestholystudio2026
  */
-const DEV_TEST_TOKEN = 'dev-test-holy';
+const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
 const DEV_TEST_EMAIL = 'dev@holystudio.ai';
 const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
 

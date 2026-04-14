@@ -1,8 +1,7 @@
 import { Env, jsonResponse } from '../_lib/types';
 import { getDb } from '../_lib/db';
-import { randomBytes } from '../_lib/crypto';
 
-const DEV_TEST_TOKEN = 'dev-test-holy';
+const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
 const DEV_TEST_EMAIL = 'dev@holystudio.ai';
 const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
 

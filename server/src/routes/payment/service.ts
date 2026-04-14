@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { config } from '../../config.js';
-import { hmacMd5 } from '../../lib/crypto.js';
+import { hmacMd5, generateBotToken } from '../../lib/crypto.js';
 import { getDb } from '../../lib/db.js';
 import { sendAccessEmail } from '../../lib/email.js';
 
 const router = Router();
+const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 
 /**
  * POST /api/payment/service — WayForPay webhook callback.
@@ -59,6 +60,15 @@ router.post('/', async (req: Request, res: Response) => {
         );
 
         if (transactionStatus === 'Approved' && userEmail) {
+            // Generate one-time bot access token with tk_ prefix
+            const botAccessToken = generateBotToken();
+
+            await db.collection('orders').updateOne(
+                { orderReference },
+                { $set: { botAccessToken, botAccessTokenUsedAt: null } }
+            );
+            console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
+
             await db.collection('users').updateOne(
                 { email: userEmail },
                 {
@@ -85,7 +95,8 @@ router.post('/', async (req: Request, res: Response) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    await sendAccessEmail(emailTarget, orderReference || '');
+                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
+                    await sendAccessEmail(emailTarget, orderReference || '', botLink);
                     await db.collection('users').updateOne(
                         { email: emailTarget },
                         { $set: { accessEmailSentAt: new Date() } }
