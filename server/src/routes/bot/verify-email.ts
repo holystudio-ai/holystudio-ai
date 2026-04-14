@@ -4,46 +4,54 @@ import { getDb } from '../../lib/db.js';
 const router = Router();
 
 /**
- * GET  /api/bot/verify-email?email=user@example.com
- * POST /api/bot/verify-email  { "email": "user@example.com" }
+ * POST /api/bot/verify-email
+ * Body: { "email": "user@example.com" }
  *
- * Returns { paid: true/false } based on user payment status.
- * One-time verification: after the first successful check the email
- * is marked as verified and subsequent attempts return already_verified.
+ * Response:
+ *   { "success": true,  "paid": true,  "email": "user@example.com" }
+ *   { "success": true,  "paid": false, "email": "user@example.com", "reason": "not_paid" }
+ *   { "success": false, "paid": false, "email": "user@example.com", "reason": "already_verified" }
+ *   { "success": false, "paid": false, "reason": "missing_email" }
+ *   { "success": false, "paid": false, "reason": "user_not_found" }
  */
-router.get('/', async (req: Request, res: Response) => {
-    const email = typeof req.query.email === 'string' ? req.query.email : '';
-    return verify(email, res);
-});
-
 router.post('/', async (req: Request, res: Response) => {
-    const email = req.body?.email ?? req.query?.email ?? '';
-    return verify(typeof email === 'string' ? email : '', res);
-});
-
-async function verify(rawEmail: string, res: Response) {
     try {
-        const email = rawEmail.trim().toLowerCase();
+        const rawEmail = req.body?.email;
 
-        if (!email) {
-            return res.status(400).json({ paid: false, reason: 'missing_email' });
+        if (!rawEmail || typeof rawEmail !== 'string' || !rawEmail.trim()) {
+            return res.status(400).json({
+                success: false,
+                paid: false,
+                reason: 'missing_email',
+            });
         }
 
+        const email = rawEmail.trim().toLowerCase();
         const db = await getDb();
         const user = await db.collection('users').findOne({ email });
 
         if (!user) {
-            return res.status(200).json({ paid: false });
+            return res.status(200).json({
+                success: false,
+                paid: false,
+                email,
+                reason: 'user_not_found',
+            });
         }
 
-        // If this email was already verified once — reject
+        // One-time check: if already verified — reject
         if (user.emailVerifiedAt) {
-            return res.status(200).json({ paid: false, reason: 'already_verified' });
+            return res.status(200).json({
+                success: false,
+                paid: false,
+                email,
+                reason: 'already_verified',
+            });
         }
 
         const isPaid = user.status === 'paid';
 
-        // Mark email as verified (one-time) — only if user has paid
+        // Mark as verified only if paid
         if (isPaid) {
             await db.collection('users').updateOne(
                 { _id: user._id },
@@ -57,12 +65,21 @@ async function verify(rawEmail: string, res: Response) {
             console.log(`[bot/verify-email] Email verified (one-time) for: ${email}`);
         }
 
-        return res.status(200).json({ paid: isPaid });
+        return res.status(200).json({
+            success: isPaid,
+            paid: isPaid,
+            email,
+            ...(!isPaid && { reason: 'not_paid' }),
+        });
     } catch (err) {
         console.error('[bot/verify-email] Error:', err);
-        return res.status(500).json({ paid: false, reason: 'server_error' });
+        return res.status(500).json({
+            success: false,
+            paid: false,
+            reason: 'server_error',
+        });
     }
-}
+});
 
 export default router;
 
