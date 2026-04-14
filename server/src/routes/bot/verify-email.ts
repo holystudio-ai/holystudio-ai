@@ -4,15 +4,26 @@ import { getDb } from '../../lib/db.js';
 const router = Router();
 
 /**
- * GET /api/bot/verify-email?email=user@example.com
+ * GET  /api/bot/verify-email?email=user@example.com
+ * POST /api/bot/verify-email  { "email": "user@example.com" }
  *
  * Returns { paid: true/false } based on user payment status.
  * One-time verification: after the first successful check the email
  * is marked as verified and subsequent attempts return already_verified.
  */
 router.get('/', async (req: Request, res: Response) => {
+    const email = typeof req.query.email === 'string' ? req.query.email : '';
+    return verify(email, res);
+});
+
+router.post('/', async (req: Request, res: Response) => {
+    const email = req.body?.email ?? req.query?.email ?? '';
+    return verify(typeof email === 'string' ? email : '', res);
+});
+
+async function verify(rawEmail: string, res: Response) {
     try {
-        const email = typeof req.query.email === 'string' ? req.query.email.trim().toLowerCase() : '';
+        const email = rawEmail.trim().toLowerCase();
 
         if (!email) {
             return res.status(400).json({ paid: false, reason: 'missing_email' });
@@ -51,7 +62,7 @@ router.get('/', async (req: Request, res: Response) => {
         console.error('[bot/verify-email] Error:', err);
         return res.status(500).json({ paid: false, reason: 'server_error' });
     }
-});
+}
 
 export default router;
 
