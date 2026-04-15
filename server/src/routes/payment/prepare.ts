@@ -16,49 +16,26 @@ function generateOrderReference(): string {
 const router = Router();
 
 /**
- * POST /api/payment/create
+ * POST /api/payment/prepare
  *
- * If { updateOnly: true, email, orderReference } — updates an existing prepared order with the email.
- * Otherwise creates a full new order with form fields.
+ * Pre-generates WayForPay form fields WITHOUT email.
+ * Frontend caches this on page load, then adds clientEmail on submit → instant redirect.
  */
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const { email, orderReference, updateOnly } = req.body || {};
-
-        if (!email || typeof email !== 'string') {
-            res.status(400).json({ error: 'Email is required' });
-            return;
-        }
-
-        const normalizedEmail = email.trim().toLowerCase();
-        const db = await getDb();
-
-        // Fast path: just update the prepared order with the email
-        if (updateOnly && orderReference) {
-            await db.collection('orders').updateOne(
-                { orderReference },
-                { $set: { email: normalizedEmail, updatedAt: new Date() } }
-            );
-            res.json({ ok: true });
-            return;
-        }
-
         const MERCHANT_LOGIN = config.WFP_MERCHANT_LOGIN;
         const MERCHANT_SECRET = config.WFP_MERCHANT_SECRET;
-        const SITE_URL = config.SITE_URL;
         const API_URL = config.API_URL;
         const PRODUCT_PRICE = config.COURSE_PRICE_UAH;
 
-        const newOrderReference = generateOrderReference();
+        const orderReference = generateOrderReference();
         const orderDate = Math.floor(Date.now() / 1000);
-
         const token = randomBytes(32);
 
-        // returnUrl points to THIS server — it will redirect to the frontend SPA
-        const returnUrl = `${API_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(newOrderReference)}`;
+        const returnUrl = `${API_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
 
         const signatureData = [
-            MERCHANT_LOGIN, MERCHANT_DOMAIN, newOrderReference, orderDate,
+            MERCHANT_LOGIN, MERCHANT_DOMAIN, orderReference, orderDate,
             PRODUCT_PRICE, CURRENCY, PRODUCT_NAME, 1, PRODUCT_PRICE,
         ].join(';');
 
@@ -68,35 +45,37 @@ router.post('/', async (req: Request, res: Response) => {
             merchantAccount: MERCHANT_LOGIN,
             merchantDomainName: MERCHANT_DOMAIN,
             merchantSignature,
-            orderReference: newOrderReference,
+            orderReference,
             orderDate: String(orderDate),
             amount: String(PRODUCT_PRICE),
             currency: CURRENCY,
             productName: PRODUCT_NAME,
             productCount: '1',
             productPrice: String(PRODUCT_PRICE),
-            clientEmail: normalizedEmail,
             returnUrl,
             serviceUrl: `${API_URL}/api/payment/service`,
             defaultPaymentSystem: 'card',
             orderTimeout: '900',
         };
 
+        const db = await getDb();
         await db.collection('orders').insertOne({
-            orderReference: newOrderReference,
+            orderReference,
             token,
-            email: normalizedEmail,
+            email: null,
             amount: PRODUCT_PRICE,
             currency: CURRENCY,
-            status: 'created',
+            status: 'prepared',
             createdAt: new Date(),
         });
 
-        res.json({ ok: true, formFields });
+        const expiresAt = Date.now() + 14 * 60 * 1000;
+
+        res.json({ ok: true, formFields, token, orderReference, expiresAt });
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error('[payment/create] Error:', msg, err);
-        res.status(500).json({ error: 'Internal server error', debug: msg });
+        console.error('[payment/prepare] Error:', msg, err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
