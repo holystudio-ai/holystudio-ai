@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {trackPurchase} from '@/src/lib/analytics.ts';
 import {coursePriceUah} from '@/src/lib/pricing.ts';
@@ -17,17 +17,9 @@ const ReturnPage: React.FC = () => {
 
     const [status, setStatus] = useState<PaymentStatus>(token && ref ? 'loading' : 'failed');
     const [pollCount, setPollCount] = useState(0);
-    const [botAccessToken, setBotAccessToken] = useState<string | null>(null);
 
-    // Build unique Telegram deep-link — use botAccessToken if available, fallback to orderReference
-    const telegramLink = useMemo(() => {
-        if (botAccessToken) {
-            return `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(botAccessToken)}`;
-        }
-        return ref
-            ? `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(ref)}`
-            : `https://t.me/${TELEGRAM_BOT}`;
-    }, [ref, botAccessToken]);
+    // Simple bot link — no token needed, verification is done via email
+    const telegramLink = `https://t.me/${TELEGRAM_BOT}`;
 
     const checkStatus = useCallback(async () => {
         try {
@@ -36,9 +28,6 @@ const ReturnPage: React.FC = () => {
 
             if (data.status === 'paid') {
                 setStatus('paid');
-                if (data.botAccessToken) {
-                    setBotAccessToken(data.botAccessToken);
-                }
                 return true; // stop polling
             } else if (data.status === 'pending') {
                 setStatus('pending');
