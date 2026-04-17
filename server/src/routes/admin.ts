@@ -109,7 +109,12 @@ router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
         if (updates.email !== undefined) setFields.email = updates.email.trim().toLowerCase();
         if (updates.emailCheckType !== undefined) setFields.emailCheckType = updates.emailCheckType; // 'single' | 'multi'
         if (updates.accessType !== undefined) setFields.accessType = updates.accessType; // 'paid' | 'free'
-        if (updates.status !== undefined) setFields.status = updates.status;
+        if (updates.status !== undefined) {
+            setFields.status = updates.status;
+            if (updates.status === 'paid') {
+                setFields.paidAt = new Date();
+            }
+        }
 
         // Reset emailVerifiedAt if switching to single and want to allow re-check
         if (updates.resetEmailVerification) {

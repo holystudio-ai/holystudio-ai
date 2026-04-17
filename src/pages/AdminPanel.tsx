@@ -107,6 +107,7 @@ function AdminPanel() {
             method: 'PUT', headers: getHeaders(),
             body: JSON.stringify({
                 email: editingUser.email,
+                status: editingUser.status,
                 emailCheckType: editingUser.emailCheckType || 'single',
                 accessType: editingUser.accessType || 'paid',
                 resetEmailVerification: !editingUser.emailVerifiedAt,
@@ -305,6 +306,11 @@ function AdminPanel() {
                                 <select value={editingUser.accessType || 'paid'} onChange={e => setEditingUser({...editingUser, accessType: e.target.value})}
                                     className="w-full bg-black border-2 border-white/50 text-white p-2">
                                     <option value="paid">Платний</option><option value="free">Безкоштовний</option>
+                                </select></div>
+                            <div><label className="text-xs text-gray-400 uppercase block mb-1">Статус оплати</label>
+                                <select value={editingUser.status} onChange={e => setEditingUser({...editingUser, status: e.target.value})}
+                                    className="w-full bg-black border-2 border-white/50 text-white p-2">
+                                    <option value="pending">Pending</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option>
                                 </select></div>
                             <label className="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" checked={!editingUser.emailVerifiedAt}
