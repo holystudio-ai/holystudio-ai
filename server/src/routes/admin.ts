@@ -182,5 +182,87 @@ router.get('/stats', adminAuth, async (_req: Request, res: Response) => {
     }
 });
 
+// GET /api/admin/analytics
+router.get('/analytics', adminAuth, async (_req: Request, res: Response) => {
+    try {
+        const db = await getDb();
+        const users = await db.collection('users').find({}).toArray();
+
+        // Timezones / regions
+        const timezones: Record<string, number> = {};
+        const platforms: Record<string, number> = {};
+        const languages: Record<string, number> = {};
+        const connectionTypes: Record<string, number> = {};
+        const screenSizes: Record<string, number> = {};
+        const referrers: Record<string, number> = {};
+        let mobileCount = 0;
+        let desktopCount = 0;
+        let totalMemory = 0;
+        let memoryCount = 0;
+
+        // Registrations by day
+        const regsByDay: Record<string, number> = {};
+        const paidByDay: Record<string, number> = {};
+
+        for (const u of users) {
+            if (u.timezone) timezones[u.timezone] = (timezones[u.timezone] || 0) + 1;
+            if (u.platform) platforms[u.platform] = (platforms[u.platform] || 0) + 1;
+            if (u.language) {
+                const lang = String(u.language).split('-')[0];
+                languages[lang] = (languages[lang] || 0) + 1;
+            }
+            if (u.connectionType) connectionTypes[u.connectionType] = (connectionTypes[u.connectionType] || 0) + 1;
+
+            // Mobile vs desktop heuristic
+            if (u.maxTouchPoints && u.maxTouchPoints > 0) mobileCount++;
+            else desktopCount++;
+
+            if (u.screenWidth && u.screenHeight) {
+                const bucket = `${u.screenWidth}x${u.screenHeight}`;
+                screenSizes[bucket] = (screenSizes[bucket] || 0) + 1;
+            }
+
+            if (u.referrer) {
+                try {
+                    const host = new URL(u.referrer).hostname || u.referrer;
+                    referrers[host] = (referrers[host] || 0) + 1;
+                } catch {
+                    referrers[u.referrer] = (referrers[u.referrer] || 0) + 1;
+                }
+            }
+
+            if (u.deviceMemory) { totalMemory += Number(u.deviceMemory); memoryCount++; }
+
+            if (u.createdAt) {
+                const day = new Date(u.createdAt).toISOString().slice(0, 10);
+                regsByDay[day] = (regsByDay[day] || 0) + 1;
+            }
+            if (u.paidAt) {
+                const day = new Date(u.paidAt).toISOString().slice(0, 10);
+                paidByDay[day] = (paidByDay[day] || 0) + 1;
+            }
+        }
+
+        const sortDesc = (obj: Record<string, number>) =>
+            Object.entries(obj).sort((a, b) => b[1] - a[1]);
+
+        res.json({
+            timezones: sortDesc(timezones),
+            platforms: sortDesc(platforms),
+            languages: sortDesc(languages),
+            connectionTypes: sortDesc(connectionTypes),
+            screenSizes: sortDesc(screenSizes).slice(0, 15),
+            referrers: sortDesc(referrers),
+            devices: { mobile: mobileCount, desktop: desktopCount },
+            avgMemoryGB: memoryCount ? +(totalMemory / memoryCount).toFixed(1) : null,
+            regsByDay: Object.entries(regsByDay).sort(),
+            paidByDay: Object.entries(paidByDay).sort(),
+            conversionRate: users.length ? +((users.filter(u => u.status === 'paid').length / users.length) * 100).toFixed(1) : 0,
+        });
+    } catch (err) {
+        res.status(500).json({ error: String(err) });
+    }
+});
+
 export default router;
 

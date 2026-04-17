@@ -8,6 +8,38 @@ interface User {
     emailVerifiedAt?: string; accessEmailSentAt?: string; orderReference?: string;
 }
 interface Stats { totalUsers: number; paidUsers: number; pendingUsers: number; freeUsers: number; totalOrders: number; paidOrders: number; }
+interface Analytics {
+    timezones: [string, number][];
+    platforms: [string, number][];
+    languages: [string, number][];
+    connectionTypes: [string, number][];
+    screenSizes: [string, number][];
+    referrers: [string, number][];
+    devices: { mobile: number; desktop: number };
+    avgMemoryGB: number | null;
+    regsByDay: [string, number][];
+    paidByDay: [string, number][];
+    conversionRate: number;
+}
+
+function BarChart({ data, color = 'bg-purple-500' }: { data: [string, number][]; color?: string }) {
+    if (!data.length) return <div className="text-gray-500 text-xs">Немає даних</div>;
+    const max = Math.max(...data.map(d => d[1]));
+    return (
+        <div className="space-y-1">
+            {data.map(([label, count]) => (
+                <div key={label} className="flex items-center gap-2 text-xs">
+                    <span className="w-28 truncate text-gray-400 text-right shrink-0">{label}</span>
+                    <div className="flex-1 h-4 bg-white/5 relative">
+                        <div className={`h-full ${color}`} style={{ width: `${(count / max) * 100}%` }} />
+                    </div>
+                    <span className="w-8 text-gray-400 text-right">{count}</span>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 function AdminPanel() {
     const [token, setToken] = useState<string | null>(() => localStorage.getItem('admin_token'));
     const [loginEmail, setLoginEmail] = useState('');
@@ -15,10 +47,11 @@ function AdminPanel() {
     const [loginError, setLoginError] = useState('');
     const [users, setUsers] = useState<User[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
+    const [analytics, setAnalytics] = useState<Analytics | null>(null);
     const [loading, setLoading] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [newUserEmail, setNewUserEmail] = useState('');
-    const [tab, setTab] = useState<'users' | 'broadcast'>('users');
+    const [tab, setTab] = useState<'users' | 'analytics' | 'broadcast'>('users');
     const [broadcastType, setBroadcastType] = useState<'reminder' | 'access'>('reminder');
     const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
     const [broadcastResult, setBroadcastResult] = useState('');
@@ -31,13 +64,15 @@ function AdminPanel() {
         if (!token) return;
         setLoading(true);
         try {
-            const [uRes, sRes] = await Promise.all([
+            const [uRes, sRes, aRes] = await Promise.all([
                 fetch(`${API_URL}/api/admin/users`, { headers: getHeaders() }),
                 fetch(`${API_URL}/api/admin/stats`, { headers: getHeaders() }),
+                fetch(`${API_URL}/api/admin/analytics`, { headers: getHeaders() }),
             ]);
             if (uRes.status === 401) { setToken(null); localStorage.removeItem('admin_token'); return; }
             setUsers((await uRes.json()).users || []);
             setStats(await sRes.json());
+            setAnalytics(await aRes.json());
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
     }, [token, getHeaders]);
@@ -124,9 +159,75 @@ function AdminPanel() {
                     </div>
                 )}
                 <div className="flex gap-2 mb-6">
-                    <button onClick={() => setTab('users')} className={`px-4 py-2 font-bold uppercase text-sm border-2 ${tab === 'users' ? 'bg-purple-600 border-purple-600' : 'border-white/30'}`}>Користувачі</button>
-                    <button onClick={() => setTab('broadcast')} className={`px-4 py-2 font-bold uppercase text-sm border-2 ${tab === 'broadcast' ? 'bg-purple-600 border-purple-600' : 'border-white/30'}`}>Розсилка</button>
+                    {(['users', 'analytics', 'broadcast'] as const).map(t => (
+                        <button key={t} onClick={() => setTab(t)}
+                            className={`px-4 py-2 font-bold uppercase text-sm border-2 ${tab === t ? 'bg-purple-600 border-purple-600' : 'border-white/30'}`}>
+                            {t === 'users' ? 'Користувачі' : t === 'analytics' ? 'Аналітика' : 'Розсилка'}
+                        </button>
+                    ))}
                 </div>
+
+                {tab === 'analytics' && analytics && (
+                    <div className="space-y-6">
+                        {/* Top metrics */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div className="border border-white/30 p-3">
+                                <div className="text-2xl font-black text-green-400">{analytics.conversionRate}%</div>
+                                <div className="text-xs text-gray-400 uppercase">Конверсія</div>
+                            </div>
+                            <div className="border border-white/30 p-3">
+                                <div className="text-2xl font-black text-blue-400">{analytics.devices.mobile}</div>
+                                <div className="text-xs text-gray-400 uppercase">Мобільні</div>
+                            </div>
+                            <div className="border border-white/30 p-3">
+                                <div className="text-2xl font-black text-purple-400">{analytics.devices.desktop}</div>
+                                <div className="text-xs text-gray-400 uppercase">Десктоп</div>
+                            </div>
+                            <div className="border border-white/30 p-3">
+                                <div className="text-2xl font-black text-yellow-400">{analytics.avgMemoryGB ?? '—'} GB</div>
+                                <div className="text-xs text-gray-400 uppercase">Сер. RAM</div>
+                            </div>
+                        </div>
+
+                        {/* Registrations timeline */}
+                        <div className="border border-white/20 p-4">
+                            <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Реєстрації по днях</h3>
+                            <BarChart data={analytics.regsByDay.slice(-14)} color="bg-purple-500" />
+                        </div>
+                        <div className="border border-white/20 p-4">
+                            <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Оплати по днях</h3>
+                            <BarChart data={analytics.paidByDay.slice(-14)} color="bg-green-500" />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Регіони (timezone)</h3>
+                                <BarChart data={analytics.timezones.slice(0, 10)} color="bg-blue-500" />
+                            </div>
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Платформи</h3>
+                                <BarChart data={analytics.platforms.slice(0, 10)} color="bg-yellow-500" />
+                            </div>
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Мови</h3>
+                                <BarChart data={analytics.languages.slice(0, 10)} color="bg-pink-500" />
+                            </div>
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Тип з'єднання</h3>
+                                <BarChart data={analytics.connectionTypes} color="bg-cyan-500" />
+                            </div>
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Розміри екрану (топ-15)</h3>
+                                <BarChart data={analytics.screenSizes} color="bg-orange-500" />
+                            </div>
+                            <div className="border border-white/20 p-4">
+                                <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Джерела трафіку</h3>
+                                <BarChart data={analytics.referrers.slice(0, 10)} color="bg-emerald-500" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {tab === 'users' && <>
                     <div className="flex gap-2 mb-4 flex-wrap">
                         <input value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} placeholder="Email (безкоштовний доступ)"

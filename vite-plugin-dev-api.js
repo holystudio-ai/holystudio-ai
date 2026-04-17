@@ -579,6 +579,35 @@ export default function devApiPlugin() {
                 return sendJson(res, 200, { ok: true, results: (body.emails || []).map(e => ({ email: e, ok: true })) });
             });
 
+            server.middlewares.use('/api/admin/analytics', async (req, res, next) => {
+                if (req.method !== 'GET' || !checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+                const db = await getDb();
+                const users = await db.collection('users').find({}).toArray();
+                const timezones = {}, platforms = {}, languages = {}, connectionTypes = {}, screenSizes = {}, referrers = {};
+                let mobile = 0, desktop = 0, totalMem = 0, memCnt = 0;
+                const regsByDay = {}, paidByDay = {};
+                for (const u of users) {
+                    if (u.timezone) timezones[u.timezone] = (timezones[u.timezone] || 0) + 1;
+                    if (u.platform) platforms[u.platform] = (platforms[u.platform] || 0) + 1;
+                    if (u.language) { const l = String(u.language).split('-')[0]; languages[l] = (languages[l] || 0) + 1; }
+                    if (u.connectionType) connectionTypes[u.connectionType] = (connectionTypes[u.connectionType] || 0) + 1;
+                    if (u.maxTouchPoints > 0) mobile++; else desktop++;
+                    if (u.screenWidth && u.screenHeight) { const b = `${u.screenWidth}x${u.screenHeight}`; screenSizes[b] = (screenSizes[b] || 0) + 1; }
+                    if (u.referrer) { try { const h = new URL(u.referrer).hostname; referrers[h] = (referrers[h] || 0) + 1; } catch { referrers[u.referrer] = (referrers[u.referrer] || 0) + 1; } }
+                    if (u.deviceMemory) { totalMem += Number(u.deviceMemory); memCnt++; }
+                    if (u.createdAt) { const d = new Date(u.createdAt).toISOString().slice(0,10); regsByDay[d] = (regsByDay[d] || 0) + 1; }
+                    if (u.paidAt) { const d = new Date(u.paidAt).toISOString().slice(0,10); paidByDay[d] = (paidByDay[d] || 0) + 1; }
+                }
+                const sort = o => Object.entries(o).sort((a,b) => b[1] - a[1]);
+                return sendJson(res, 200, {
+                    timezones: sort(timezones), platforms: sort(platforms), languages: sort(languages),
+                    connectionTypes: sort(connectionTypes), screenSizes: sort(screenSizes).slice(0,15), referrers: sort(referrers),
+                    devices: { mobile, desktop }, avgMemoryGB: memCnt ? +(totalMem/memCnt).toFixed(1) : null,
+                    regsByDay: Object.entries(regsByDay).sort(), paidByDay: Object.entries(paidByDay).sort(),
+                    conversionRate: users.length ? +((users.filter(u => u.status === 'paid').length / users.length)*100).toFixed(1) : 0,
+                });
+            });
+
             // POST /api/payment/service (webhook)
             server.middlewares.use('/api/payment/service', async (req, res, next) => {
                 if (req.method !== 'POST') return next();
