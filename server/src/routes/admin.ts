@@ -117,7 +117,7 @@ router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
         }
 
         await db.collection('users').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(String(id)) },
             { $set: setFields }
         );
 
@@ -132,7 +132,7 @@ router.delete('/users/:id', adminAuth, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const db = await getDb();
-        await db.collection('users').deleteOne({ _id: new ObjectId(id) });
+        await db.collection('users').deleteOne({ _id: new ObjectId(String(id)) });
         res.json({ ok: true });
     } catch (err) {
         res.status(500).json({ error: String(err) });

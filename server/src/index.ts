@@ -15,6 +15,7 @@ import paymentStatusRouter from "./routes/payment/status.js";
 import cronCheckUnpaidRouter from "./routes/cron/check-unpaid.js";
 import botVerifyTokenRouter from "./routes/bot/verify-token.js";
 import botVerifyEmailRouter from "./routes/bot/verify-email.js";
+import adminRouter from "./routes/admin.js";
 
 validateConfig();
 
