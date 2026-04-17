@@ -54,6 +54,7 @@ app.use("/api/payment/status", paymentStatusRouter);
 app.use("/api/cron/check-unpaid", cronCheckUnpaidRouter);
 app.use("/api/bot/verify-token", botVerifyTokenRouter);
 app.use("/api/bot/verify-email", botVerifyEmailRouter);
+app.use("/api/admin", adminRouter);
 
 // Graceful shutdown
 function shutdown() {

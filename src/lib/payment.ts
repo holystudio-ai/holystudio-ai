@@ -179,19 +179,20 @@ export async function proceedToPayment(email: string) {
         formFields = {...preparedPayment.formFields, clientEmail: email};
         orderReference = preparedPayment.orderReference;
 
-        // Fire-and-forget: save user + update order with email
-        fetch(`${API_URL}/api/users`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, clientMeta, orderReference}),
-        }).catch(() => {});
+        // Save user + update order with email BEFORE redirecting
+        await Promise.all([
+            fetch(`${API_URL}/api/users`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, clientMeta, orderReference}),
+            }).catch(() => {}),
 
-        // Update order with email (fire-and-forget)
-        fetch(`${API_URL}/api/payment/create`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, orderReference, updateOnly: true}),
-        }).catch(() => {});
+            fetch(`${API_URL}/api/payment/create`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, orderReference, updateOnly: true}),
+            }).catch(() => {}),
+        ]);
 
         // Invalidate cache so next payment gets a fresh form
         preparedPayment = null;

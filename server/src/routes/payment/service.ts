@@ -95,7 +95,7 @@ router.post('/', async (req: Request, res: Response) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
+                    const botLink = `https://t.me/${TELEGRAM_BOT}`;
                     await sendAccessEmail(emailTarget, orderReference || '', botLink);
                     await db.collection('users').updateOne(
                         { email: emailTarget },

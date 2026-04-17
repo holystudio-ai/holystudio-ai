@@ -61,7 +61,7 @@ function buildReminderHtml(siteUrl: string): string {
 }
 
 function buildAccessHtml(orderReference: string, botLink?: string): string {
-    const finalBotLink = botLink || `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(orderReference)}`;
+    const finalBotLink = botLink || `https://t.me/${TELEGRAM_BOT}`;
     return `
 <!DOCTYPE html>
 <html lang="uk">

@@ -16,8 +16,15 @@ import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
 import EmailModal from "@/src/components/features/EmailModal.tsx";
 import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
+import AdminPanel from "@/src/pages/AdminPanel.tsx";
 
 const App: React.FC = () => {
+    const location = useLocation();
+    const isAdmin = location.pathname === '/admin-panel';
+
+    if (isAdmin) {
+        return <AdminPanel />;
+    }
 
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
