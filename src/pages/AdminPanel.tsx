@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-const API_URL = (import.meta as any).env?.VITE_API_URL
-    ? (import.meta as any).env.VITE_API_URL.replace(/\/+$/, '')
-    : '';
+
+const API_URL = process.env.VITE_API_URL ? process.env.VITE_API_URL.replace(/\/+$/, '') : '';
+
 interface User {
     _id: string; email: string; status: string; accessType?: string; emailCheckType?: string;
     ip?: string; createdAt?: string; updatedAt?: string; paidAt?: string;
@@ -9,7 +9,7 @@ interface User {
 }
 interface Stats { totalUsers: number; paidUsers: number; pendingUsers: number; freeUsers: number; totalOrders: number; paidOrders: number; }
 function AdminPanel() {
-    const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('admin_token'));
+    const [token, setToken] = useState<string | null>(() => localStorage.getItem('admin_token'));
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [loginError, setLoginError] = useState('');
@@ -35,7 +35,7 @@ function AdminPanel() {
                 fetch(`${API_URL}/api/admin/users`, { headers: getHeaders() }),
                 fetch(`${API_URL}/api/admin/stats`, { headers: getHeaders() }),
             ]);
-            if (uRes.status === 401) { setToken(null); sessionStorage.removeItem('admin_token'); return; }
+            if (uRes.status === 401) { setToken(null); localStorage.removeItem('admin_token'); return; }
             setUsers((await uRes.json()).users || []);
             setStats(await sRes.json());
         } catch (e) { console.error(e); }
@@ -44,15 +44,17 @@ function AdminPanel() {
     useEffect(() => { fetchData(); }, [fetchData]);
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoginError('');
         try {
             const res = await fetch(`${API_URL}/api/admin/login`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: loginEmail, password: loginPassword }),
             });
+            if (!res.ok) { setLoginError('Невірні дані'); return; }
             const data = await res.json();
-            if (data.ok) { setToken(data.token); sessionStorage.setItem('admin_token', data.token); }
+            if (data.ok) { setToken(data.token); localStorage.setItem('admin_token', data.token); }
             else setLoginError('Невірні дані');
-        } catch { setLoginError("Помилка з'єднання"); }
+        } catch (err) { setLoginError("Помилка з'єднання: " + String(err)); }
     };
     const createUser = async () => {
         if (!newUserEmail.trim()) return;
@@ -107,7 +109,7 @@ function AdminPanel() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                     <h1 className="text-2xl font-black uppercase">Admin Panel</h1>
-                    <button onClick={() => { setToken(null); sessionStorage.removeItem('admin_token'); }}
+                    <button onClick={() => { setToken(null); localStorage.removeItem('admin_token'); }}
                         className="text-sm border border-white px-4 py-2 hover:bg-white hover:text-black transition-colors">Вийти</button>
                 </div>
                 {stats && (

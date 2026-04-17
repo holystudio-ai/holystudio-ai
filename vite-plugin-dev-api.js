@@ -7,6 +7,8 @@ import dns from 'dns';
 import { promisify } from 'util';
 import { MongoClient } from 'mongodb';
 
+import { ObjectId } from 'mongodb';
+
 const resolveMx = promisify(dns.resolveMx);
 
 // Read env lazily (at request time) because vite.config.ts injects them after this module loads
@@ -489,6 +491,92 @@ export default function devApiPlugin() {
                     console.error('[dev-api] Payment status error:', err);
                     return sendJson(res, 500, { error: 'Internal server error' });
                 }
+            });
+
+            // ── Admin routes ──
+            const ADMIN_EMAIL = 'holystudio.ai@gmail.com';
+            const ADMIN_PASSWORD = 'HolyStudioWebdev666!*';
+
+            function checkAdminAuth(req) {
+                const auth = req.headers.authorization;
+                if (!auth || !auth.startsWith('Basic ')) return false;
+                const decoded = Buffer.from(auth.slice(6), 'base64').toString();
+                const [e, p] = decoded.split(':');
+                return e === ADMIN_EMAIL && p === ADMIN_PASSWORD;
+            }
+
+            server.middlewares.use('/api/admin/login', async (req, res, next) => {
+                if (req.method !== 'POST') return next();
+                const body = await parseBody(req);
+                if (body.email === ADMIN_EMAIL && body.password === ADMIN_PASSWORD) {
+                    const token = Buffer.from(`${body.email}:${body.password}`).toString('base64');
+                    return sendJson(res, 200, { ok: true, token });
+                }
+                return sendJson(res, 401, { error: 'Invalid credentials' });
+            });
+
+            server.middlewares.use('/api/admin/users', async (req, res, next) => {
+                if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+                const db = await getDb();
+                if (req.method === 'GET') {
+                    const users = await db.collection('users').find({}).sort({ createdAt: -1 }).toArray();
+                    return sendJson(res, 200, { users });
+                }
+                if (req.method === 'POST') {
+                    const body = await parseBody(req);
+                    if (!body.email) return sendJson(res, 400, { error: 'Email required' });
+                    const email = body.email.trim().toLowerCase();
+                    const existing = await db.collection('users').findOne({ email });
+                    if (existing) return sendJson(res, 400, { error: 'User already exists' });
+                    await db.collection('users').insertOne({
+                        email, status: 'paid', accessType: 'free', emailCheckType: 'multi',
+                        ip: null, userAgent: null, language: null, languages: null, platform: null,
+                        vendor: null, cookiesEnabled: null, doNotTrack: null, screenWidth: null,
+                        screenHeight: null, viewportWidth: null, viewportHeight: null,
+                        devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                        referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                        maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                        createdAt: new Date(), updatedAt: new Date(), paidAt: new Date(),
+                        reminderSentAt: null, orderReference: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                    });
+                    return sendJson(res, 200, { ok: true });
+                }
+                if (req.method === 'DELETE') {
+                    const id = req.url.split('/').pop();
+                    await db.collection('users').deleteOne({ _id: new ObjectId(id) });
+                    return sendJson(res, 200, { ok: true });
+                }
+                if (req.method === 'PUT') {
+                    const id = req.url.split('/').pop();
+                    const body = await parseBody(req);
+                    const setFields = { updatedAt: new Date() };
+                    if (body.email !== undefined) setFields.email = body.email.trim().toLowerCase();
+                    if (body.emailCheckType !== undefined) setFields.emailCheckType = body.emailCheckType;
+                    if (body.accessType !== undefined) setFields.accessType = body.accessType;
+                    if (body.resetEmailVerification) setFields.emailVerifiedAt = null;
+                    await db.collection('users').updateOne({ _id: new ObjectId(id) }, { $set: setFields });
+                    return sendJson(res, 200, { ok: true });
+                }
+                return next();
+            });
+
+            server.middlewares.use('/api/admin/stats', async (req, res, next) => {
+                if (req.method !== 'GET' || !checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+                const db = await getDb();
+                const totalUsers = await db.collection('users').countDocuments();
+                const paidUsers = await db.collection('users').countDocuments({ status: 'paid' });
+                const pendingUsers = await db.collection('users').countDocuments({ status: 'pending' });
+                const freeUsers = await db.collection('users').countDocuments({ accessType: 'free' });
+                const totalOrders = await db.collection('orders').countDocuments();
+                const paidOrders = await db.collection('orders').countDocuments({ status: 'paid' });
+                return sendJson(res, 200, { totalUsers, paidUsers, pendingUsers, freeUsers, totalOrders, paidOrders });
+            });
+
+            server.middlewares.use('/api/admin/broadcast', async (req, res, next) => {
+                if (req.method !== 'POST' || !checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+                const body = await parseBody(req);
+                console.log('[dev-api] Broadcast request:', body.type, 'to', body.emails?.length, 'emails');
+                return sendJson(res, 200, { ok: true, results: (body.emails || []).map(e => ({ email: e, ok: true })) });
             });
 
             // POST /api/payment/service (webhook)
