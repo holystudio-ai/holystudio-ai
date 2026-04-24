@@ -139,6 +139,88 @@ export async function sendReminderEmail(to: string): Promise<boolean> {
     }
 }
 
+function buildZoomNotificationHtml(userEmail: string): string {
+    return `
+<!DOCTYPE html>
+<html lang="uk">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background-color:#000000;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#000000;padding:40px 16px;">
+<tr><td align="center">
+<table width="500" cellpadding="0" cellspacing="0" style="max-width:500px;width:100%;border:3px solid #ffffff;background-color:#000000;">
+<tr><td style="padding:28px 28px 0 28px;">
+  <img src="https://holystudio.ai/logo.png" alt="HOLYSTUDIO" height="32" style="height:32px;display:block;" />
+</td></tr>
+<tr><td style="padding:24px 28px 0 28px;">
+  <h1 style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;color:#ffffff;line-height:1.2;">
+    Новий запис на зум сесію 📹
+  </h1>
+</td></tr>
+<tr><td style="padding:16px 28px 0 28px;">
+  <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;color:#cccccc;">
+    Користувач записався на зум сесію:
+  </p>
+</td></tr>
+<tr><td style="padding:16px 28px 0 28px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#111111;border:1px solid #333333;">
+  <tr><td style="padding:16px 20px;">
+    <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#888888;text-transform:uppercase;letter-spacing:1px;">
+      Email користувача
+    </p>
+    <p style="margin:6px 0 0 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:18px;font-weight:700;color:#a855f7;word-break:break-all;">
+      ${userEmail}
+    </p>
+  </td></tr>
+  </table>
+</td></tr>
+<tr><td style="padding:28px 28px 12px 28px;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+  <tr><td align="center">
+    <a href="mailto:${userEmail}" style="display:block;width:100%;background-color:#a855f7;color:#ffffff;text-align:center;padding:16px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:-0.3px;border:3px solid #ffffff;">
+      Написати користувачу
+    </a>
+  </td></tr>
+  </table>
+</td></tr>
+<tr><td style="padding:0 28px;">
+  <div style="border-top:1px solid #333333;"></div>
+</td></tr>
+<tr><td style="padding:20px 28px 28px 28px;">
+  <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
+    Це автоматичне сповіщення від системи HOLYSTUDIO
+  </p>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`.trim();
+}
+
+export async function sendZoomNotificationEmail(adminEmail: string, userEmail: string): Promise<boolean> {
+    try {
+        const resend = getResend();
+        const from = config.RESEND_FROM;
+
+        const { error } = await resend.emails.send({
+            from, to: adminEmail,
+            subject: `Новий запис на зум сесію від ${userEmail} — HOLYSTUDIO`,
+            html: buildZoomNotificationHtml(userEmail),
+        });
+
+        if (error) {
+            console.error('[Resend] Error sending zoom notification', error);
+            return false;
+        }
+
+        console.log('[Resend] Zoom notification sent for', userEmail);
+        return true;
+    } catch (err) {
+        console.error('[Resend] Exception sending zoom notification', err);
+        return false;
+    }
+}
+
 export async function sendAccessEmail(to: string, orderReference: string, botLink?: string): Promise<boolean> {
     try {
         const resend = getResend();

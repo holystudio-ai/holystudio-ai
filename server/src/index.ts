@@ -16,6 +16,7 @@ import cronCheckUnpaidRouter from "./routes/cron/check-unpaid.js";
 import botVerifyTokenRouter from "./routes/bot/verify-token.js";
 import botVerifyEmailRouter from "./routes/bot/verify-email.js";
 import adminRouter from "./routes/admin.js";
+import notificationSendRouter from "./routes/notification/send-notification.js";
 
 validateConfig();
 
@@ -56,6 +57,7 @@ app.use("/api/cron/check-unpaid", cronCheckUnpaidRouter);
 app.use("/api/bot/verify-token", botVerifyTokenRouter);
 app.use("/api/bot/verify-email", botVerifyEmailRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/notification/send-notification", notificationSendRouter);
 
 // Graceful shutdown
 function shutdown() {
