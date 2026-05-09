@@ -1,6 +1,7 @@
 import React from 'react';
 import Pricing from "@/src/components/sections/Pricing.tsx";
 import heroImage from "../../assets/images/hero-image.webp";
+import heroImageMobile from "../../assets/images/hero-image-mobile.webp";
 import offers from "../../assets/images/offers.webp";
 
 const blocks = [
@@ -14,34 +15,93 @@ const blocks = [
     {
         type: "offer",
         title: "НЕ ПРОСПИ...",
-        details: "МОЖЛИВІСТЬ ОПАНУВАТИ ГЕНЕРАТИВНИЙ AI ЗАРАЗ, ЩОБ ПЕРЕТВОРИТИ СВОЇ ІДЕЇ НА ПРОФЕСІЙНИЙ КОНТЕНТ І ЗІРВАТИ КУШ $$$ НОВОЇ ЦИФРОВОЇ ЕРИ, ПОКИ ІНШІ ЗВОЛІКАЮТЬ",
+        details:
+            "МОЖЛИВІСТЬ ОПАНУВАТИ ГЕНЕРАТИВНИЙ AI ЗАРАЗ, ЩОБ ПЕРЕТВОРИТИ СВОЇ ІДЕЇ НА ПРОФЕСІЙНИЙ КОНТЕНТ І ЗІРВАТИ КУШ $$$ НОВОЇ ЦИФРОВОЇ ЕРИ, ПОКИ ІНШІ ЗВОЛІКАЮТЬ",
     },
 ];
 
 const Hero: React.FC = () => {
-    const mainTitle = "НАВЧИСЬ СТВОРЮВАТИ АІ КРЕАТИВИ КІНОШНОЇ ЯКОСТІ З НУЛЯ ЗА 5 ДНІВ.";
-
     const heroBlock = blocks.find((block) => block.type === "hero");
     const offerBlock = blocks.find((block) => block.type === "offer");
 
     return (
-        <section className="overflow-x-hidden px-4 pb-8 pt-20 md:pb-10 md:pt-24">
+        <section
+            className="
+                overflow-x-hidden px-4 pb-8 pt-20
+                md:pb-10 md:pt-24
+
+                max-[480px]:px-0
+                max-[480px]:pt-[126px]
+                max-[480px]:pb-8
+            "
+        >
             <div className="mx-auto max-w-7xl">
-                <div className="overflow-hidden border-4 border-black bg-black">
-                    <img
-                        src={heroImage}
-                        alt="AI creative course hero"
-                        fetchPriority="high"
-                        loading="eager"
-                        decoding="async"
-                        className="block h-auto max-h-[72svh] w-full object-cover object-center md:max-h-[90svh]"
+                <div
+                    className="
+                        overflow-visible border-4 border-black bg-black
+                        max-[480px]:border-0
+                    "
+                >
+                    <picture>
+                        <source
+                            media="(max-width: 480px)"
+                            srcSet={heroImageMobile}
+                        />
+
+                        <img
+                            src={heroImage}
+                            alt="AI creative course hero"
+                            fetchPriority="high"
+                            loading="eager"
+                            decoding="async"
+                            className="
+                                block w-full object-cover object-center
+                                h-auto max-h-[72svh]
+                                md:max-h-[90svh]
+
+                                max-[480px]:block
+                                max-[480px]:h-auto
+                                max-[480px]:max-h-none
+                                max-[480px]:min-h-0
+                                max-[480px]:w-full
+                                max-[480px]:object-contain
+                                max-[480px]:object-top
+                            "
+                        />
+                    </picture>
+                </div>
+
+                <div
+                    className="
+                        relative z-10 mt-4 px-4
+
+                        max-[480px]:mt-0
+                        max-[480px]:px-4
+                    "
+                >
+                    <Pricing
+                        badge
+                        showBonus
+                        showTimer
+                        text="ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"
                     />
                 </div>
 
-                <Pricing badge showBonus showTimer text={"ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"} />
+                <div
+                    className="
+                        flex-box gap-10 items-start mt-12 font-brutal
 
-                <div className="flex-box gap-10 items-start mt-12 font-brutal">
-                    <div className="flex flex-col gap-6 mt-12 w-full">
+                        max-[480px]:mt-8
+                        max-[480px]:px-4
+                    "
+                >
+                    <div
+                        className="
+                            flex flex-col gap-6 mt-12 w-full
+
+                            max-[480px]:mt-6
+                        "
+                    >
                         {heroBlock && (
                             <div className="border-2 border-dashed border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white">
                                 <h3 className="text-[18px] sm:text-[22px] md:text-[34px] uppercase leading-[1.05] tracking-tight text-center font-black">
@@ -49,7 +109,7 @@ const Hero: React.FC = () => {
                                     <span className="font-normal">
                                         {heroBlock.titleLight}
                                     </span>
-                                    {heroBlock?.titleEnd}
+                                    {heroBlock.titleEnd}
                                 </h3>
                             </div>
                         )}
