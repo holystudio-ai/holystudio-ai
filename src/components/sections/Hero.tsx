@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
                 md:pb-10 md:pt-24
 
                 max-[480px]:px-0
-                max-[480px]:pt-[126px]
+                max-[480px]:pt-[90px]
                 max-[480px]:pb-8
             "
         >
