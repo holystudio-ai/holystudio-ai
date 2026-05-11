@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import Hero from "@/src/components/sections/Hero.tsx";
 import Audience from "@/src/components/sections/Audience.tsx";
 import Pricing from "@/src/components/sections/Pricing.tsx";
@@ -18,17 +18,22 @@ const FAQ = lazy(() => import("@/src/components/sections/FAQ.tsx"));
 const priceValue = String(coursePriceUah);
 
 const HomePage = () => {
+    const offersRef = useRef<HTMLDivElement>(null);
     const [showFloatingCta, setShowFloatingCta] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setShowFloatingCta(window.scrollY > 96);
-        };
+        const el = offersRef.current;
+        if (!el) return;
 
-        handleScroll();
-        window.addEventListener('scroll', handleScroll, {passive: true});
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setShowFloatingCta(entry.isIntersecting || entry.boundingClientRect.top < 0);
+            },
+            {threshold: 0.15, rootMargin: '0px 0px -10% 0px'}
+        );
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        observer.observe(el);
+        return () => observer.disconnect();
     }, []);
 
     return (
@@ -39,7 +44,7 @@ const HomePage = () => {
                 structuredData={buildCourseSchema(priceValue)}
             />
             <main>
-                <Hero/>
+                <Hero offersRef={offersRef}/>
 
                 <Audience/>
 

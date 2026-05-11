@@ -20,7 +20,11 @@ const blocks = [
     },
 ];
 
-const Hero: React.FC = () => {
+interface HeroProps {
+    offersRef?: React.Ref<HTMLDivElement>;
+}
+
+const Hero: React.FC<HeroProps> = ({offersRef}) => {
     const heroBlock = blocks.find((block) => block.type === "hero");
     const offerBlock = blocks.find((block) => block.type === "offer");
 
@@ -31,7 +35,7 @@ const Hero: React.FC = () => {
                 md:pb-10 md:pt-24
 
                 max-[480px]:px-0
-                max-[480px]:pt-[90px]
+                max-[480px]:pt-[70px]
                 max-[480px]:pb-8
             "
         >
@@ -83,7 +87,6 @@ const Hero: React.FC = () => {
                         badge
                         showBonus
                         showTimer
-                        text="ЦІНА ДІЄ ТІЛЬКИ СЬОГОДНІ"
                     />
                 </div>
 
@@ -114,7 +117,7 @@ const Hero: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="w-[110%] -ml-[5%] md:w-full md:ml-0 lg:w-[85%] lg:mx-auto">
+                        <div ref={offersRef} className="w-[110%] -ml-[5%] md:w-full md:ml-0 lg:w-[85%] lg:mx-auto">
                             <img
                                 src={offers}
                                 alt="Special offers"
