@@ -37,7 +37,33 @@ router.get('/users', adminAuth, async (_req: Request, res: Response) => {
     try {
         const db = await getDb();
         const users = await db.collection('users').find({}).sort({ createdAt: -1 }).toArray();
-        res.json({ users });
+
+        const orders = await db.collection('orders').find(
+            { botAccessToken: { $exists: true, $ne: null } },
+            { projection: { email: 1, botAccessToken: 1, botAccessTokenUsedAt: 1, orderReference: 1, status: 1 } }
+        ).toArray();
+
+        const tokensByEmail = new Map<string, { botAccessToken: string; botAccessTokenUsedAt: Date | null; orderStatus: string }>();
+        for (const o of orders) {
+            if (o.email) {
+                tokensByEmail.set(o.email, {
+                    botAccessToken: o.botAccessToken,
+                    botAccessTokenUsedAt: o.botAccessTokenUsedAt || null,
+                    orderStatus: o.status,
+                });
+            }
+        }
+
+        const enrichedUsers = users.map(u => {
+            const tokenInfo = tokensByEmail.get(u.email) || (u.botAccessToken ? { botAccessToken: u.botAccessToken, botAccessTokenUsedAt: null, orderStatus: u.status } : null);
+            return {
+                ...u,
+                botAccessToken: tokenInfo?.botAccessToken || null,
+                botAccessTokenUsedAt: tokenInfo?.botAccessTokenUsedAt || null,
+            };
+        });
+
+        res.json({ users: enrichedUsers });
     } catch (err) {
         res.status(500).json({ error: String(err) });
     }

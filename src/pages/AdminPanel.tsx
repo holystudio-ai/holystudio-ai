@@ -6,6 +6,7 @@ interface User {
     _id: string; email: string; status: string; accessType?: string; emailCheckType?: string;
     ip?: string; createdAt?: string; updatedAt?: string; paidAt?: string;
     emailVerifiedAt?: string; accessEmailSentAt?: string; orderReference?: string;
+    botAccessToken?: string; botAccessTokenUsedAt?: string;
 }
 interface Stats { totalUsers: number; paidUsers: number; pendingUsers: number; freeUsers: number; totalOrders: number; paidOrders: number; }
 interface Analytics {
@@ -241,7 +242,7 @@ function AdminPanel() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm border-collapse">
                                 <thead><tr className="border-b-2 border-white/30 text-left">
-                                    <th className="p-2">Email</th><th className="p-2">Статус</th><th className="p-2">Доступ</th>
+                                    <th className="p-2">Email</th><th className="p-2">Статус</th><th className="p-2">Токен</th><th className="p-2">Доступ</th>
                                     <th className="p-2">Перевірка</th><th className="p-2">Верифікація</th><th className="p-2">Створено</th>
                                     <th className="p-2">Оплачено</th><th className="p-2">IP</th><th className="p-2">Дії</th>
                                 </tr></thead>
@@ -249,6 +250,13 @@ function AdminPanel() {
                                     <tr key={u._id} className="border-b border-white/10 hover:bg-white/5">
                                         <td className="p-2 font-mono text-xs">{u.email}</td>
                                         <td className="p-2"><span className={`text-xs font-bold uppercase px-2 py-0.5 ${u.status === 'paid' ? 'bg-green-600/30 text-green-400' : u.status === 'pending' ? 'bg-yellow-600/30 text-yellow-400' : 'bg-red-600/30 text-red-400'}`}>{u.status}</span></td>
+                                        <td className="p-2 text-xs font-mono">
+                                            {u.botAccessToken ? (
+                                                <span className={u.botAccessTokenUsedAt ? 'text-gray-500 line-through' : 'text-cyan-400'} title={u.botAccessTokenUsedAt ? `Використано: ${fmt(u.botAccessTokenUsedAt)}` : 'Активний'}>
+                                                    {u.botAccessToken.slice(0, 12)}...
+                                                </span>
+                                            ) : <span className="text-gray-500">—</span>}
+                                        </td>
                                         <td className="p-2 text-xs">{u.accessType === 'free' ? <span className="text-blue-400">безкошт.</span> : <span className="text-gray-400">платний</span>}</td>
                                         <td className="p-2 text-xs">{u.emailCheckType === 'multi' ? <span className="text-purple-400">багатор.</span> : <span className="text-gray-400">одноразово</span>}</td>
                                         <td className="p-2 text-xs">{u.emailVerifiedAt ? <span className="text-green-400">{fmt(u.emailVerifiedAt)}</span> : <span className="text-gray-500">—</span>}</td>

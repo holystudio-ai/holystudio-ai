@@ -38,7 +38,7 @@ router.post('/', async (req: Request, res: Response) => {
 
 async function verify(tokenValue: string | undefined, res: Response) {
     if (!tokenValue || typeof tokenValue !== 'string') {
-        return res.status(400).json({ valid: false, reason: 'missing_token' });
+        return res.status(400).json({ paid_status: 0, valid: false, reason: 'missing_token' });
     }
 
     const trimmedToken = tokenValue.trim();
@@ -47,6 +47,7 @@ async function verify(tokenValue: string | undefined, res: Response) {
     if (trimmedToken === DEV_TEST_TOKEN) {
         console.log('[bot/verify-token] DEV TEST TOKEN used (reusable)');
         return res.status(200).json({
+            paid_status: 1,
             valid: true,
             email: DEV_TEST_EMAIL,
             orderReference: DEV_TEST_ORDER,
@@ -60,15 +61,15 @@ async function verify(tokenValue: string | undefined, res: Response) {
     const order = await orders.findOne({ botAccessToken: trimmedToken });
 
     if (!order) {
-        return res.status(200).json({ valid: false, reason: 'not_found' });
+        return res.status(200).json({ paid_status: 0, valid: false, reason: 'not_found' });
     }
 
     if (order.botAccessTokenUsedAt) {
-        return res.status(200).json({ valid: false, reason: 'already_used' });
+        return res.status(200).json({ paid_status: 0, valid: false, reason: 'already_used' });
     }
 
     if (order.status !== 'paid') {
-        return res.status(200).json({ valid: false, reason: 'not_paid' });
+        return res.status(200).json({ paid_status: 0, valid: false, reason: 'not_paid' });
     }
 
     // Mark token as used — one-time only
@@ -85,6 +86,7 @@ async function verify(tokenValue: string | undefined, res: Response) {
     console.log(`[bot/verify-token] Token used for order ${order.orderReference}, email: ${order.email}`);
 
     return res.status(200).json({
+        paid_status: 1,
         valid: true,
         email: order.email || null,
         orderReference: order.orderReference,

@@ -49,25 +49,38 @@ router.post('/', async (req: Request, res: Response) => {
             transactionStatus, receivedAt: new Date(),
         });
 
+        const isApproved = transactionStatus === 'Approved';
+        const isFailed = ['Declined', 'Expired', 'Refunded', 'Voided', 'DeclinedByBank'].includes(transactionStatus);
+
         await db.collection('orders').updateOne(
             { orderReference },
             {
                 $set: {
-                    status: transactionStatus === 'Approved' ? 'paid' : transactionStatus,
+                    status: isApproved ? 'paid' : transactionStatus,
                     transactionData: body, updatedAt: new Date(),
                 },
             }
         );
 
-        if (transactionStatus === 'Approved' && userEmail) {
-            // Generate one-time bot access token with tk_ prefix
-            const botAccessToken = generateBotToken();
-
-            await db.collection('orders').updateOne(
-                { orderReference },
-                { $set: { botAccessToken, botAccessTokenUsedAt: null } }
+        if (isFailed && userEmail) {
+            await db.collection('users').updateOne(
+                { email: userEmail },
+                { $set: { status: 'unpaid', updatedAt: new Date() } }
             );
-            console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
+            console.log(`[Service URL] Payment failed for ${userEmail}, status: ${transactionStatus}`);
+        }
+
+        if (isApproved && userEmail) {
+            // Use existing botAccessToken or generate new one
+            const botAccessToken = order?.botAccessToken || generateBotToken();
+
+            if (!order?.botAccessToken) {
+                await db.collection('orders').updateOne(
+                    { orderReference },
+                    { $set: { botAccessToken, botAccessTokenUsedAt: null } }
+                );
+            }
+            console.log(`[Service URL] botAccessToken for order ${orderReference}: ${botAccessToken}`);
 
             await db.collection('users').updateOne(
                 { email: userEmail },
@@ -75,6 +88,7 @@ router.post('/', async (req: Request, res: Response) => {
                     $set: {
                         status: 'paid', paidAt: new Date(), updatedAt: new Date(),
                         orderReference: orderReference || null, phone: phone || null,
+                        botAccessToken,
                     },
                 }
             );
@@ -86,6 +100,7 @@ router.post('/', async (req: Request, res: Response) => {
                         $set: {
                             status: 'paid', paidAt: new Date(), updatedAt: new Date(),
                             orderReference: orderReference || null, phone: phone || null,
+                            botAccessToken,
                         },
                     }
                 );
@@ -95,7 +110,7 @@ router.post('/', async (req: Request, res: Response) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    const botLink = `https://t.me/${TELEGRAM_BOT}`;
+                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
                     await sendAccessEmail(emailTarget, orderReference || '', botLink);
                     await db.collection('users').updateOne(
                         { email: emailTarget },

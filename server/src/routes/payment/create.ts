@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { config } from '../../config.js';
-import { hmacMd5, randomBytes } from '../../lib/crypto.js';
+import { hmacMd5, randomBytes, generateBotToken } from '../../lib/crypto.js';
 import { getDb } from '../../lib/db.js';
 
 const MERCHANT_DOMAIN = 'holystudio.ai';
@@ -33,12 +33,21 @@ router.post('/', async (req: Request, res: Response) => {
         const normalizedEmail = email.trim().toLowerCase();
         const db = await getDb();
 
-        // Fast path: just update the prepared order with the email
+        // Fast path: just update the prepared order with the email + generate bot token
         if (updateOnly && orderReference) {
+            const existingOrder = await db.collection('orders').findOne({ orderReference });
+            const botAccessToken = existingOrder?.botAccessToken || generateBotToken();
+
             await db.collection('orders').updateOne(
                 { orderReference },
-                { $set: { email: normalizedEmail, updatedAt: new Date() } }
+                { $set: { email: normalizedEmail, botAccessToken, updatedAt: new Date() } }
             );
+
+            await db.collection('users').updateOne(
+                { email: normalizedEmail },
+                { $set: { botAccessToken, updatedAt: new Date() } },
+            );
+
             res.json({ ok: true });
             return;
         }
@@ -82,6 +91,8 @@ router.post('/', async (req: Request, res: Response) => {
             orderTimeout: '900',
         };
 
+        const botAccessToken = generateBotToken();
+
         await db.collection('orders').insertOne({
             orderReference: newOrderReference,
             token,
@@ -89,8 +100,15 @@ router.post('/', async (req: Request, res: Response) => {
             amount: PRODUCT_PRICE,
             currency: CURRENCY,
             status: 'created',
+            botAccessToken,
+            botAccessTokenUsedAt: null,
             createdAt: new Date(),
         });
+
+        await db.collection('users').updateOne(
+            { email: normalizedEmail },
+            { $set: { botAccessToken, updatedAt: new Date() } },
+        );
 
         res.json({ ok: true, formFields });
     } catch (err) {

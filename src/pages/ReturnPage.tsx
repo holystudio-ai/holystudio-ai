@@ -17,9 +17,11 @@ const ReturnPage: React.FC = () => {
 
     const [status, setStatus] = useState<PaymentStatus>(token && ref ? 'loading' : 'failed');
     const [pollCount, setPollCount] = useState(0);
+    const [botToken, setBotToken] = useState<string | null>(null);
 
-    // Simple bot link — no token needed, verification is done via email
-    const telegramLink = `https://t.me/${TELEGRAM_BOT}`;
+    const telegramLink = botToken
+        ? `https://t.me/${TELEGRAM_BOT}?start=${botToken}`
+        : `https://t.me/${TELEGRAM_BOT}`;
 
     const checkStatus = useCallback(async () => {
         try {
@@ -28,6 +30,7 @@ const ReturnPage: React.FC = () => {
 
             if (data.status === 'paid') {
                 setStatus('paid');
+                if (data.botAccessToken) setBotToken(data.botAccessToken);
                 return true; // stop polling
             } else if (data.status === 'pending') {
                 setStatus('pending');
