@@ -61,9 +61,15 @@ const Pricing: React.FC<PricingProps> = ({
         return () => window.clearInterval(intervalId);
     }, [showTimer]);
 
+    const timerItems = [
+        {value: timeLeft.hours, label: 'год'},
+        {value: timeLeft.minutes, label: 'хв'},
+        {value: timeLeft.seconds, label: 'сек'}
+    ];
+
     const content = (
         <div
-            className="bg-[#0b0b10] border border-white/10 rounded-3xl max-[480px]:rounded-[20px] p-5 max-[480px]:p-4 md:p-8 text-center relative overflow-hidden w-full max-[480px]:w-[82vw] max-[480px]:max-w-[360px] md:max-w-md mx-auto shadow-[0_4px_40px_rgba(0,0,0,0.6)]">
+            className="bg-[#0b0b10] border border-white/10 rounded-lg p-5 max-[480px]:p-4 md:p-7 text-center relative overflow-hidden w-full max-[480px]:w-[82vw] max-[480px]:max-w-[360px] md:max-w-md mx-auto shadow-[0_4px_40px_rgba(0,0,0,0.6)]">
             {badge && (
                 <div
                     className="absolute top-4 left-4 max-[480px]:top-3 max-[480px]:left-3 flex items-center gap-1.5 bg-red-950/80 border border-red-500/30 rounded-full px-3 py-1.5 max-[480px]:px-2.5 max-[480px]:py-1 z-10">
@@ -74,11 +80,14 @@ const Pricing: React.FC<PricingProps> = ({
                 </div>
             )}
 
-            <h2 className="text-lg md:text-xl font-black mb-6 max-[480px]:mb-4 mt-8 max-[480px]:mt-6 font-brutal leading-none uppercase text-white tracking-tighter">
-                {title}
-            </h2>
+            {title && (
+                <h2 className="text-lg md:text-xl font-black mb-5 max-[480px]:mb-4 mt-8 max-[480px]:mt-7 font-brutal leading-none uppercase text-white tracking-tighter">
+                    {title}
+                </h2>
+            )}
 
-            <div className="flex justify-center items-center gap-6 max-[480px]:gap-4 md:gap-8 mb-6 max-[480px]:mb-4">
+            <div
+                className={`flex justify-center items-center gap-5 max-[480px]:gap-4 md:gap-8 mb-5 max-[480px]:mb-4 ${!title && badge ? 'mt-8 max-[480px]:mt-7' : ''}`}>
                 <div className="flex flex-col items-center">
                     <span
                         className="text-3xl max-[480px]:text-2xl md:text-5xl line-through decoration-red-500 decoration-[3px] max-[480px]:decoration-2 text-white/30 font-black font-brutal tracking-tighter">
@@ -100,26 +109,42 @@ const Pricing: React.FC<PricingProps> = ({
                 </div>
             </div>
 
+            {text && (
+                <p className="text-xs md:text-sm font-bold mb-5 max-[480px]:mb-4 text-white/70 uppercase leading-tight max-w-xs mx-auto font-brutal">
+                    {text}
+                </p>
+            )}
+
+            <div className="relative z-10 mb-5 max-[480px]:mb-4">
+                <div
+                    className="pointer-events-none absolute -inset-x-3 -bottom-3 h-9 rounded-full bg-red-600/30 blur-xl"></div>
+                <button
+                    type="button"
+                    onClick={redirectToPayment}
+                    className="relative w-full bg-red-600 hover:bg-red-500 text-white text-sm md:text-base font-black py-4 max-[480px]:py-3.5 uppercase rounded-xl shadow-[0_0_16px_rgba(239,68,68,0.68),0_0_40px_rgba(239,68,68,0.34),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-200 hover:shadow-[0_0_20px_rgba(239,68,68,0.8),0_0_54px_rgba(239,68,68,0.42),inset_0_1px_0_rgba(255,255,255,0.22)] font-brutal"
+                >
+                    ОТРИМАТИ ДОСТУП
+                </button>
+            </div>
+
             {showTimer && (
-                <div className="mb-4 max-[480px]:mb-3 md:mb-5">
-                    <div className="grid grid-cols-3 gap-2 md:gap-3">
-                        <div className="bg-[#14141c] border border-white/[0.06] rounded-lg md:rounded-xl px-2 py-2 max-[480px]:py-1.5 md:px-4 md:py-4 text-center shadow-inner">
+                <div className="mb-5 max-[480px]:mb-4">
+                    <div className="grid grid-cols-3 gap-2 max-[480px]:gap-2.5 md:gap-3">
+                        {timerItems.map((item) => (
                             <div
-                                className="text-2xl max-[480px]:text-xl md:text-4xl font-black leading-none text-white font-brutal">{timeLeft.hours}</div>
-                            <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal">год</div>
-                        </div>
-
-                        <div className="bg-[#14141c] border border-white/[0.06] rounded-lg md:rounded-xl px-2 py-2 max-[480px]:py-1.5 md:px-4 md:py-4 text-center shadow-inner">
-                            <div
-                                className="text-2xl max-[480px]:text-xl md:text-4xl font-black leading-none text-white font-brutal">{timeLeft.minutes}</div>
-                            <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal">хв</div>
-                        </div>
-
-                        <div className="bg-[#14141c] border border-white/[0.06] rounded-lg md:rounded-xl px-2 py-2 max-[480px]:py-1.5 md:px-4 md:py-4 text-center shadow-inner">
-                            <div
-                                className="text-2xl max-[480px]:text-xl md:text-4xl font-black leading-none text-white font-brutal">{timeLeft.seconds}</div>
-                            <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal">сек</div>
-                        </div>
+                                key={item.label}
+                                className="flex h-[76px] max-[480px]:h-[70px] md:h-[94px] flex-col items-center justify-center bg-[#17171f] border border-white/[0.07] rounded-lg px-2 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_22px_rgba(0,0,0,0.24)]"
+                            >
+                                <div
+                                    className="text-[34px] max-[480px]:text-[30px] md:text-[46px] font-black leading-none text-white font-brutal tracking-tight">
+                                    {item.value}
+                                </div>
+                                <div
+                                    className="mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal uppercase leading-none">
+                                    {item.label}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}
@@ -138,20 +163,6 @@ const Pricing: React.FC<PricingProps> = ({
                     </p>
                 </div>
             )}
-
-            {text && (
-                <p className="text-xs md:text-sm font-bold mb-6 max-[480px]:mb-4 text-white/70 uppercase leading-tight max-w-xs mx-auto font-brutal">
-                    {text}
-                </p>
-            )}
-
-            <button
-                type="button"
-                onClick={redirectToPayment}
-                className="w-full bg-red-600 hover:bg-red-500 text-white text-sm md:text-base font-black py-3.5 max-[480px]:py-3 uppercase rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.35)] transition-all font-brutal"
-            >
-                ОТРИМАТИ ДОСТУП
-            </button>
         </div>
     );
 
