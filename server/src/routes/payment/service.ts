@@ -62,16 +62,24 @@ router.post('/', async (req: Request, res: Response) => {
             }
         );
 
+        // Save email to order if WayForPay provided it
+        if (userEmail && !orderEmail) {
+            await db.collection('orders').updateOne(
+                { orderReference },
+                { $set: { email: userEmail, updatedAt: new Date() } }
+            );
+        }
+
         if (isFailed && userEmail) {
             await db.collection('users').updateOne(
                 { email: userEmail },
-                { $set: { status: 'unpaid', updatedAt: new Date() } }
+                { $set: { status: 'unpaid', updatedAt: new Date() } },
+                { upsert: true }
             );
             console.log(`[Service URL] Payment failed for ${userEmail}, status: ${transactionStatus}`);
         }
 
         if (isApproved && userEmail) {
-            // Use existing botAccessToken or generate new one
             const botAccessToken = order?.botAccessToken || generateBotToken();
 
             if (!order?.botAccessToken) {
@@ -82,27 +90,41 @@ router.post('/', async (req: Request, res: Response) => {
             }
             console.log(`[Service URL] botAccessToken for order ${orderReference}: ${botAccessToken}`);
 
-            await db.collection('users').updateOne(
-                { email: userEmail },
-                {
-                    $set: {
-                        status: 'paid', paidAt: new Date(), updatedAt: new Date(),
-                        orderReference: orderReference || null, phone: phone || null,
-                        botAccessToken,
-                    },
-                }
-            );
+            // Create or update user profile with email from WayForPay
+            const userFields = {
+                status: 'paid', paidAt: new Date(), updatedAt: new Date(),
+                orderReference: orderReference || null, phone: phone || null,
+                botAccessToken,
+            };
+
+            const existingUser = await db.collection('users').findOne({ email: userEmail });
+            if (existingUser) {
+                await db.collection('users').updateOne(
+                    { email: userEmail },
+                    { $set: userFields }
+                );
+            } else {
+                await db.collection('users').insertOne({
+                    email: userEmail,
+                    ...userFields,
+                    accessType: 'paid',
+                    emailCheckType: 'single',
+                    ip: null, userAgent: null, language: null, languages: null,
+                    platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                    screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                    devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                    referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                    maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                    createdAt: new Date(),
+                    reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                });
+            }
 
             if (orderEmail && orderEmail !== userEmail) {
                 await db.collection('users').updateOne(
                     { email: orderEmail },
-                    {
-                        $set: {
-                            status: 'paid', paidAt: new Date(), updatedAt: new Date(),
-                            orderReference: orderReference || null, phone: phone || null,
-                            botAccessToken,
-                        },
-                    }
+                    { $set: userFields },
+                    { upsert: true }
                 );
             }
 

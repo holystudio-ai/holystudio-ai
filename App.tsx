@@ -14,7 +14,6 @@ import ThankYou from "@/src/pages/ThankYou.tsx";
 import ReturnPage from "@/src/pages/ReturnPage.tsx";
 import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
-import EmailModal from "@/src/components/features/EmailModal.tsx";
 import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
 import AdminPanel from "@/src/pages/AdminPanel.tsx";
 
@@ -48,8 +47,6 @@ const App: React.FC = () => {
             </Routes>
 
             <Footer/>
-
-            <EmailModal />
         </div>
     );
 };
