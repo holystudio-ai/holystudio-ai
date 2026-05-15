@@ -13,6 +13,17 @@ export const config = {
     WFP_MERCHANT_PASSWORD: process.env.WFP_MERCHANT_PASSWORD || '',
     /** Public URL of THIS server (for WayForPay callbacks) */
     API_URL: (process.env.API_URL || 'https://holystudio-ai.onrender.com').replace(/\/+$/, ''),
+
+    // Meta (Facebook) Ads API
+    META_APP_ID: process.env.META_APP_ID || '',
+    META_APP_SECRET: process.env.META_APP_SECRET || '',
+    META_ACCESS_TOKEN: process.env.META_ACCESS_TOKEN || '',
+    META_AD_ACCOUNT_ID: process.env.META_AD_ACCOUNT_ID || '',
+
+    // Google Sheets API
+    GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
+    GOOGLE_PRIVATE_KEY: (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    GOOGLE_SHEET_ID: process.env.GOOGLE_SHEET_ID || '',
 };
 
 export function validateConfig() {

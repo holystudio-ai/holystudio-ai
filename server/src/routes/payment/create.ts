@@ -33,29 +33,25 @@ router.post('/', async (req: Request, res: Response) => {
         const normalizedEmail = email.trim().toLowerCase();
         const db = await getDb();
 
-        // Fast path: just update the prepared order with the email
         if (updateOnly && orderReference) {
             await db.collection('orders').updateOne(
                 { orderReference },
                 { $set: { email: normalizedEmail, updatedAt: new Date() } }
             );
+
             res.json({ ok: true });
             return;
         }
 
         const MERCHANT_LOGIN = config.WFP_MERCHANT_LOGIN;
         const MERCHANT_SECRET = config.WFP_MERCHANT_SECRET;
-        const SITE_URL = config.SITE_URL;
         const API_URL = config.API_URL;
         const PRODUCT_PRICE = config.COURSE_PRICE_UAH;
 
         const newOrderReference = generateOrderReference();
         const orderDate = Math.floor(Date.now() / 1000);
 
-        const token = randomBytes(32);
-
-        // returnUrl points to THIS server — it will redirect to the frontend SPA
-        const returnUrl = `${API_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(newOrderReference)}`;
+        const returnUrl = 'https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI1OTA2';
 
         const signatureData = [
             MERCHANT_LOGIN, MERCHANT_DOMAIN, newOrderReference, orderDate,
@@ -84,7 +80,6 @@ router.post('/', async (req: Request, res: Response) => {
 
         await db.collection('orders').insertOne({
             orderReference: newOrderReference,
-            token,
             email: normalizedEmail,
             amount: PRODUCT_PRICE,
             currency: CURRENCY,

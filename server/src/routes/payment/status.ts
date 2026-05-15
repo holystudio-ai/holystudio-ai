@@ -61,7 +61,7 @@ router.get("/", async (req: Request, res: Response) => {
 
         if (order.status === "paid") {
             await markUserPaid(db, userEmail, orderReference);
-            res.json({ status: "paid", orderReference, email: userEmail });
+            res.json({ status: "paid", orderReference, email: userEmail, botAccessToken: order.botAccessToken || null });
             return;
         }
 
@@ -76,7 +76,8 @@ router.get("/", async (req: Request, res: Response) => {
                 { $set: { status: "paid", updatedAt: new Date() } }
             );
             await markUserPaid(db, userEmail, orderReference);
-            res.json({ status: "paid", orderReference, email: userEmail });
+            const updatedOrder = await db.collection("orders").findOne({ orderReference });
+            res.json({ status: "paid", orderReference, email: userEmail, botAccessToken: updatedOrder?.botAccessToken || null });
             return;
         }
 

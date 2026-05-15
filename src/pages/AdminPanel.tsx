@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 const API_URL = process.env.VITE_API_URL ? process.env.VITE_API_URL.replace(/\/+$/, '') : '';
 
 interface User {
-    _id: string; email: string; status: string; accessType?: string; emailCheckType?: string;
+    _id: string; email: string; status: string; accessType?: string;
     ip?: string; createdAt?: string; updatedAt?: string; paidAt?: string;
     emailVerifiedAt?: string; accessEmailSentAt?: string; orderReference?: string;
 }
@@ -20,6 +20,25 @@ interface Analytics {
     regsByDay: [string, number][];
     paidByDay: [string, number][];
     conversionRate: number;
+}
+
+function SuccessPopup({ email, onClose }: { email: string; onClose: () => void }) {
+    return (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={onClose}>
+            <div className="bg-black border-2 border-green-500 p-6 w-full max-w-lg" onClick={e => e.stopPropagation()}>
+                <div className="text-4xl text-center mb-3">&#10003;</div>
+                <h2 className="text-xl font-black uppercase mb-2 text-green-400 text-center">
+                    Користувача додано успішно!
+                </h2>
+                <p className="text-sm text-gray-400 text-center mb-4">
+                    Лист з посиланням на бот надіслано на <span className="text-white font-bold">{email}</span>
+                </p>
+                <button onClick={onClose} className="w-full p-2 font-bold uppercase border-2 border-white hover:bg-white hover:text-black transition-colors">
+                    Закрити
+                </button>
+            </div>
+        </div>
+    );
 }
 
 function BarChart({ data, color = 'bg-purple-500' }: { data: [string, number][]; color?: string }) {
@@ -51,6 +70,7 @@ function AdminPanel() {
     const [loading, setLoading] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [newUserEmail, setNewUserEmail] = useState('');
+    const [successEmail, setSuccessEmail] = useState<string | null>(null);
     const [tab, setTab] = useState<'users' | 'analytics' | 'broadcast'>('users');
     const [broadcastType, setBroadcastType] = useState<'reminder' | 'access'>('reminder');
     const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
@@ -91,13 +111,31 @@ function AdminPanel() {
             else setLoginError('Невірні дані');
         } catch (err) { setLoginError("Помилка з'єднання: " + String(err)); }
     };
+    const [createError, setCreateError] = useState('');
     const createUser = async () => {
         if (!newUserEmail.trim()) return;
-        await fetch(`${API_URL}/api/admin/users`, { method: 'POST', headers: getHeaders(), body: JSON.stringify({ email: newUserEmail }) });
-        setNewUserEmail(''); fetchData();
+        setCreateError('');
+        try {
+            const res = await fetch(`${API_URL}/api/admin/users`, {
+                method: 'POST', headers: getHeaders(),
+                body: JSON.stringify({ email: newUserEmail }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                setCreateError(data.error || 'Помилка створення');
+                return;
+            }
+            if (data.ok) {
+                setSuccessEmail(newUserEmail.trim());
+            }
+            setNewUserEmail('');
+            fetchData();
+        } catch (err) {
+            setCreateError('Помилка з\'єднання: ' + String(err));
+        }
     };
     const deleteUser = async (id: string) => {
-        if (!confirm('Видалити?')) return;
+        if (!confirm('Видалити користувача?')) return;
         await fetch(`${API_URL}/api/admin/users/${id}`, { method: 'DELETE', headers: getHeaders() });
         fetchData();
     };
@@ -108,12 +146,12 @@ function AdminPanel() {
             body: JSON.stringify({
                 email: editingUser.email,
                 status: editingUser.status,
-                emailCheckType: editingUser.emailCheckType || 'single',
                 accessType: editingUser.accessType || 'paid',
                 resetEmailVerification: !editingUser.emailVerifiedAt,
             }),
         });
-        setEditingUser(null); fetchData();
+        setEditingUser(null);
+        fetchData();
     };
     const broadcast = async () => {
         if (!selectedEmails.size) return;
@@ -130,7 +168,7 @@ function AdminPanel() {
     if (!token) return (
         <div className="min-h-screen bg-black flex items-center justify-center p-4">
             <form onSubmit={handleLogin} className="w-full max-w-sm border-2 border-white p-8">
-                <h1 className="text-white text-2xl font-black uppercase mb-6">HOLYSTUDIO Admin</h1>
+                <h1 className="text-white text-2xl font-black uppercase mb-6">HOLYSTUDIO Адмін</h1>
                 <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="Email"
                     className="w-full bg-black border-2 border-white text-white p-3 mb-4 outline-none focus:border-purple-500" />
                 <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} placeholder="Пароль"
@@ -144,7 +182,7 @@ function AdminPanel() {
         <div className="min-h-screen bg-black text-white p-4 pt-6">
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-                    <h1 className="text-2xl font-black uppercase">Admin Panel</h1>
+                    <h1 className="text-2xl font-black uppercase">Адмін панель</h1>
                     <button onClick={() => { setToken(null); localStorage.removeItem('admin_token'); }}
                         className="text-sm border border-white px-4 py-2 hover:bg-white hover:text-black transition-colors">Вийти</button>
                 </div>
@@ -170,7 +208,6 @@ function AdminPanel() {
 
                 {tab === 'analytics' && analytics && (
                     <div className="space-y-6">
-                        {/* Top metrics */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <div className="border border-white/30 p-3">
                                 <div className="text-2xl font-black text-green-400">{analytics.conversionRate}%</div>
@@ -189,8 +226,6 @@ function AdminPanel() {
                                 <div className="text-xs text-gray-400 uppercase">Сер. RAM</div>
                             </div>
                         </div>
-
-                        {/* Registrations timeline */}
                         <div className="border border-white/20 p-4">
                             <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Реєстрації по днях</h3>
                             <BarChart data={analytics.regsByDay.slice(-14)} color="bg-purple-500" />
@@ -199,7 +234,6 @@ function AdminPanel() {
                             <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Оплати по днях</h3>
                             <BarChart data={analytics.paidByDay.slice(-14)} color="bg-green-500" />
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="border border-white/20 p-4">
                                 <h3 className="text-sm font-bold uppercase text-gray-300 mb-3">Регіони (timezone)</h3>
@@ -230,34 +264,37 @@ function AdminPanel() {
                 )}
 
                 {tab === 'users' && <>
-                    <div className="flex gap-2 mb-4 flex-wrap">
+                    <div className="flex gap-2 mb-4 flex-wrap items-end">
                         <input value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} placeholder="Email (безкоштовний доступ)"
                             className="bg-black border-2 border-white/50 text-white p-2 flex-1 min-w-[250px] outline-none focus:border-purple-500" />
                         <button onClick={createUser} className="bg-purple-600 px-6 py-2 font-bold uppercase border-2 border-white hover:bg-purple-700">Додати</button>
                     </div>
+                    {createError && <p className="text-red-400 text-sm mb-2">{createError}</p>}
+
                     <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Пошук..."
                         className="bg-black border-2 border-white/30 text-white p-2 w-full mb-4 outline-none focus:border-purple-500" />
                     {loading ? <div className="text-gray-400 py-8 text-center">Завантаження...</div> : (
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm border-collapse">
                                 <thead><tr className="border-b-2 border-white/30 text-left">
-                                    <th className="p-2">Email</th><th className="p-2">Статус</th><th className="p-2">Доступ</th>
-                                    <th className="p-2">Перевірка</th><th className="p-2">Верифікація</th><th className="p-2">Створено</th>
-                                    <th className="p-2">Оплачено</th><th className="p-2">IP</th><th className="p-2">Дії</th>
+                                    <th className="p-2">Email</th><th className="p-2">Статус</th>
+                                    <th className="p-2">Тип доступу</th><th className="p-2">Лист</th>
+                                    <th className="p-2">Створено</th><th className="p-2">Дії</th>
                                 </tr></thead>
                                 <tbody>{filtered.map(u => (
                                     <tr key={u._id} className="border-b border-white/10 hover:bg-white/5">
                                         <td className="p-2 font-mono text-xs">{u.email}</td>
-                                        <td className="p-2"><span className={`text-xs font-bold uppercase px-2 py-0.5 ${u.status === 'paid' ? 'bg-green-600/30 text-green-400' : u.status === 'pending' ? 'bg-yellow-600/30 text-yellow-400' : 'bg-red-600/30 text-red-400'}`}>{u.status}</span></td>
-                                        <td className="p-2 text-xs">{u.accessType === 'free' ? <span className="text-blue-400">безкошт.</span> : <span className="text-gray-400">платний</span>}</td>
-                                        <td className="p-2 text-xs">{u.emailCheckType === 'multi' ? <span className="text-purple-400">багатор.</span> : <span className="text-gray-400">одноразово</span>}</td>
-                                        <td className="p-2 text-xs">{u.emailVerifiedAt ? <span className="text-green-400">{fmt(u.emailVerifiedAt)}</span> : <span className="text-gray-500">—</span>}</td>
+                                        <td className="p-2"><span className={`text-xs font-bold uppercase px-2 py-0.5 ${u.status === 'paid' ? 'bg-green-600/30 text-green-400' : u.status === 'pending' ? 'bg-yellow-600/30 text-yellow-400' : 'bg-red-600/30 text-red-400'}`}>{u.status === 'paid' ? 'оплачено' : u.status === 'pending' ? 'очікує' : 'не оплачено'}</span></td>
+                                        <td className="p-2 text-xs">
+                                            {u.accessType === 'free' ? <span className="text-blue-400">безкоштовний</span> : <span className="text-gray-400">платний</span>}
+                                        </td>
+                                        <td className="p-2 text-xs">
+                                            {u.accessEmailSentAt ? <span className="text-green-400">надіслано {fmt(u.accessEmailSentAt)}</span> : <span className="text-gray-500">—</span>}
+                                        </td>
                                         <td className="p-2 text-xs text-gray-400">{fmt(u.createdAt)}</td>
-                                        <td className="p-2 text-xs text-gray-400">{fmt(u.paidAt)}</td>
-                                        <td className="p-2 text-xs text-gray-500 font-mono">{u.ip || '—'}</td>
                                         <td className="p-2"><div className="flex gap-1">
-                                            <button onClick={() => setEditingUser({...u})} className="text-xs border border-purple-500 text-purple-400 px-2 py-1 hover:bg-purple-600 hover:text-white">✏️</button>
-                                            <button onClick={() => deleteUser(u._id)} className="text-xs border border-red-500 text-red-400 px-2 py-1 hover:bg-red-600 hover:text-white">🗑️</button>
+                                            <button onClick={() => setEditingUser({...u})} className="text-xs border border-purple-500 text-purple-400 px-2 py-1 hover:bg-purple-600 hover:text-white">Ред.</button>
+                                            <button onClick={() => deleteUser(u._id)} className="text-xs border border-red-500 text-red-400 px-2 py-1 hover:bg-red-600 hover:text-white">Вид.</button>
                                         </div></td>
                                     </tr>
                                 ))}</tbody>
@@ -274,7 +311,7 @@ function AdminPanel() {
                         {broadcastResult && <span className="text-sm text-gray-400">{broadcastResult}</span>}
                     </div>
                     <div className="flex gap-2 mb-4">
-                        <button onClick={() => setSelectedEmails(new Set(users.filter(u => u.status === 'pending').map(u => u.email)))} className="text-xs border border-yellow-500 text-yellow-400 px-3 py-1">Pending</button>
+                        <button onClick={() => setSelectedEmails(new Set(users.filter(u => u.status === 'pending').map(u => u.email)))} className="text-xs border border-yellow-500 text-yellow-400 px-3 py-1">Очікують</button>
                         <button onClick={() => setSelectedEmails(new Set(users.map(u => u.email)))} className="text-xs border border-white/50 text-gray-400 px-3 py-1">Всі</button>
                         <button onClick={() => setSelectedEmails(new Set())} className="text-xs border border-white/50 text-gray-400 px-3 py-1">Скинути</button>
                     </div>
@@ -285,23 +322,21 @@ function AdminPanel() {
                                     setSelectedEmails(p => { const n = new Set(p); n.has(u.email) ? n.delete(u.email) : n.add(u.email); return n; });
                                 }} className="accent-purple-600" />
                                 <span className="font-mono text-sm">{u.email}</span>
-                                <span className={`text-xs ${u.status === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>{u.status}</span>
+                                <span className={`text-xs ${u.status === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>{u.status === 'paid' ? 'оплачено' : u.status === 'pending' ? 'очікує' : 'не оплачено'}</span>
                             </label>
                         ))}
                     </div>
                 </div>}
+
+                {successEmail && <SuccessPopup email={successEmail} onClose={() => setSuccessEmail(null)} />}
+
                 {editingUser && <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-black border-2 border-white p-6 w-full max-w-md">
-                        <h2 className="text-xl font-black uppercase mb-4">Редагувати</h2>
+                        <h2 className="text-xl font-black uppercase mb-4">Редагувати користувача</h2>
                         <div className="space-y-3">
                             <div><label className="text-xs text-gray-400 uppercase block mb-1">Email</label>
                                 <input value={editingUser.email} onChange={e => setEditingUser({...editingUser, email: e.target.value})}
                                     className="w-full bg-black border-2 border-white/50 text-white p-2 outline-none focus:border-purple-500" /></div>
-                            <div><label className="text-xs text-gray-400 uppercase block mb-1">Перевірка email</label>
-                                <select value={editingUser.emailCheckType || 'single'} onChange={e => setEditingUser({...editingUser, emailCheckType: e.target.value})}
-                                    className="w-full bg-black border-2 border-white/50 text-white p-2">
-                                    <option value="single">Одноразова</option><option value="multi">Багаторазова</option>
-                                </select></div>
                             <div><label className="text-xs text-gray-400 uppercase block mb-1">Тип доступу</label>
                                 <select value={editingUser.accessType || 'paid'} onChange={e => setEditingUser({...editingUser, accessType: e.target.value})}
                                     className="w-full bg-black border-2 border-white/50 text-white p-2">
@@ -310,7 +345,7 @@ function AdminPanel() {
                             <div><label className="text-xs text-gray-400 uppercase block mb-1">Статус оплати</label>
                                 <select value={editingUser.status} onChange={e => setEditingUser({...editingUser, status: e.target.value})}
                                     className="w-full bg-black border-2 border-white/50 text-white p-2">
-                                    <option value="pending">Pending</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option>
+                                    <option value="pending">Очікує</option><option value="paid">Оплачено</option><option value="unpaid">Не оплачено</option>
                                 </select></div>
                             <label className="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" checked={!editingUser.emailVerifiedAt}

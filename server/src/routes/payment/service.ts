@@ -1,15 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { config } from '../../config.js';
-import { hmacMd5, generateBotToken } from '../../lib/crypto.js';
+import { hmacMd5 } from '../../lib/crypto.js';
 import { getDb } from '../../lib/db.js';
 import { sendAccessEmail } from '../../lib/email.js';
 
 const router = Router();
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 
-/**
- * POST /api/payment/service — WayForPay webhook callback.
- */
 router.post('/', async (req: Request, res: Response) => {
     const MERCHANT_SECRET = config.WFP_MERCHANT_SECRET;
 
@@ -49,45 +45,56 @@ router.post('/', async (req: Request, res: Response) => {
             transactionStatus, receivedAt: new Date(),
         });
 
+        const isApproved = transactionStatus === 'Approved';
+        const isFailed = ['Declined', 'Expired', 'Refunded', 'Voided', 'DeclinedByBank'].includes(transactionStatus);
+
         await db.collection('orders').updateOne(
             { orderReference },
             {
                 $set: {
-                    status: transactionStatus === 'Approved' ? 'paid' : transactionStatus,
+                    status: isApproved ? 'paid' : transactionStatus,
                     transactionData: body, updatedAt: new Date(),
+                    ...(userEmail && !orderEmail ? { email: userEmail } : {}),
                 },
             }
         );
 
-        if (transactionStatus === 'Approved' && userEmail) {
-            // Generate one-time bot access token with tk_ prefix
-            const botAccessToken = generateBotToken();
-
-            await db.collection('orders').updateOne(
-                { orderReference },
-                { $set: { botAccessToken, botAccessTokenUsedAt: null } }
-            );
-            console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
-
+        if (isFailed && userEmail) {
             await db.collection('users').updateOne(
                 { email: userEmail },
-                {
-                    $set: {
-                        status: 'paid', paidAt: new Date(), updatedAt: new Date(),
-                        orderReference: orderReference || null, phone: phone || null,
-                    },
-                }
+                { $set: { status: 'unpaid', updatedAt: new Date() } },
+                { upsert: true }
             );
+            console.log(`[Service URL] Payment failed for ${userEmail}, status: ${transactionStatus}`);
+        }
+
+        if (isApproved && userEmail) {
+            const userFields = {
+                status: 'paid', paidAt: new Date(), updatedAt: new Date(),
+                orderReference: orderReference || null, phone: phone || null,
+            };
+
+            const existingUser = await db.collection('users').findOne({ email: userEmail });
+            if (existingUser) {
+                await db.collection('users').updateOne({ email: userEmail }, { $set: userFields });
+            } else {
+                await db.collection('users').insertOne({
+                    email: userEmail, ...userFields,
+                    accessType: 'paid', emailCheckType: 'single',
+                    ip: null, userAgent: null, language: null, languages: null,
+                    platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                    screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                    devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                    referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                    maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                    createdAt: new Date(),
+                    reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                });
+            }
 
             if (orderEmail && orderEmail !== userEmail) {
                 await db.collection('users').updateOne(
-                    { email: orderEmail },
-                    {
-                        $set: {
-                            status: 'paid', paidAt: new Date(), updatedAt: new Date(),
-                            orderReference: orderReference || null, phone: phone || null,
-                        },
-                    }
+                    { email: orderEmail }, { $set: userFields }, { upsert: true }
                 );
             }
 
@@ -95,8 +102,7 @@ router.post('/', async (req: Request, res: Response) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    const botLink = `https://t.me/${TELEGRAM_BOT}`;
-                    await sendAccessEmail(emailTarget, orderReference || '', botLink);
+                    await sendAccessEmail(emailTarget, orderReference || '');
                     await db.collection('users').updateOne(
                         { email: emailTarget },
                         { $set: { accessEmailSentAt: new Date() } }
@@ -121,4 +127,3 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 export default router;
-
