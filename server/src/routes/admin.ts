@@ -8,7 +8,6 @@ const router = Router();
 const ADMIN_EMAIL = 'holystudio.ai@gmail.com';
 const ADMIN_PASSWORD = 'HolyStudioWebdev666!*';
 
-// Simple auth middleware
 function adminAuth(req: Request, res: Response, next: NextFunction) {
     const auth = req.headers.authorization;
     if (!auth || !auth.startsWith('Basic ')) {
@@ -22,7 +21,6 @@ function adminAuth(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-// POST /api/admin/login
 router.post('/login', (req: Request, res: Response) => {
     const { email, password } = req.body || {};
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -32,44 +30,16 @@ router.post('/login', (req: Request, res: Response) => {
     return res.status(401).json({ error: 'Invalid credentials' });
 });
 
-// GET /api/admin/users
 router.get('/users', adminAuth, async (_req: Request, res: Response) => {
     try {
         const db = await getDb();
         const users = await db.collection('users').find({}).sort({ createdAt: -1 }).toArray();
-
-        const orders = await db.collection('orders').find(
-            { botAccessToken: { $exists: true, $ne: null } },
-            { projection: { email: 1, botAccessToken: 1, botAccessTokenUsedAt: 1, orderReference: 1, status: 1 } }
-        ).toArray();
-
-        const tokensByEmail = new Map<string, { botAccessToken: string; botAccessTokenUsedAt: Date | null; orderStatus: string }>();
-        for (const o of orders) {
-            if (o.email) {
-                tokensByEmail.set(o.email, {
-                    botAccessToken: o.botAccessToken,
-                    botAccessTokenUsedAt: o.botAccessTokenUsedAt || null,
-                    orderStatus: o.status,
-                });
-            }
-        }
-
-        const enrichedUsers = users.map(u => {
-            const tokenInfo = tokensByEmail.get(u.email) || (u.botAccessToken ? { botAccessToken: u.botAccessToken, botAccessTokenUsedAt: null, orderStatus: u.status } : null);
-            return {
-                ...u,
-                botAccessToken: tokenInfo?.botAccessToken || null,
-                botAccessTokenUsedAt: tokenInfo?.botAccessTokenUsedAt || null,
-            };
-        });
-
-        res.json({ users: enrichedUsers });
+        res.json({ users });
     } catch (err) {
         res.status(500).json({ error: String(err) });
     }
 });
 
-// POST /api/admin/users — create free user
 router.post('/users', adminAuth, async (req: Request, res: Response) => {
     try {
         const { email } = req.body || {};
@@ -83,31 +53,13 @@ router.post('/users', adminAuth, async (req: Request, res: Response) => {
         await db.collection('users').insertOne({
             email: normalizedEmail,
             status: 'paid',
-            accessType: 'free',          // free access
-            emailCheckType: 'multi',     // multi-use email check by default
-            ip: null,
-            userAgent: null,
-            language: null,
-            languages: null,
-            platform: null,
-            vendor: null,
-            cookiesEnabled: null,
-            doNotTrack: null,
-            screenWidth: null,
-            screenHeight: null,
-            viewportWidth: null,
-            viewportHeight: null,
-            devicePixelRatio: null,
-            colorDepth: null,
-            timezone: null,
-            timezoneOffset: null,
-            referrer: null,
-            currentUrl: null,
-            deviceMemory: null,
-            hardwareConcurrency: null,
-            maxTouchPoints: null,
-            connectionType: null,
-            connectionDownlink: null,
+            accessType: 'free',
+            ip: null, userAgent: null, language: null, languages: null,
+            platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+            screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+            devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+            referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+            maxTouchPoints: null, connectionType: null, connectionDownlink: null,
             createdAt: new Date(),
             updatedAt: new Date(),
             paidAt: new Date(),
@@ -117,13 +69,21 @@ router.post('/users', adminAuth, async (req: Request, res: Response) => {
             emailVerifiedAt: null,
         });
 
-        res.json({ ok: true });
+        const emailSent = await sendAccessEmail(normalizedEmail, 'ADMIN-FREE');
+
+        if (emailSent) {
+            await db.collection('users').updateOne(
+                { email: normalizedEmail },
+                { $set: { accessEmailSentAt: new Date() } }
+            );
+        }
+
+        res.json({ ok: true, emailSent });
     } catch (err) {
         res.status(500).json({ error: String(err) });
     }
 });
 
-// PUT /api/admin/users/:id
 router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -133,8 +93,7 @@ router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
         const setFields: Record<string, any> = { updatedAt: new Date() };
 
         if (updates.email !== undefined) setFields.email = updates.email.trim().toLowerCase();
-        if (updates.emailCheckType !== undefined) setFields.emailCheckType = updates.emailCheckType; // 'single' | 'multi'
-        if (updates.accessType !== undefined) setFields.accessType = updates.accessType; // 'paid' | 'free'
+        if (updates.accessType !== undefined) setFields.accessType = updates.accessType;
         if (updates.status !== undefined) {
             setFields.status = updates.status;
             if (updates.status === 'paid') {
@@ -142,7 +101,6 @@ router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
             }
         }
 
-        // Reset emailVerifiedAt if switching to single and want to allow re-check
         if (updates.resetEmailVerification) {
             setFields.emailVerifiedAt = null;
         }
@@ -158,7 +116,6 @@ router.put('/users/:id', adminAuth, async (req: Request, res: Response) => {
     }
 });
 
-// DELETE /api/admin/users/:id
 router.delete('/users/:id', adminAuth, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -170,11 +127,9 @@ router.delete('/users/:id', adminAuth, async (req: Request, res: Response) => {
     }
 });
 
-// POST /api/admin/broadcast — send email to selected users
 router.post('/broadcast', adminAuth, async (req: Request, res: Response) => {
     try {
         const { emails, type } = req.body || {};
-        // type: 'reminder' | 'access'
         if (!emails || !Array.isArray(emails) || !type) {
             return res.status(400).json({ error: 'emails array and type required' });
         }
@@ -196,7 +151,6 @@ router.post('/broadcast', adminAuth, async (req: Request, res: Response) => {
     }
 });
 
-// GET /api/admin/stats
 router.get('/stats', adminAuth, async (_req: Request, res: Response) => {
     try {
         const db = await getDb();
@@ -213,13 +167,11 @@ router.get('/stats', adminAuth, async (_req: Request, res: Response) => {
     }
 });
 
-// GET /api/admin/analytics
 router.get('/analytics', adminAuth, async (_req: Request, res: Response) => {
     try {
         const db = await getDb();
         const users = await db.collection('users').find({}).toArray();
 
-        // Timezones / regions
         const timezones: Record<string, number> = {};
         const platforms: Record<string, number> = {};
         const languages: Record<string, number> = {};
@@ -231,7 +183,6 @@ router.get('/analytics', adminAuth, async (_req: Request, res: Response) => {
         let totalMemory = 0;
         let memoryCount = 0;
 
-        // Registrations by day
         const regsByDay: Record<string, number> = {};
         const paidByDay: Record<string, number> = {};
 
@@ -244,7 +195,6 @@ router.get('/analytics', adminAuth, async (_req: Request, res: Response) => {
             }
             if (u.connectionType) connectionTypes[u.connectionType] = (connectionTypes[u.connectionType] || 0) + 1;
 
-            // Mobile vs desktop heuristic
             if (u.maxTouchPoints && u.maxTouchPoints > 0) mobileCount++;
             else desktopCount++;
 
@@ -296,4 +246,3 @@ router.get('/analytics', adminAuth, async (_req: Request, res: Response) => {
 });
 
 export default router;
-

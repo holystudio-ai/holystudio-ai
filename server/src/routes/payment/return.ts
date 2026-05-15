@@ -1,24 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { config } from '../../config.js';
 
 const router = Router();
 
-/**
- * ALL /api/payment/return — WayForPay redirects here, we redirect to SPA.
- */
-router.all('/', (req: Request, res: Response) => {
-    const SITE_URL = config.SITE_URL;
+const BOT_URL = 'https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI1OTA2';
 
-    const token = ((req.query.token as string) || '').trim();
-    const ref = ((req.query.ref as string) || '').trim();
-
-    const params = new URLSearchParams();
-    if (token) params.set('token', token);
-    if (ref) params.set('ref', ref);
-
-    const redirectUrl = `${SITE_URL}/return-page${params.toString() ? '?' + params.toString() : ''}`;
-    res.redirect(302, redirectUrl);
+router.all('/', (_req: Request, res: Response) => {
+    res.redirect(302, BOT_URL);
 });
 
 export default router;
-

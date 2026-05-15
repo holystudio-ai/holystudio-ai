@@ -1,15 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { config } from '../../config.js';
-import { hmacMd5, generateBotToken } from '../../lib/crypto.js';
+import { hmacMd5 } from '../../lib/crypto.js';
 import { getDb } from '../../lib/db.js';
 import { sendAccessEmail } from '../../lib/email.js';
 
 const router = Router();
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
 
-/**
- * POST /api/payment/service — WayForPay webhook callback.
- */
 router.post('/', async (req: Request, res: Response) => {
     const MERCHANT_SECRET = config.WFP_MERCHANT_SECRET;
 
@@ -58,17 +54,10 @@ router.post('/', async (req: Request, res: Response) => {
                 $set: {
                     status: isApproved ? 'paid' : transactionStatus,
                     transactionData: body, updatedAt: new Date(),
+                    ...(userEmail && !orderEmail ? { email: userEmail } : {}),
                 },
             }
         );
-
-        // Save email to order if WayForPay provided it
-        if (userEmail && !orderEmail) {
-            await db.collection('orders').updateOne(
-                { orderReference },
-                { $set: { email: userEmail, updatedAt: new Date() } }
-            );
-        }
 
         if (isFailed && userEmail) {
             await db.collection('users').updateOne(
@@ -80,35 +69,18 @@ router.post('/', async (req: Request, res: Response) => {
         }
 
         if (isApproved && userEmail) {
-            const botAccessToken = order?.botAccessToken || generateBotToken();
-
-            if (!order?.botAccessToken) {
-                await db.collection('orders').updateOne(
-                    { orderReference },
-                    { $set: { botAccessToken, botAccessTokenUsedAt: null } }
-                );
-            }
-            console.log(`[Service URL] botAccessToken for order ${orderReference}: ${botAccessToken}`);
-
-            // Create or update user profile with email from WayForPay
             const userFields = {
                 status: 'paid', paidAt: new Date(), updatedAt: new Date(),
                 orderReference: orderReference || null, phone: phone || null,
-                botAccessToken,
             };
 
             const existingUser = await db.collection('users').findOne({ email: userEmail });
             if (existingUser) {
-                await db.collection('users').updateOne(
-                    { email: userEmail },
-                    { $set: userFields }
-                );
+                await db.collection('users').updateOne({ email: userEmail }, { $set: userFields });
             } else {
                 await db.collection('users').insertOne({
-                    email: userEmail,
-                    ...userFields,
-                    accessType: 'paid',
-                    emailCheckType: 'single',
+                    email: userEmail, ...userFields,
+                    accessType: 'paid', emailCheckType: 'single',
                     ip: null, userAgent: null, language: null, languages: null,
                     platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
                     screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
@@ -122,9 +94,7 @@ router.post('/', async (req: Request, res: Response) => {
 
             if (orderEmail && orderEmail !== userEmail) {
                 await db.collection('users').updateOne(
-                    { email: orderEmail },
-                    { $set: userFields },
-                    { upsert: true }
+                    { email: orderEmail }, { $set: userFields }, { upsert: true }
                 );
             }
 
@@ -132,8 +102,7 @@ router.post('/', async (req: Request, res: Response) => {
             if (emailTarget) {
                 const user = await db.collection('users').findOne({ email: emailTarget });
                 if (!user?.accessEmailSentAt) {
-                    const botLink = `https://t.me/${TELEGRAM_BOT}?start=${botAccessToken}`;
-                    await sendAccessEmail(emailTarget, orderReference || '', botLink);
+                    await sendAccessEmail(emailTarget, orderReference || '');
                     await db.collection('users').updateOne(
                         { email: emailTarget },
                         { $set: { accessEmailSentAt: new Date() } }
@@ -158,4 +127,3 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 export default router;
-

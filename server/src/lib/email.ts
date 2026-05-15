@@ -60,8 +60,7 @@ function buildReminderHtml(siteUrl: string): string {
 </html>`.trim();
 }
 
-function buildAccessHtml(orderReference: string, botLink?: string): string {
-    const finalBotLink = botLink || `https://t.me/${TELEGRAM_BOT}`;
+function buildAccessHtml(orderReference: string, redirectUrl: string): string {
     return `
 <!DOCTYPE html>
 <html lang="uk">
@@ -86,7 +85,12 @@ function buildAccessHtml(orderReference: string, botLink?: string): string {
 <tr><td style="padding:28px 28px 12px 28px;">
   <table width="100%" cellpadding="0" cellspacing="0">
   <tr><td align="center">
-    <a href="${finalBotLink}" target="_blank" style="display:block;width:100%;background-color:#2AABEE;color:#ffffff;text-align:center;padding:16px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:-0.3px;border:3px solid #ffffff;">
+    <!--[if mso]>
+    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="${redirectUrl}" style="height:48px;v-text-anchor:middle;width:100%;" arcsize="0%" fillcolor="#2AABEE" strokecolor="#ffffff" strokeweight="3px">
+    <center style="color:#ffffff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;">✈️ Отримати доступ до курсу</center>
+    </v:roundrect>
+    <![endif]-->
+    <a href="${redirectUrl}" target="_blank" style="display:block;width:100%;background-color:#2AABEE;color:#ffffff;text-align:center;padding:16px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:-0.3px;border:3px solid #ffffff;-webkit-user-select:none;user-select:none;">
       ✈️ Отримати доступ до курсу
     </a>
   </td></tr>
@@ -221,15 +225,16 @@ export async function sendZoomNotificationEmail(adminEmail: string, userEmail: s
     }
 }
 
-export async function sendAccessEmail(to: string, orderReference: string, botLink?: string): Promise<boolean> {
+export async function sendAccessEmail(to: string, orderReference: string): Promise<boolean> {
     try {
         const resend = getResend();
         const from = config.RESEND_FROM;
+        const redirectUrl = 'https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI1OTA2';
 
         const { error } = await resend.emails.send({
             from, to,
             subject: 'Доступ до курсу — HOLYSTUDIO 🎉',
-            html: buildAccessHtml(orderReference, botLink),
+            html: buildAccessHtml(orderReference, redirectUrl),
         });
 
         if (error) {
