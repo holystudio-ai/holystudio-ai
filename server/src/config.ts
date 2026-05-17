@@ -20,9 +20,10 @@ export const config = {
     META_ACCESS_TOKEN: process.env.META_ACCESS_TOKEN || '',
     META_AD_ACCOUNT_ID: process.env.META_AD_ACCOUNT_ID || '',
 
-    // Google Sheets API
-    GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
-    GOOGLE_PRIVATE_KEY: (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    // Google Sheets API (OAuth2)
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+    GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN || '',
     GOOGLE_SHEET_ID: process.env.GOOGLE_SHEET_ID || '',
 };
 

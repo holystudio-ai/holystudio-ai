@@ -18,7 +18,7 @@ router.get('/', async (req: Request, res: Response) => {
             res.status(400).json({ error: 'Meta Ads credentials not configured' });
             return;
         }
-        if (!config.GOOGLE_SERVICE_ACCOUNT_EMAIL || !config.GOOGLE_PRIVATE_KEY || !config.GOOGLE_SHEET_ID) {
+        if (!config.GOOGLE_CLIENT_ID || !config.GOOGLE_CLIENT_SECRET || !config.GOOGLE_REFRESH_TOKEN || !config.GOOGLE_SHEET_ID) {
             res.status(400).json({ error: 'Google Sheets credentials not configured' });
             return;
         }
