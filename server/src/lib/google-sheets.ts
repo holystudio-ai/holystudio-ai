@@ -1,39 +1,27 @@
-import crypto from 'crypto';
 import { config } from '../config.js';
 
-function base64url(input: string | Buffer): string {
-    const buf = typeof input === 'string' ? Buffer.from(input) : input;
-    return buf.toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
+let cachedToken: { accessToken: string; expiresAt: number } | null = null;
 
 async function getAccessToken(): Promise<string> {
-    const { GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY } = config;
+    const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN } = config;
 
-    if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY) {
-        throw new Error('GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY are required');
+    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REFRESH_TOKEN) {
+        throw new Error('GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN are required');
     }
 
-    const now = Math.floor(Date.now() / 1000);
-    const header = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-    const claimSet = base64url(JSON.stringify({
-        iss: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        scope: 'https://www.googleapis.com/auth/spreadsheets',
-        aud: 'https://oauth2.googleapis.com/token',
-        iat: now,
-        exp: now + 3600,
-    }));
-
-    const signInput = `${header}.${claimSet}`;
-    const sign = crypto.createSign('RSA-SHA256');
-    sign.update(signInput);
-    const signature = base64url(sign.sign(GOOGLE_PRIVATE_KEY));
-
-    const jwt = `${signInput}.${signature}`;
+    if (cachedToken && Date.now() < cachedToken.expiresAt) {
+        return cachedToken.accessToken;
+    }
 
     const resp = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+        body: new URLSearchParams({
+            client_id: GOOGLE_CLIENT_ID,
+            client_secret: GOOGLE_CLIENT_SECRET,
+            refresh_token: GOOGLE_REFRESH_TOKEN,
+            grant_type: 'refresh_token',
+        }),
     });
 
     if (!resp.ok) {
@@ -42,7 +30,40 @@ async function getAccessToken(): Promise<string> {
     }
 
     const data: any = await resp.json();
+    cachedToken = {
+        accessToken: data.access_token,
+        expiresAt: Date.now() + (data.expires_in - 60) * 1000,
+    };
+
     return data.access_token;
+}
+
+export async function appendToSheet(values: (string | number)[][]): Promise<void> {
+    const { GOOGLE_SHEET_ID } = config;
+
+    if (!GOOGLE_SHEET_ID) {
+        throw new Error('GOOGLE_SHEET_ID is required');
+    }
+
+    const accessToken = await getAccessToken();
+    const range = 'Аркуш1!A1';
+
+    const resp = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${range}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+        {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ range, majorDimension: 'ROWS', values }),
+        }
+    );
+
+    if (!resp.ok) {
+        const err = await resp.text();
+        throw new Error(`Google Sheets API error (${resp.status}): ${err}`);
+    }
 }
 
 export async function writeToSheet(values: (string | number)[][]): Promise<void> {
@@ -53,7 +74,7 @@ export async function writeToSheet(values: (string | number)[][]): Promise<void>
     }
 
     const accessToken = await getAccessToken();
-    const range = 'Sheet1!A1';
+    const range = 'Аркуш1!A1';
 
     const resp = await fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${range}?valueInputOption=RAW`,
