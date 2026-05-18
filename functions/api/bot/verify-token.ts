@@ -1,9 +1,6 @@
 import { Env, jsonResponse } from '../_lib/types';
 import { getDb } from '../_lib/db';
 
-const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
-const DEV_TEST_EMAIL = 'dev@holystudio.ai';
-const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
 
 /**
  * GET /api/bot/verify-token?token=abc123
@@ -43,8 +40,12 @@ async function verify(trimmedToken: string, env: Env): Promise<Response> {
         return jsonResponse({ valid: false, reason: 'missing_token' }, 400);
     }
 
+    const DEV_TEST_TOKEN = env.DEV_TEST_TOKEN || '';
+    const DEV_TEST_EMAIL = env.DEV_TEST_EMAIL || '';
+    const DEV_TEST_ORDER = env.DEV_TEST_ORDER || '';
+
     // ── Dev test token (reusable) ──
-    if (trimmedToken === DEV_TEST_TOKEN) {
+    if (DEV_TEST_TOKEN && trimmedToken === DEV_TEST_TOKEN) {
         console.log('[bot/verify-token] DEV TEST TOKEN used (reusable)');
         return jsonResponse({
             valid: true,

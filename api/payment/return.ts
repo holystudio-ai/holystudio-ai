@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const SITE_URL = (process.env.SITE_URL || 'https://holystudio.ai').replace(/\/+$/, '');
+const SITE_URL = (process.env.SITE_URL || '').replace(/\/+$/, '');
 
 /**
  * WayForPay POSTs here after payment.

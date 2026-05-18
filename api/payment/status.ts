@@ -118,20 +118,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 async function markUserPaid(db: any, email: string, orderReference: string) {
     if (!email) return;
 
-    await db.collection('users').updateOne(
-        { email },
-        {
-            $set: {
-                status: 'paid',
-                paidAt: new Date(),
-                updatedAt: new Date(),
-                orderReference,
-            },
-        }
-    );
+    const userFields = {
+        status: 'paid',
+        paidAt: new Date(),
+        updatedAt: new Date(),
+        orderReference,
+    };
+
+    const existingUser = await db.collection('users').findOne({ email });
+    if (existingUser) {
+        await db.collection('users').updateOne({ email }, { $set: userFields });
+    } else {
+        await db.collection('users').insertOne({
+            email, ...userFields,
+            accessType: 'paid', emailCheckType: 'single',
+            ip: null, userAgent: null, language: null, languages: null,
+            platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+            screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+            devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+            referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+            maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+            createdAt: new Date(),
+            reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+        });
+    }
 
     // Send access email only once
-    const user = await db.collection('users').findOne({ email });
+    const user = existingUser || await db.collection('users').findOne({ email });
     if (user && !user.accessEmailSentAt) {
         await sendAccessEmail(email, orderReference);
         await db.collection('users').updateOne(

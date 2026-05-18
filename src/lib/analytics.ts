@@ -26,8 +26,8 @@ function getCookie(name: string): string | null {
 
 /* ─── SmartSender helpers ─── */
 
-const SS_IDENTIFIER = 'SPH-MV0PGWP';
-const SS_BASE_URL = 'https://customer.smartsender.eu/pixel';
+const SS_IDENTIFIER = process.env.SMARTSENDER_IDENTIFIER || '';
+const SS_BASE_URL = process.env.SMARTSENDER_PIXEL_URL || '';
 
 /**
  * Identify the current visitor in SmartSender by email.
@@ -85,7 +85,7 @@ export function trackPageView() {
 export function trackLead(email: string, {
     value,
     currency = 'UAH',
-    contentName = 'AI Інтенсив HOLYSTUDIO',
+    contentName = process.env.PRODUCT_NAME || 'AI Інтенсив HOLYSTUDIO',
     contentId = 'holy-ai-intensive',
 }: EventPayload) {
     // Facebook Pixel — Lead
@@ -116,7 +116,7 @@ export function trackLead(email: string, {
 export function trackInitiateCheckout({
                                           value,
                                           currency = 'UAH',
-                                          contentName = 'AI Інтенсив HOLYSTUDIO',
+                                          contentName = process.env.PRODUCT_NAME || 'AI Інтенсив HOLYSTUDIO',
                                           contentId = 'holy-ai-intensive',
                                       }: EventPayload) {
     window.fbq?.('track', 'InitiateCheckout', {
@@ -148,7 +148,7 @@ export function trackInitiateCheckout({
 export function trackPurchase({
                                   value,
                                   currency = 'UAH',
-                                  contentName = 'AI Інтенсив HOLYSTUDIO',
+                                  contentName = process.env.PRODUCT_NAME || 'AI Інтенсив HOLYSTUDIO',
                                   contentId = 'holy-ai-intensive',
                               }: EventPayload): boolean {
     const key = 'hs_purchase_tracked';

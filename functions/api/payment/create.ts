@@ -2,9 +2,9 @@ import { Env, jsonResponse } from '../_lib/types';
 import { hmacMd5, randomBytes } from '../_lib/crypto';
 import { getDb } from '../_lib/db';
 
-const MERCHANT_DOMAIN = 'holystudio.ai';
-const PRODUCT_NAME = 'AI Інтенсив HOLYSTUDIO';
-const CURRENCY = 'UAH';
+const MERCHANT_DOMAIN = process.env.MERCHANT_DOMAIN || '';
+const PRODUCT_NAME = process.env.PRODUCT_NAME || '';
+const CURRENCY = process.env.CURRENCY || 'UAH';
 
 function generateOrderReference(): string {
     const ts = Date.now();
@@ -25,7 +25,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
         const MERCHANT_LOGIN = env.WFP_MERCHANT_LOGIN;
         const MERCHANT_SECRET = env.WFP_MERCHANT_SECRET;
-        const SITE_URL = (env.SITE_URL || 'https://holystudio.ai').replace(/\/+$/, '');
+        const SITE_URL = (env.SITE_URL || '').replace(/\/+$/, '');
         const PRODUCT_PRICE = Number(env.COURSE_PRICE_UAH) || 490;
 
         const normalizedEmail = email.trim().toLowerCase();
@@ -35,8 +35,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         // Generate a secure token to identify the user on return
         const token = randomBytes(32);
 
-        // Build returnUrl → API endpoint that accepts WayForPay POST and redirects to SPA
-        const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
+        const returnUrl = env.WFP_RETURN_URL || '';
 
         // Build signature string
         const signatureData = [

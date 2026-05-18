@@ -1,12 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { config } from '../config.js';
 import { getDb } from '../lib/db.js';
 import { ObjectId } from 'mongodb';
 import { sendAccessEmail, sendReminderEmail } from '../lib/email.js';
 
 const router = Router();
 
-const ADMIN_EMAIL = 'holystudio.ai@gmail.com';
-const ADMIN_PASSWORD = 'HolyStudioWebdev666!*';
+const ADMIN_EMAIL = config.ADMIN_EMAIL;
+const ADMIN_PASSWORD = config.ADMIN_PASSWORD;
 
 function adminAuth(req: Request, res: Response, next: NextFunction) {
     const auth = req.headers.authorization;

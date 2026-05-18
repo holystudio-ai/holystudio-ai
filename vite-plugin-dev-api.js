@@ -21,9 +21,9 @@ function trimUrl(url) {
     return url.replace(/\/+$/, '');
 }
 
-const MERCHANT_DOMAIN = 'holystudio.ai';
-const PRODUCT_NAME = 'AI Інтенсив HOLYSTUDIO';
-const CURRENCY = 'UAH';
+const MERCHANT_DOMAIN = getEnv('MERCHANT_DOMAIN', 'holystudio.ai');
+const PRODUCT_NAME = getEnv('PRODUCT_NAME', 'AI Інтенсив HOLYSTUDIO');
+const CURRENCY = getEnv('CURRENCY', 'UAH');
 
 let _dbClient = null;
 async function getDb() {
@@ -176,7 +176,7 @@ export default function devApiPlugin() {
                 const orderDate = Math.floor(Date.now() / 1000);
 
                 const token = crypto.randomBytes(32).toString('hex');
-                const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
+                const returnUrl = getEnv('WFP_RETURN_URL', '');
 
                 const signatureData = [
                     MERCHANT_LOGIN, MERCHANT_DOMAIN, orderReference, orderDate,
@@ -239,12 +239,13 @@ export default function devApiPlugin() {
                 }
 
                 // Dev test token — reusable, never expires, no DB lookup
-                if (botToken === 'dev-test-holy') {
+                const devToken = getEnv('DEV_TEST_TOKEN', 'dev-test-holy');
+                if (botToken === devToken) {
                     console.log('[dev-api] DEV TEST TOKEN used (reusable)');
                     return sendJson(res, 200, {
                         valid: true,
-                        email: 'dev@holystudio.ai',
-                        orderReference: 'HOLY-DEV-TEST-000',
+                        email: getEnv('DEV_TEST_EMAIL', 'dev@holystudio.ai'),
+                        orderReference: getEnv('DEV_TEST_ORDER', 'HOLY-DEV-TEST-000'),
                         _dev: true,
                     });
                 }
@@ -313,7 +314,7 @@ export default function devApiPlugin() {
 
                 // Secure token to identify user on return
                 const token = crypto.randomBytes(32).toString('hex');
-                const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
+                const returnUrl = getEnv('WFP_RETURN_URL', '');
 
                 const signatureData = [
                     MERCHANT_LOGIN, MERCHANT_DOMAIN, orderReference, orderDate,
@@ -406,18 +407,25 @@ export default function devApiPlugin() {
                     if (order.status === 'paid') {
                         // Already paid — ensure user is marked + email sent
                         if (email) {
-                            await db.collection('users').updateOne(
-                                { email },
-                                {
-                                    $set: {
-                                        status: 'paid',
-                                        paidAt: new Date(),
-                                        updatedAt: new Date(),
-                                        orderReference,
-                                    },
-                                }
-                            );
-                            const user = await db.collection('users').findOne({ email });
+                            const paidFields = { status: 'paid', paidAt: new Date(), updatedAt: new Date(), orderReference };
+                            const existing = await db.collection('users').findOne({ email });
+                            if (existing) {
+                                await db.collection('users').updateOne({ email }, { $set: paidFields });
+                            } else {
+                                await db.collection('users').insertOne({
+                                    email, ...paidFields,
+                                    accessType: 'paid', emailCheckType: 'single',
+                                    ip: null, userAgent: null, language: null, languages: null,
+                                    platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                                    screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                                    devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                                    referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                                    maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                                    createdAt: new Date(),
+                                    reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                                });
+                            }
+                            const user = existing || await db.collection('users').findOne({ email });
                             if (user && !user.accessEmailSentAt) {
                                 console.log('[dev-api] Would send access email to:', email);
                                 await db.collection('users').updateOne(
@@ -461,18 +469,25 @@ export default function devApiPlugin() {
                             { $set: { status: 'paid', updatedAt: new Date() } }
                         );
                         if (email) {
-                            await db.collection('users').updateOne(
-                                { email },
-                                {
-                                    $set: {
-                                        status: 'paid',
-                                        paidAt: new Date(),
-                                        updatedAt: new Date(),
-                                        orderReference,
-                                    },
-                                }
-                            );
-                            const user = await db.collection('users').findOne({ email });
+                            const paidFields = { status: 'paid', paidAt: new Date(), updatedAt: new Date(), orderReference };
+                            const existing = await db.collection('users').findOne({ email });
+                            if (existing) {
+                                await db.collection('users').updateOne({ email }, { $set: paidFields });
+                            } else {
+                                await db.collection('users').insertOne({
+                                    email, ...paidFields,
+                                    accessType: 'paid', emailCheckType: 'single',
+                                    ip: null, userAgent: null, language: null, languages: null,
+                                    platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                                    screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                                    devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                                    referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                                    maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                                    createdAt: new Date(),
+                                    reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                                });
+                            }
+                            const user = existing || await db.collection('users').findOne({ email });
                             if (user && !user.accessEmailSentAt) {
                                 console.log('[dev-api] Would send access email to:', email);
                                 await db.collection('users').updateOne(
@@ -494,8 +509,8 @@ export default function devApiPlugin() {
             });
 
             // ── Admin routes ──
-            const ADMIN_EMAIL = 'holystudio.ai@gmail.com';
-            const ADMIN_PASSWORD = 'HolyStudioWebdev666!*';
+            const ADMIN_EMAIL = getEnv('ADMIN_EMAIL', '');
+            const ADMIN_PASSWORD = getEnv('ADMIN_PASSWORD', '');
 
             function checkAdminAuth(req) {
                 const auth = req.headers.authorization;
@@ -674,34 +689,38 @@ export default function devApiPlugin() {
                         );
                         console.log('[dev-api] Generated botAccessToken for order:', orderReference);
 
-                        // Mark user as paid
-                        await db.collection('users').updateOne(
-                            { email: userEmail },
-                            {
-                                $set: {
-                                    status: 'paid',
-                                    paidAt: new Date(),
-                                    updatedAt: new Date(),
-                                    orderReference: orderReference || null,
-                                    phone: phone || null,
-                                },
-                            }
-                        );
-                        console.log('[dev-api] Marked user as paid:', userEmail);
+                        // Create or update user as paid
+                        const userFields = {
+                            status: 'paid',
+                            paidAt: new Date(),
+                            updatedAt: new Date(),
+                            orderReference: orderReference || null,
+                            phone: phone || null,
+                        };
+
+                        const existingUser = await db.collection('users').findOne({ email: userEmail });
+                        if (existingUser) {
+                            await db.collection('users').updateOne({ email: userEmail }, { $set: userFields });
+                        } else {
+                            await db.collection('users').insertOne({
+                                email: userEmail, ...userFields,
+                                accessType: 'paid', emailCheckType: 'single',
+                                ip: null, userAgent: null, language: null, languages: null,
+                                platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                                screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                                devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                                referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                                maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                                createdAt: new Date(),
+                                reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                            });
+                        }
+                        console.log('[dev-api] Marked user as paid:', userEmail, 'existed:', !!existingUser);
 
                         // If order email differs, mark both
                         if (orderEmail && orderEmail !== userEmail) {
                             await db.collection('users').updateOne(
-                                { email: orderEmail },
-                                {
-                                    $set: {
-                                        status: 'paid',
-                                        paidAt: new Date(),
-                                        updatedAt: new Date(),
-                                        orderReference: orderReference || null,
-                                        phone: phone || null,
-                                    },
-                                }
+                                { email: orderEmail }, { $set: userFields }, { upsert: true }
                             );
                             console.log('[dev-api] Also marked order email as paid:', orderEmail);
                         }
