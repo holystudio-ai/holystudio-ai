@@ -107,12 +107,14 @@ const HomePage = () => {
                         : 'translate-y-6 opacity-0 pointer-events-none'
                 }`}
             >
-                <button
-                    onClick={redirectToPayment}
+                <a
+                    href="https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання
-                </button>
+                </a>
             </div>
         </div>
     );
