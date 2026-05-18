@@ -2,8 +2,9 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const SITE_URL = (process.env.SITE_URL || 'https://holystudio.ai').replace(/\/+$/, '');
-const FROM = process.env.RESEND_FROM || 'HOLYSTUDIO <noreply@holystudio.ai>';
+const SITE_URL = (process.env.SITE_URL || '').replace(/\/+$/, '');
+const FROM = process.env.RESEND_FROM || '';
+const INSTAGRAM_URL = process.env.INSTAGRAM_URL || '';
 
 function buildReminderHtml(siteUrl: string): string {
     return `
@@ -54,7 +55,7 @@ function buildReminderHtml(siteUrl: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${INSTAGRAM_URL}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>
@@ -88,7 +89,7 @@ export async function sendReminderEmail(to: string): Promise<boolean> {
     }
 }
 
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
+const TELEGRAM_BOT = process.env.TELEGRAM_BOT_USERNAME!;
 
 function buildAccessHtml(orderReference: string, botLink?: string): string {
     const finalBotLink = botLink || `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(orderReference)}`;
@@ -147,7 +148,7 @@ function buildAccessHtml(orderReference: string, botLink?: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${INSTAGRAM_URL}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>

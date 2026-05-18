@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
+import { config } from '../../config.js';
 import { sendZoomNotificationEmail } from '../../lib/email.js';
 
-const ADMIN_EMAIL = 'holystudio.ai@gmail.com';
+const ADMIN_EMAIL = config.ADMIN_EMAIL;
 
 const router = Router();
 

@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { getDb } from '../_lib/db';
 import { sendAccessEmail } from '../_lib/email';
 
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
+const TELEGRAM_BOT = process.env.TELEGRAM_BOT_USERNAME!;
 
 const MERCHANT_SECRET = process.env.WFP_MERCHANT_SECRET!;
 
@@ -104,36 +104,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             );
             console.log(`[Service URL] Generated botAccessToken for order ${orderReference}`);
 
-            // Mark user as paid
-            const result = await db.collection('users').updateOne(
-                { email: userEmail },
-                {
-                    $set: {
-                        status: 'paid',
-                        paidAt: new Date(),
-                        updatedAt: new Date(),
-                        orderReference: orderReference || null,
-                        phone: phone || null,
-                    },
-                }
-            );
-            console.log(`[Service URL] Marked "${userEmail}" as paid. Matched: ${result.matchedCount}`);
+            const userFields = {
+                status: 'paid',
+                paidAt: new Date(),
+                updatedAt: new Date(),
+                orderReference: orderReference || null,
+                phone: phone || null,
+            };
+
+            // Create user if not exists, otherwise update
+            const existingUser = await db.collection('users').findOne({ email: userEmail });
+            if (existingUser) {
+                await db.collection('users').updateOne({ email: userEmail }, { $set: userFields });
+            } else {
+                await db.collection('users').insertOne({
+                    email: userEmail, ...userFields,
+                    accessType: 'paid', emailCheckType: 'single',
+                    ip: null, userAgent: null, language: null, languages: null,
+                    platform: null, vendor: null, cookiesEnabled: null, doNotTrack: null,
+                    screenWidth: null, screenHeight: null, viewportWidth: null, viewportHeight: null,
+                    devicePixelRatio: null, colorDepth: null, timezone: null, timezoneOffset: null,
+                    referrer: null, currentUrl: null, deviceMemory: null, hardwareConcurrency: null,
+                    maxTouchPoints: null, connectionType: null, connectionDownlink: null,
+                    createdAt: new Date(),
+                    reminderSentAt: null, accessEmailSentAt: null, emailVerifiedAt: null,
+                });
+            }
+            console.log(`[Service URL] Marked "${userEmail}" as paid. Existed: ${!!existingUser}`);
 
             // If the order email differs from WayForPay email, mark both as paid
             if (orderEmail && orderEmail !== userEmail) {
-                const result2 = await db.collection('users').updateOne(
-                    { email: orderEmail },
-                    {
-                        $set: {
-                            status: 'paid',
-                            paidAt: new Date(),
-                            updatedAt: new Date(),
-                            orderReference: orderReference || null,
-                            phone: phone || null,
-                        },
-                    }
+                await db.collection('users').updateOne(
+                    { email: orderEmail }, { $set: userFields }, { upsert: true }
                 );
-                console.log(`[Service URL] Also marked order email "${orderEmail}" as paid. Matched: ${result2.matchedCount}`);
+                console.log(`[Service URL] Also marked order email "${orderEmail}" as paid.`);
             }
 
             // Send access email with one-time bot token (only if not already sent)

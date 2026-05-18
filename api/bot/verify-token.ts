@@ -6,9 +6,9 @@ import { getDb } from '../_lib/db';
  * Use it in the browser or SmartSender to test the flow without real payment:
  *   GET /api/bot/verify-token?token=tk_devtestholystudio2026
  */
-const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
-const DEV_TEST_EMAIL = 'dev@holystudio.ai';
-const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
+const DEV_TEST_TOKEN = process.env.DEV_TEST_TOKEN!;
+const DEV_TEST_EMAIL = process.env.DEV_TEST_EMAIL!;
+const DEV_TEST_ORDER = process.env.DEV_TEST_ORDER || 'HOLY-DEV-TEST-000';
 
 /**
  * GET /api/bot/verify-token?token=abc123

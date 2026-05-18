@@ -1,11 +1,12 @@
 import { Router, Request, Response } from 'express';
+import { config } from '../../config.js';
 import { getDb } from '../../lib/db.js';
 
 const router = Router();
 
-const DEV_TEST_TOKEN = 'tk_devtestholystudio2026';
-const DEV_TEST_EMAIL = 'dev@holystudio.ai';
-const DEV_TEST_ORDER = 'HOLY-DEV-TEST-000';
+const DEV_TEST_TOKEN = config.DEV_TEST_TOKEN;
+const DEV_TEST_EMAIL = config.DEV_TEST_EMAIL;
+const DEV_TEST_ORDER = config.DEV_TEST_ORDER;
 
 router.get('/', async (req: Request, res: Response) => {
     try {

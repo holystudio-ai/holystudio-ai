@@ -10,7 +10,7 @@ function getResend(): Resend {
     return resendInstance;
 }
 
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
+const TELEGRAM_BOT = config.TELEGRAM_BOT_USERNAME;
 
 function buildReminderHtml(siteUrl: string): string {
     return `
@@ -49,7 +49,7 @@ function buildReminderHtml(siteUrl: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${config.INSTAGRAM_URL}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>
@@ -107,7 +107,7 @@ function buildAccessHtml(orderReference: string, redirectUrl: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${config.INSTAGRAM_URL}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>
@@ -229,7 +229,7 @@ export async function sendAccessEmail(to: string, orderReference: string): Promi
     try {
         const resend = getResend();
         const from = config.RESEND_FROM;
-        const redirectUrl = 'https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI1OTA2';
+        const redirectUrl = config.BOT_URL;
 
         const { error } = await resend.emails.send({
             from, to,

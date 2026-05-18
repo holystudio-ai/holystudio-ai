@@ -4,12 +4,12 @@ import { getDb } from '../_lib/db';
 
 const MERCHANT_LOGIN = process.env.WFP_MERCHANT_LOGIN!;
 const MERCHANT_SECRET = process.env.WFP_MERCHANT_SECRET!;
-const SITE_URL = (process.env.SITE_URL || 'https://holystudio.ai').replace(/\/+$/, '');
-const MERCHANT_DOMAIN = 'holystudio.ai';
+const SITE_URL = (process.env.SITE_URL || '').replace(/\/+$/, '');
+const MERCHANT_DOMAIN = process.env.MERCHANT_DOMAIN!;
 
-const PRODUCT_NAME = 'AI Інтенсив HOLYSTUDIO';
+const PRODUCT_NAME = process.env.PRODUCT_NAME!;
 const PRODUCT_PRICE = Number(process.env.COURSE_PRICE_UAH) || 490;
-const CURRENCY = 'UAH';
+const CURRENCY = process.env.CURRENCY || 'UAH';
 
 function hmacMd5(data: string, secret: string): string {
     return crypto.createHmac('md5', secret).update(data, 'utf8').digest('hex');
@@ -57,8 +57,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Generate a secure token to identify the user on return
         const token = crypto.randomBytes(32).toString('hex');
 
-        // Build returnUrl → API endpoint that accepts WayForPay POST and redirects to SPA
-        const returnUrl = `${SITE_URL}/api/payment/return?token=${token}&ref=${encodeURIComponent(orderReference)}`;
+        const returnUrl = process.env.WFP_RETURN_URL!;
 
         // Build signature string
         const signatureData = [

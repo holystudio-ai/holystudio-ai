@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
 
     // Make .env values available to Node.js plugins (e.g. vite-plugin-dev-api)
     // Always overwrite process.env with .env values for consistency
-    for (const key of ['COURSE_PRICE_UAH', 'WFP_MERCHANT_LOGIN', 'WFP_MERCHANT_SECRET', 'SITE_URL', 'MONGODB_URI', 'RESEND_API_KEY', 'RESEND_FROM', 'CRON_SECRET', 'WFP_MERCHANT_PASSWORD']) {
+    for (const key of ['COURSE_PRICE_UAH', 'WFP_MERCHANT_LOGIN', 'WFP_MERCHANT_SECRET', 'SITE_URL', 'MONGODB_URI', 'RESEND_API_KEY', 'RESEND_FROM', 'CRON_SECRET', 'WFP_MERCHANT_PASSWORD', 'MERCHANT_DOMAIN', 'PRODUCT_NAME', 'CURRENCY', 'ADMIN_EMAIL', 'ADMIN_PASSWORD', 'DEV_TEST_TOKEN', 'DEV_TEST_EMAIL', 'DEV_TEST_ORDER', 'TELEGRAM_BOT_USERNAME', 'BOT_URL', 'INSTAGRAM_URL', 'WFP_RETURN_URL', 'WFP_FAILED_URL']) {
         if (env[key]) {
             process.env[key] = env[key];
         }
@@ -44,9 +44,10 @@ export default defineConfig(({ mode }) => {
             'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
             'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
             'process.env.COURSE_PRICE_UAH': JSON.stringify(env.COURSE_PRICE_UAH || '490'),
-            // In dev mode, always use empty string (relative URLs → local Vite dev API plugin).
-            // In production build, use VITE_API_URL from env, fallback to api.holystudio.ai.
-            'process.env.VITE_API_URL': JSON.stringify(mode === 'development' ? '' : (env.VITE_API_URL || 'https://api.holystudio.ai')),
+            'process.env.VITE_API_URL': JSON.stringify(mode === 'development' ? '' : (env.VITE_API_URL || '')),
+            'process.env.PRODUCT_NAME': JSON.stringify(env.PRODUCT_NAME || ''),
+            'process.env.SMARTSENDER_IDENTIFIER': JSON.stringify(env.SMARTSENDER_IDENTIFIER || ''),
+            'process.env.SMARTSENDER_PIXEL_URL': JSON.stringify(env.SMARTSENDER_PIXEL_URL || ''),
         },
         resolve: {
             alias: {

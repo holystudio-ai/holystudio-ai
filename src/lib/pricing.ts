@@ -4,6 +4,7 @@
  * Change the price in .env (and Vercel env vars) — it updates everywhere.
  */
 export const coursePriceUah = Number(process.env.COURSE_PRICE_UAH) || 490;
+export const productName = process.env.PRODUCT_NAME || 'AI Інтенсив HOLYSTUDIO';
 
 export function formatPriceUah(value: number) {
     return new Intl.NumberFormat('uk-UA', {

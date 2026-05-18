@@ -9,7 +9,7 @@ function getResend(apiKey: string): Resend {
     return resendInstance;
 }
 
-const TELEGRAM_BOT = 'HOLYSTUDIO_AI_bot';
+const TELEGRAM_BOT = process.env.TELEGRAM_BOT_USERNAME || 'HOLYSTUDIO_AI_bot';
 
 function buildReminderHtml(siteUrl: string): string {
     return `
@@ -60,7 +60,7 @@ function buildReminderHtml(siteUrl: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${process.env.INSTAGRAM_URL || ''}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>
@@ -129,7 +129,7 @@ function buildAccessHtml(orderReference: string, botLink?: string): string {
 <tr><td style="padding:20px 28px 28px 28px;">
   <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#666666;text-align:center;line-height:1.5;">
     Якщо виникли питання — напиши нам
-    <a href="https://www.instagram.com/holystudio.ai/" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
+    <a href="${process.env.INSTAGRAM_URL || ''}" style="color:#a855f7;text-decoration:underline;">@holystudio.ai</a>
     в Instagram
   </p>
 </td></tr>
@@ -147,8 +147,8 @@ export async function sendReminderEmail(
 ): Promise<boolean> {
     try {
         const resend = getResend(env.RESEND_API_KEY);
-        const from = env.RESEND_FROM || 'HOLYSTUDIO <noreply@holystudio.ai>';
-        const siteUrl = env.SITE_URL || 'https://holystudio.ai';
+        const from = env.RESEND_FROM;
+        const siteUrl = env.SITE_URL;
 
         const { error } = await resend.emails.send({
             from,
@@ -178,7 +178,7 @@ export async function sendAccessEmail(
 ): Promise<boolean> {
     try {
         const resend = getResend(env.RESEND_API_KEY);
-        const from = env.RESEND_FROM || 'HOLYSTUDIO <noreply@holystudio.ai>';
+        const from = env.RESEND_FROM;
 
         const { error } = await resend.emails.send({
             from,

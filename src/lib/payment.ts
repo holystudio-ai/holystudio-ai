@@ -95,7 +95,7 @@ export function redirectToPayment() {
     const analyticsPayload = {
         value: coursePriceUah,
         currency: 'UAH',
-        contentName: 'AI Інтенсив HOLYSTUDIO',
+        contentName: process.env.PRODUCT_NAME || 'AI Інтенсив HOLYSTUDIO',
         contentId: 'holy-ai-intensive',
     };
 

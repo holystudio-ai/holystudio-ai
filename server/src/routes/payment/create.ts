@@ -3,9 +3,9 @@ import { config } from '../../config.js';
 import { hmacMd5, randomBytes } from '../../lib/crypto.js';
 import { getDb } from '../../lib/db.js';
 
-const MERCHANT_DOMAIN = 'holystudio.ai';
-const PRODUCT_NAME = 'AI Інтенсив HOLYSTUDIO';
-const CURRENCY = 'UAH';
+const MERCHANT_DOMAIN = config.MERCHANT_DOMAIN;
+const PRODUCT_NAME = config.PRODUCT_NAME;
+const CURRENCY = config.CURRENCY;
 
 function generateOrderReference(): string {
     const ts = Date.now();
@@ -51,7 +51,7 @@ router.post('/', async (req: Request, res: Response) => {
         const newOrderReference = generateOrderReference();
         const orderDate = Math.floor(Date.now() / 1000);
 
-        const returnUrl = 'https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI1OTA2';
+        const returnUrl = config.WFP_RETURN_URL;
 
         const signatureData = [
             MERCHANT_LOGIN, MERCHANT_DOMAIN, newOrderReference, orderDate,
