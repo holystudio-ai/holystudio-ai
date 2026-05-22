@@ -122,7 +122,7 @@ const Pricing: React.FC<PricingProps> = ({
                     href="https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative block w-full bg-red-600 hover:bg-red-500 text-white text-sm md:text-base font-black py-4 max-[480px]:py-3.5 uppercase rounded-xl shadow-[0_0_16px_rgba(239,68,68,0.68),0_0_40px_rgba(239,68,68,0.34),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-200 hover:shadow-[0_0_20px_rgba(239,68,68,0.8),0_0_54px_rgba(239,68,68,0.42),inset_0_1px_0_rgba(255,255,255,0.22)] font-brutal"
+                    className="button relative block w-full bg-red-600 hover:bg-red-500 text-white text-sm md:text-base font-black py-4 max-[480px]:py-3.5 uppercase rounded-xl shadow-[0_0_16px_rgba(239,68,68,0.68),0_0_40px_rgba(239,68,68,0.34),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-200 hover:shadow-[0_0_20px_rgba(239,68,68,0.8),0_0_54px_rgba(239,68,68,0.42),inset_0_1px_0_rgba(255,255,255,0.22)] font-brutal"
                 >
                     ОТРИМАТИ ДОСТУП
                 </a>

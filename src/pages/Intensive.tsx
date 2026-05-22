@@ -109,7 +109,7 @@ const Intensive = () => {
             >
                 <button
                     onClick={redirectToPayment}
-                    className="bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
+                    className="button bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання
                 </button>

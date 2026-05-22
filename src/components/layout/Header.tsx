@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => setIsOpen(false)}
-                            className="bg-purple-600 text-white px-8 py-4 font-black text-lg uppercase brutalist-border border-white brutalist-shadow transition-all font-brutal inline-block"
+                            className="button bg-purple-600 text-white px-8 py-4 font-black text-lg uppercase brutalist-border border-white brutalist-shadow transition-all font-brutal inline-block"
                         >
                             Залетіти в навчання
                         </a>
