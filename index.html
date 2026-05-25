@@ -402,9 +402,22 @@
   setFbParam("_fbc", "fbc");
 
 
-  ssDeepLink(className, domain, false, {
-    variables: variables,
-  });
+  function initDeepLink() {
+    if (document.getElementsByClassName(className).length > 0) {
+      ssDeepLink(className, domain, false, { variables: variables });
+      return true;
+    }
+    return false;
+  }
+
+  if (!initDeepLink()) {
+    const observer = new MutationObserver(function () {
+      if (initDeepLink()) {
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.getElementById("root"), { childList: true, subtree: true });
+  }
 </script>
 </body>
 </html>
