@@ -405,19 +405,17 @@
   function initDeepLink() {
     if (document.getElementsByClassName(className).length > 0) {
       ssDeepLink(className, domain, false, { variables: variables });
-      return true;
     }
-    return false;
   }
 
-  if (!initDeepLink()) {
-    const observer = new MutationObserver(function () {
-      if (initDeepLink()) {
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.getElementById("root"), { childList: true, subtree: true });
-  }
+  initDeepLink();
+
+  let debounceTimer;
+  const observer = new MutationObserver(function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(initDeepLink, 300);
+  });
+  observer.observe(document.getElementById("root"), { childList: true, subtree: true });
 </script>
 </body>
 </html>
