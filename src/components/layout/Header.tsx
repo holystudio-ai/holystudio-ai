@@ -109,7 +109,7 @@ const Header: React.FC = () => {
 
                     <div className="mt-4">
                         <a
-                            href="https://t.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
+                            href="https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => setIsOpen(false)}
