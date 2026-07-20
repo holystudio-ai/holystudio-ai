@@ -28,7 +28,12 @@ import workPoster4 from '../../assets/video-posters/work-poster4.png';
 import workPoster5 from '../../assets/video-posters/work-poster5.png';
 import workPoster6 from '../../assets/video-posters/work-poster6.png';
 
-const Team: React.FC = () => {
+interface TeamProps {
+    /** Use the split-test production copy (new headline + body + accented "10"). */
+    productionVariant?: 'default' | 'split';
+}
+
+const Team: React.FC<TeamProps> = ({productionVariant = 'default'}) => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const instructors = [
@@ -138,15 +143,34 @@ const Team: React.FC = () => {
                     <div
                         className="relative mt-8 flex flex-col gap-8 border-2 border-zinc-800 bg-zinc-900 p-4 md:gap-10 md:p-10">
                         <div className="max-w-3xl">
-                            <p className="mt-3 text-[14px] font-bold uppercase leading-snug text-zinc-400 md:text-[16px]">
-                                Ми - рекламний відео продакшн з досвідом роботи 10 років в індустрії. Інтегруємо АІ в
-                                проекти клієнтів.
-                                <br/>
-                                <span
-                                    className="mt-4 block text-[14px] font-black uppercase tracking-widest text-white md:text-[16px]">
-                                    Наші крайні АІ роботи:
-                                </span>
-                            </p>
+                            {productionVariant === 'split' ? (
+                                <div className="mt-3">
+                                    <h3 className="font-brutal text-[18px] font-black uppercase leading-[1.1] tracking-tight text-white md:text-[26px]">
+                                        Ми — рекламний відео продакшн, що диктує тренди.{' '}
+                                        <span className="text-purple-500">10</span> років в індустрії, тепер — підсилені AI.
+                                    </h3>
+
+                                    <p className="mt-4 text-[14px] font-bold normal-case leading-snug text-zinc-400 md:text-[16px]">
+                                        Ми не просто «генеруємо картинки». Ми інтегруємо AI-технології у великий бізнес,
+                                        створюючи контент, який раніше здавався неможливим. Від традиційного кінодосвіду
+                                        до візуальних революцій для лідерів ринку.
+                                    </p>
+
+                                    <span className="mt-4 block text-[14px] font-black uppercase tracking-widest text-white md:text-[16px]">
+                                        Подивіться, як виглядає майбутнє реклами:
+                                    </span>
+                                </div>
+                            ) : (
+                                <p className="mt-3 text-[14px] font-bold uppercase leading-snug text-zinc-400 md:text-[16px]">
+                                    Ми - рекламний відео продакшн з досвідом роботи 10 років в індустрії. Інтегруємо АІ в
+                                    проекти клієнтів.
+                                    <br/>
+                                    <span
+                                        className="mt-4 block text-[14px] font-black uppercase tracking-widest text-white md:text-[16px]">
+                                        Наші крайні АІ роботи:
+                                    </span>
+                                </p>
+                            )}
                         </div>
 
                         <div className="relative w-full group">

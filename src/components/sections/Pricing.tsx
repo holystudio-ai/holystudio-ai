@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {formatPriceUah, coursePriceUah} from '@/src/lib/pricing.ts';
 import {redirectToPayment} from '@/src/lib/payment.ts';
 
@@ -15,16 +15,21 @@ const getNextResetTime = (now: Date) => {
     return resetTime;
 };
 
-const getTimeLeft = () => {
-    const now = new Date();
-    const diff = getNextResetTime(now).getTime() - now.getTime();
-    const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+const formatTimeLeft = (totalSeconds: number) => {
+    const safeSeconds = Math.max(0, Math.floor(totalSeconds));
 
-    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    const hours = String(Math.floor(safeSeconds / 3600)).padStart(2, '0');
+    const minutes = String(Math.floor((safeSeconds % 3600) / 60)).padStart(2, '0');
+    const seconds = String(safeSeconds % 60).padStart(2, '0');
 
     return {hours, minutes, seconds};
+};
+
+const getDailyTimeLeft = () => {
+    const now = new Date();
+    const diff = getNextResetTime(now).getTime() - now.getTime();
+
+    return formatTimeLeft(diff / 1000);
 };
 
 interface PricingProps {
@@ -35,6 +40,18 @@ interface PricingProps {
     isEmbedded?: boolean;
     showBonus?: boolean;
     showTimer?: boolean;
+    /** 'daily' — resets each day at 02:00 (default). 'countdown' — N minutes, restarts on every reload/expiry. */
+    timerMode?: 'daily' | 'countdown';
+    /** Minutes for 'countdown' mode. */
+    countdownMinutes?: number;
+    /** Discounted price to display. Defaults to the shared course price (env). */
+    price?: number;
+    /** Full/old (struck-through) price label. */
+    oldPrice?: string;
+    /** CTA button label. */
+    ctaText?: string;
+    /** Render the countdown in the brutalist "program block" style. */
+    timerBlocks?: boolean;
 }
 
 const Pricing: React.FC<PricingProps> = ({
@@ -43,8 +60,34 @@ const Pricing: React.FC<PricingProps> = ({
                                              text,
                                              badge = false,
                                              showBonus = false,
-                                             showTimer = false
+                                             showTimer = false,
+                                             timerMode = 'daily',
+                                             countdownMinutes = 10,
+                                             price,
+                                             oldPrice = '4000',
+                                             ctaText = 'ОТРИМАТИ ДОСТУП',
+                                             timerBlocks = false
                                          }) => {
+    const displayPrice = price !== undefined ? formatPriceUah(price) : DISPLAY_PRICE;
+
+    // Countdown deadline lives only in memory (a ref), so it starts fresh on
+    // every page load and loops back to `countdownMinutes` when it hits 0.
+    const deadlineRef = useRef<number | null>(null);
+
+    const getTimeLeft = React.useCallback(() => {
+        if (timerMode === 'countdown') {
+            const durationMs = countdownMinutes * 60 * 1000;
+
+            if (deadlineRef.current === null || deadlineRef.current <= Date.now()) {
+                deadlineRef.current = Date.now() + durationMs;
+            }
+
+            return formatTimeLeft((deadlineRef.current - Date.now()) / 1000);
+        }
+
+        return getDailyTimeLeft();
+    }, [timerMode, countdownMinutes]);
+
     const [timeLeft, setTimeLeft] = useState(getTimeLeft);
 
     useEffect(() => {
@@ -59,7 +102,7 @@ const Pricing: React.FC<PricingProps> = ({
         }, 1000);
 
         return () => window.clearInterval(intervalId);
-    }, [showTimer]);
+    }, [showTimer, getTimeLeft]);
 
     const timerItems = [
         {value: timeLeft.hours, label: 'год'},
@@ -91,7 +134,7 @@ const Pricing: React.FC<PricingProps> = ({
                 <div className="flex flex-col items-center">
                     <span
                         className="text-3xl max-[480px]:text-2xl md:text-5xl line-through decoration-red-500 decoration-[3px] max-[480px]:decoration-2 text-white/30 font-black font-brutal tracking-tighter">
-                        4000
+                        {oldPrice}
                     </span>
                     <span className="text-xs md:text-sm text-white/30 font-bold font-brutal mt-0.5">
                         ГРН
@@ -101,7 +144,7 @@ const Pricing: React.FC<PricingProps> = ({
                 <div className="flex flex-col items-center">
                     <span
                         className="text-5xl max-[480px]:text-4xl md:text-7xl font-black text-white font-brutal tracking-tighter leading-none">
-                        {DISPLAY_PRICE}
+                        {displayPrice}
                     </span>
                     <span className="text-sm max-[480px]:text-xs md:text-base text-white/70 font-bold font-brutal leading-none mt-1">
                         ГРН
@@ -124,27 +167,41 @@ const Pricing: React.FC<PricingProps> = ({
                     rel="noopener noreferrer"
                     className="button relative block w-full bg-red-600 hover:bg-red-500 text-white text-sm md:text-base font-black py-4 max-[480px]:py-3.5 uppercase rounded-xl shadow-[0_0_16px_rgba(239,68,68,0.68),0_0_40px_rgba(239,68,68,0.34),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-200 hover:shadow-[0_0_20px_rgba(239,68,68,0.8),0_0_54px_rgba(239,68,68,0.42),inset_0_1px_0_rgba(255,255,255,0.22)] font-brutal"
                 >
-                    ОТРИМАТИ ДОСТУП
+                    {ctaText}
                 </a>
             </div>
 
             {showTimer && (
                 <div className="mb-5 max-[480px]:mb-4">
-                    <div className="grid grid-cols-3 gap-2 max-[480px]:gap-2.5 md:gap-3">
+                    <div className="grid grid-cols-3 gap-2.5 max-[480px]:gap-2.5 md:gap-4">
                         {timerItems.map((item) => (
-                            <div
-                                key={item.label}
-                                className="flex h-[76px] max-[480px]:h-[70px] md:h-[94px] flex-col items-center justify-center bg-[#17171f] border border-white/[0.07] rounded-lg px-2 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_22px_rgba(0,0,0,0.24)]"
-                            >
+                            timerBlocks ? (
                                 <div
-                                    className="text-[34px] max-[480px]:text-[30px] md:text-[46px] font-black leading-none text-white font-brutal tracking-tight">
-                                    {item.value}
+                                    key={item.label}
+                                    className="flex h-[76px] max-[480px]:h-[70px] md:h-[94px] flex-col items-center justify-center border-4 border-black bg-white px-2 text-center shadow-[5px_5px_0px_0px_#a855f7] max-[480px]:shadow-[4px_4px_0px_0px_#a855f7]"
+                                >
+                                    <div className="text-[34px] max-[480px]:text-[30px] md:text-[46px] font-black leading-none text-black font-brutal tracking-tight">
+                                        {item.value}
+                                    </div>
+                                    <div className="mt-1 text-[9px] md:text-[11px] font-black text-purple-600 font-brutal uppercase leading-none tracking-widest">
+                                        {item.label}
+                                    </div>
                                 </div>
+                            ) : (
                                 <div
-                                    className="mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal uppercase leading-none">
-                                    {item.label}
+                                    key={item.label}
+                                    className="flex h-[76px] max-[480px]:h-[70px] md:h-[94px] flex-col items-center justify-center bg-[#17171f] border border-white/[0.07] rounded-lg px-2 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_22px_rgba(0,0,0,0.24)]"
+                                >
+                                    <div
+                                        className="text-[34px] max-[480px]:text-[30px] md:text-[46px] font-black leading-none text-white font-brutal tracking-tight">
+                                        {item.value}
+                                    </div>
+                                    <div
+                                        className="mt-1.5 text-[9px] md:text-[11px] font-semibold text-white/40 font-brutal uppercase leading-none">
+                                        {item.label}
+                                    </div>
                                 </div>
-                            </div>
+                            )
                         ))}
                     </div>
                 </div>
