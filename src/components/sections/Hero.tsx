@@ -23,10 +23,10 @@ const heroCompanyLogos = [
 
 /** New split-test hero offer (point 1 of the edits brief). */
 export interface HeroOffer {
-    heading: string;
+    heading?: string;
     offer: string;
     text: string;
-    plashka: string;
+    plashka?: string;
 }
 
 const heroBlock = {
@@ -41,7 +41,7 @@ interface HeroProps {
     /** Override the demand-block offer plate title (only when Hero renders DemandSection inline). */
     offerTitle?: string;
     /** Override the demand-block offer plate body text (only when Hero renders DemandSection inline). */
-    offerDetails?: string;
+    offerDetails?: React.ReactNode;
     /** Show the round "graduates get hired" sticker over the offers image. */
     showGraduateBadge?: boolean;
     /** Timer mode forwarded to the hero Pricing card. */
@@ -60,6 +60,8 @@ interface HeroProps {
     renderDemand?: boolean;
     /** CTA label forwarded to the hero Pricing card. */
     ctaText?: string;
+    /** CTA link forwarded to the hero Pricing card. */
+    ctaHref?: string;
     /** Render the hero Pricing countdown in the brutalist "program block" style. */
     timerBlocks?: boolean;
 }
@@ -77,6 +79,7 @@ const Hero: React.FC<HeroProps> = ({
                                        showCompanyLogos = false,
                                        renderDemand = true,
                                        ctaText,
+                                       ctaHref,
                                        timerBlocks = false
                                    }) => {
     return (
@@ -142,6 +145,7 @@ const Hero: React.FC<HeroProps> = ({
                         price={price}
                         oldPrice={oldPrice}
                         ctaText={ctaText}
+                        ctaHref={ctaHref}
                         timerBlocks={timerBlocks}
                     />
                 </div>
@@ -172,11 +176,13 @@ const Hero: React.FC<HeroProps> = ({
                                     </div>
                                 )}
 
-                                <h2 className="text-[22px] sm:text-[28px] md:text-[42px] font-black uppercase leading-[1.02] tracking-tight">
-                                    {heroOffer.heading}
-                                </h2>
+                                {heroOffer.heading && (
+                                    <h2 className="text-[22px] sm:text-[28px] md:text-[42px] font-black uppercase leading-[1.02] tracking-tight">
+                                        {heroOffer.heading}
+                                    </h2>
+                                )}
 
-                                <p className="mt-3 text-[16px] sm:text-[18px] md:text-[24px] font-black uppercase leading-tight text-purple-400">
+                                <p className={`text-[16px] sm:text-[18px] md:text-[24px] font-black uppercase leading-tight text-purple-400 ${heroOffer.heading ? 'mt-3' : ''}`}>
                                     {heroOffer.offer}
                                 </p>
 
@@ -184,11 +190,13 @@ const Hero: React.FC<HeroProps> = ({
                                     {heroOffer.text}
                                 </p>
 
-                                <div className="mt-5 inline-block border-2 border-dashed border-purple-500 bg-purple-600/10 px-4 py-3 md:px-5 md:py-4">
-                                    <p className="text-[13px] sm:text-[15px] md:text-[18px] font-black uppercase leading-tight tracking-tight">
-                                        {heroOffer.plashka}
-                                    </p>
-                                </div>
+                                {heroOffer.plashka && (
+                                    <div className="mt-5 inline-block border-2 border-dashed border-purple-500 bg-purple-600/10 px-4 py-3 md:px-5 md:py-4">
+                                        <p className="text-[13px] sm:text-[15px] md:text-[18px] font-black uppercase leading-tight tracking-tight">
+                                            {heroOffer.plashka}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             heroBlock && (

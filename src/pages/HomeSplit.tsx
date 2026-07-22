@@ -2,7 +2,6 @@ import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import Hero from "@/src/components/sections/Hero.tsx";
 import DemandSection from "@/src/components/sections/DemandSection.tsx";
 import Audience from "@/src/components/sections/Audience.tsx";
-import Pricing from "@/src/components/sections/Pricing.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
@@ -12,8 +11,7 @@ const Team = lazy(() => import("@/src/components/sections/Team.tsx"));
 const Program = lazy(() => import("@/src/components/sections/Program.tsx"));
 const SkillsSection = lazy(() => import("@/src/components/sections/SkillsSection.tsx"));
 const Guarantee = lazy(() => import("@/src/components/sections/Guarantee.tsx"));
-const StudentsWorks = lazy(() => import("@/src/components/sections/StudentWorks.tsx"));
-const StudentVideos = lazy(() => import("@/src/components/sections/StudentVideos.tsx"));
+const StudentGallery = lazy(() => import("@/src/components/sections/split/StudentGallery.tsx"));
 const FAQ = lazy(() => import("@/src/components/sections/FAQ.tsx"));
 const SplitCourseBlock = lazy(() => import("@/src/components/sections/split/SplitCourseBlock.tsx"));
 const Testimonials = lazy(() => import("@/src/components/sections/split/Testimonials.tsx"));
@@ -28,21 +26,30 @@ const SPLIT_PRICE = 390;
 const SPLIT_OLD_PRICE = '1 000';
 
 const OFFER_TITLE = 'ДОСИТЬ ДИВИТИСЯ НА ВАКАНСІЇ — СТАВАЙ ТИМ, КОГО ШУКАЮТЬ';
-const OFFER_DETAILS =
-    'ПОКИ ІНШІ ЗВОЛІКАЮТЬ, НАШІ ВИПУСКНИКИ ВЖЕ ЗАРОБЛЯЮТЬ. МИ ЗАБИРАЄМО ТОПОВИХ СТУДЕНТІВ У КОМАНДУ HOLYSTUDIO НА ОПЛАЧУВАНІ ЗАМОВЛЕННЯ ВЖЕ ПІД ЧАС НАВЧАННЯ. ОПАНУЙ AI ЗАРАЗ І ОТРИМАЙ РОБОТУ В КРАЩОМУ AI ВІДЕО-ПРОДАКШНІ КРАЇНИ ШВИДШЕ, НІЖ ВСТИГНЕШ ДОДИВИТИСЯ ЦЕЙ КУРС.';
 
-// New split-test hero offer (point 1 of the edits brief).
+// Accented words are highlighted in purple (per the edits brief, point 5).
+const OFFER_DETAILS = (
+    <>
+        ПОКИ ІНШІ ЗВОЛІКАЮТЬ, НАШІ ВИПУСКНИКИ{' '}
+        <span className="text-purple-500">ВЖЕ ЗАРОБЛЯЮТЬ.</span> МИ ЗАБИРАЄМО ТОПОВИХ СТУДЕНТІВ{' '}
+        <span className="text-purple-500">У КОМАНДУ HOLYSTUDIO</span> НА ОПЛАЧУВАНІ ЗАМОВЛЕННЯ ВЖЕ
+        ПІД ЧАС НАВЧАННЯ. ОПАНУЙ AI ЗАРАЗ І ОТРИМАЙ РОБОТУ В КРАЩОМУ AI ВІДЕО-ПРОДАКШНІ КРАЇНИ
+        ШВИДШЕ, НІЖ ВСТИГНЕШ ДОДИВИТИСЯ ЦЕЙ КУРС.
+    </>
+);
+
+// Split-test hero offer. The headline / "300+ учнів" pill / bottom plate were
+// dropped per the 2.0 edits brief (point 2) — only the offer line + body remain.
 const HERO_OFFER = {
-    heading: '5-денний інтенсив від АІ-продакшена',
     offer: 'Навчись з нуля генерувати АІ фото та відео за 5 днів.',
     text: 'Отримай систему створення кіношного контенту, яку ми використовуємо у своєму продакшені. Від першого промпта до готового ролика.',
-    plashka: 'Твій перший професійний АІ-кейс у портфоліо за один робочий тиждень.',
 } as const;
-
-const STUDENTS_BADGE = '300+ учнів';
 
 // CTA label used on all split-test timer/pricing cards.
 const SPLIT_CTA = 'ЗРОБИТИ ПРОРИВ В AI!';
+
+// Split-test Telegram deep link (edits brief, point 10).
+const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1';
 
 const HomeSplit = () => {
     const offersRef = useRef<HTMLDivElement>(null);
@@ -71,23 +78,20 @@ const HomeSplit = () => {
                 structuredData={buildCourseSchema(priceValue)}
             />
             <main>
-                {/* 01. Головний екран — новий офер + бейдж «300+ учнів» + лого */}
+                {/* 01. Головний екран — офер без заголовка, бейджа та лого */}
                 <Hero
                     timerMode={SPLIT_TIMER_MODE}
                     price={SPLIT_PRICE}
                     oldPrice={SPLIT_OLD_PRICE}
                     heroOffer={HERO_OFFER}
-                    studentsBadge={STUDENTS_BADGE}
-                    showCompanyLogos
                     renderDemand={false}
                     ctaText={SPLIT_CTA}
-                    timerBlocks
+                    ctaHref={SPLIT_CTA_HREF}
                 />
 
-                {/* 02. Кейси випускників / галерея робіт — фото + відео */}
+                {/* 02. Роботи студентів — один слайдер: спочатку відео, потім фото */}
                 <Suspense fallback={null}>
-                    <StudentsWorks/>
-                    <StudentVideos/>
+                    <StudentGallery/>
                 </Suspense>
 
                 {/* 03. Спрос на продукт — окрема секція (винесена з Hero) */}
@@ -97,6 +101,7 @@ const HomeSplit = () => {
                     offerTitle={OFFER_TITLE}
                     offerDetails={OFFER_DETAILS}
                     showGraduateBadge
+                    titleGap
                 />
 
                 {/* 04. Кому підходить */}
@@ -114,7 +119,7 @@ const HomeSplit = () => {
 
                 {/* 07. Про відео продакшн + автори (об'єднано в Team) */}
                 <Suspense fallback={null}>
-                    <Team productionVariant="split"/>
+                    <Team productionVariant="split" sliderAutoScroll/>
                 </Suspense>
 
                 {/* 08. 300+ студентів — відгуки (новий блок) */}
@@ -122,15 +127,9 @@ const HomeSplit = () => {
                     <Testimonials/>
                 </Suspense>
 
-                {/* 09. Блок з тарифом і офером */}
-                <Pricing badge={true} text="Не проґав можливість бути першим і зірвати куш $$$"
-                         title={"спеціальна пропозиція"} showTimer timerMode={SPLIT_TIMER_MODE}
-                         price={SPLIT_PRICE} oldPrice={SPLIT_OLD_PRICE}
-                         ctaText={SPLIT_CTA} timerBlocks/>
-
-                {/* 09. Перероблена друга плашка — контент курсу в стилі Program */}
+                {/* 09. Контент курсу + офер (окремий блок з таймером після відгуків прибрано) */}
                 <Suspense fallback={null}>
-                    <SplitCourseBlock/>
+                    <SplitCourseBlock ctaHref={SPLIT_CTA_HREF}/>
                 </Suspense>
 
                 {/* 10. Гарантія + «dont scroll the future» (після оферу, за брифом) */}
@@ -156,7 +155,7 @@ const HomeSplit = () => {
                 }`}
             >
                 <a
-                    href="https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
+                    href={SPLIT_CTA_HREF}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="button bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"

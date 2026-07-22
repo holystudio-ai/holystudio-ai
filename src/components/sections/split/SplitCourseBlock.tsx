@@ -1,5 +1,6 @@
 import React from 'react';
 import {formatPriceUah} from '@/src/lib/pricing.ts';
+import CountdownBlocks from '@/src/components/sections/split/CountdownBlocks.tsx';
 
 /**
  * Split-test course contents block — replaces the second "special offer"
@@ -19,7 +20,14 @@ const items = [
 const OLD_PRICE = '1 000';
 const NEW_PRICE = formatPriceUah(390);
 
-const SplitCourseBlock: React.FC = () => {
+interface SplitCourseBlockProps {
+    /** CTA target link (Telegram bot deep link). */
+    ctaHref?: string;
+}
+
+const SplitCourseBlock: React.FC<SplitCourseBlockProps> = ({
+    ctaHref = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1',
+}) => {
     return (
         <section className="bg-white px-4 py-12 text-black md:py-16">
             <div className="mx-auto max-w-3xl">
@@ -36,11 +44,11 @@ const SplitCourseBlock: React.FC = () => {
                     {items.map((item) => (
                         <div
                             key={item.num}
-                            className="flex flex-col gap-2 border-4 border-black bg-white p-4 brutalist-shadow transition-transform hover:-translate-y-1 md:p-5"
+                            className="flex items-baseline gap-3 border-4 border-black bg-white px-4 py-3 brutalist-shadow transition-transform hover:-translate-y-1 md:gap-4 md:px-5 md:py-4"
                         >
-                            <div className="font-brutal text-lg font-black leading-none opacity-40 md:text-2xl">
+                            <span className="shrink-0 font-brutal text-base font-black leading-none opacity-40 md:text-xl">
                                 /{item.num}
-                            </div>
+                            </span>
                             <p className="font-brutal text-sm font-black uppercase leading-tight md:text-lg">
                                 {item.text}
                             </p>
@@ -62,13 +70,15 @@ const SplitCourseBlock: React.FC = () => {
                     </div>
 
                     <a
-                        href="https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzI3OTcz"
+                        href={ctaHref}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="button w-full bg-purple-600 py-4 text-center font-brutal text-base font-black uppercase text-white brutalist-border border-white transition-all hover:bg-purple-500 md:text-lg"
                     >
                         Зробити прорив в AI!
                     </a>
+
+                    <CountdownBlocks/>
                 </div>
             </div>
         </section>

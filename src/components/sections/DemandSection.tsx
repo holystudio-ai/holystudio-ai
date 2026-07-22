@@ -21,12 +21,14 @@ interface DemandSectionProps {
     offersRef?: React.Ref<HTMLDivElement>;
     /** Offer plate title. */
     offerTitle?: string;
-    /** Offer plate body text. */
-    offerDetails?: string;
+    /** Offer plate body text (a string, or rich content with accented words). */
+    offerDetails?: React.ReactNode;
     /** Show the round "graduates get hired" sticker over the offers image. */
     showGraduateBadge?: boolean;
     /** true = own <section> with spacing; false = inline fragment inside Hero's column. */
     standalone?: boolean;
+    /** Separate the title and the body text with a full paragraph gap. */
+    titleGap?: boolean;
 }
 
 const DemandSection: React.FC<DemandSectionProps> = ({
@@ -35,6 +37,7 @@ const DemandSection: React.FC<DemandSectionProps> = ({
     offerDetails = DEFAULT_DETAILS,
     showGraduateBadge = false,
     standalone = false,
+    titleGap = false,
 }) => {
     const inner = (
         <>
@@ -55,7 +58,7 @@ const DemandSection: React.FC<DemandSectionProps> = ({
 
             {(offerTitle || offerDetails) && (
                 <div className="border-2 border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white">
-                    <h4 className="text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none mb-1">
+                    <h4 className={`text-[16px] sm:text-[18px] md:text-[28px] font-black uppercase leading-none ${titleGap ? 'mb-4 md:mb-6' : 'mb-1'}`}>
                         {offerTitle}
                     </h4>
 

@@ -20,6 +20,7 @@ import companyLogo9 from '../../assets/company-logos/9.png';
 import companyLogo10 from '../../assets/company-logos/10.png';
 import companyLogo11 from '../../assets/company-logos/11.png';
 import VideoEmbed from '@/src/components/features/VideoEmbed.tsx';
+import useAutoScroll from '@/src/hooks/useAutoScroll.ts';
 
 import workPoster1 from '../../assets/video-posters/work-poster1.png';
 import workPoster2 from '../../assets/video-posters/work-poster2.png';
@@ -31,10 +32,14 @@ import workPoster6 from '../../assets/video-posters/work-poster6.png';
 interface TeamProps {
     /** Use the split-test production copy (new headline + body + accented "10"). */
     productionVariant?: 'default' | 'split';
+    /** Slowly auto-scroll the works slider and keep the arrows visible on mobile too. */
+    sliderAutoScroll?: boolean;
 }
 
-const Team: React.FC<TeamProps> = ({productionVariant = 'default'}) => {
+const Team: React.FC<TeamProps> = ({productionVariant = 'default', sliderAutoScroll = false}) => {
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    useAutoScroll(scrollRef, {enabled: sliderAutoScroll});
 
     const instructors = [
         {
@@ -176,7 +181,9 @@ const Team: React.FC<TeamProps> = ({productionVariant = 'default'}) => {
                         <div className="relative w-full group">
                             <div
                                 ref={scrollRef}
-                                className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:gap-6"
+                                className={`no-scrollbar flex gap-4 overflow-x-auto pb-4 md:gap-6 ${
+                                    sliderAutoScroll ? '' : 'snap-x snap-mandatory'
+                                }`}
                                 style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}
                             >
                                 {videoWorks.map((video) => (
@@ -202,7 +209,9 @@ const Team: React.FC<TeamProps> = ({productionVariant = 'default'}) => {
 
                             <button
                                 onClick={() => scroll('left')}
-                                className="absolute -left-5 top-1/2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border-black bg-white font-black text-black transition-all hover:bg-purple-500 hover:text-white md:flex brutalist-border"
+                                className={`absolute top-1/2 z-30 h-10 w-10 -translate-y-1/2 items-center justify-center border-black bg-white font-black text-black transition-all hover:bg-purple-500 hover:text-white md:flex md:-left-5 brutalist-border ${
+                                    sliderAutoScroll ? 'flex left-0' : 'hidden -left-5'
+                                }`}
                                 aria-label="Прокрутити вліво"
                             >
                                 ←
@@ -210,7 +219,9 @@ const Team: React.FC<TeamProps> = ({productionVariant = 'default'}) => {
 
                             <button
                                 onClick={() => scroll('right')}
-                                className="absolute -right-5 top-1/2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border-black bg-white font-black text-black transition-all hover:bg-purple-500 hover:text-white md:flex brutalist-border"
+                                className={`absolute top-1/2 z-30 h-10 w-10 -translate-y-1/2 items-center justify-center border-black bg-white font-black text-black transition-all hover:bg-purple-500 hover:text-white md:flex md:-right-5 brutalist-border ${
+                                    sliderAutoScroll ? 'flex right-0' : 'hidden -right-5'
+                                }`}
                                 aria-label="Прокрутити вправо"
                             >
                                 →
