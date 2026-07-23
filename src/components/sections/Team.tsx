@@ -39,7 +39,7 @@ interface TeamProps {
 const Team: React.FC<TeamProps> = ({productionVariant = 'default', sliderAutoScroll = false}) => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    useAutoScroll(scrollRef, {enabled: sliderAutoScroll});
+    const pauseAutoScroll = useAutoScroll(scrollRef, {enabled: sliderAutoScroll});
 
     const instructors = [
         {
@@ -94,6 +94,8 @@ const Team: React.FC<TeamProps> = ({productionVariant = 'default', sliderAutoScr
 
     const scroll = (direction: 'left' | 'right') => {
         if (!scrollRef.current) return;
+
+        pauseAutoScroll();
 
         const scrollAmount = window.innerWidth < 768 ? 300 : 640;
 

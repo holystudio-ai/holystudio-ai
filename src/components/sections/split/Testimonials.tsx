@@ -22,12 +22,16 @@ const screenshots = [review1, review2, review3, review4, review5, review6, revie
 const Testimonials: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    useAutoScroll(scrollRef);
+    const pauseAutoScroll = useAutoScroll(scrollRef);
 
     const scroll = (direction: 'left' | 'right') => {
         const track = scrollRef.current;
         const card = track?.firstElementChild as HTMLElement | null;
         if (!track || !card) return;
+
+        // Keep the auto-scroll off the element while the smooth animation runs,
+        // otherwise the two fight over scrollLeft and the slider gets stuck.
+        pauseAutoScroll();
 
         // Step by whole cards so a card always lands flush against the left edge —
         // scrolling by the raw viewport width leaves the next card half off-screen
@@ -35,16 +39,20 @@ const Testimonials: React.FC = () => {
         const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
         const step = card.offsetWidth + gap;
         const perView = Math.max(1, Math.round(track.clientWidth / step));
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        const index = track.scrollLeft / step;
 
-        const target =
+        // floor/ceil (not round) so a click always moves in the pressed direction
+        // even when auto-scroll has left us mid-card.
+        const nextIndex =
             direction === 'left'
-                ? Math.max(0, Math.round(track.scrollLeft / step) - perView) * step
-                : Math.min(
-                      track.scrollWidth - track.clientWidth,
-                      (Math.round(track.scrollLeft / step) + perView) * step
-                  );
+                ? Math.ceil(index - 0.02) - perView
+                : Math.floor(index + 0.02) + perView;
 
-        track.scrollTo({left: target, behavior: 'smooth'});
+        track.scrollTo({
+            left: Math.min(maxScroll, Math.max(0, nextIndex * step)),
+            behavior: 'smooth',
+        });
     };
 
     return (

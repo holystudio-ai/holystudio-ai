@@ -47,10 +47,12 @@ const slides: Slide[] = [
 const StudentGallery: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    useAutoScroll(scrollRef);
+    const pauseAutoScroll = useAutoScroll(scrollRef);
 
     const scroll = (direction: "left" | "right") => {
         if (!scrollRef.current) return;
+
+        pauseAutoScroll();
 
         const scrollAmount = window.innerWidth < 768 ? 260 : 380;
         scrollRef.current.scrollBy({

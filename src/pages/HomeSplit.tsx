@@ -30,13 +30,14 @@ const SPLIT_OLD_PRICE = '1 000';
 const OFFER_TITLE = 'ДОСИТЬ ДИВИТИСЯ НА ВАКАНСІЇ — СТАВАЙ ТИМ, КОГО ШУКАЮТЬ';
 
 // Accented words are highlighted in purple (per the edits brief, point 5).
+// Sentence case on purpose — the all-caps version was hard to read.
 const OFFER_DETAILS = (
     <>
-        ПОКИ ІНШІ ЗВОЛІКАЮТЬ, НАШІ ВИПУСКНИКИ{' '}
-        <span className="text-purple-500">ВЖЕ ЗАРОБЛЯЮТЬ.</span> МИ ЗАБИРАЄМО ТОПОВИХ СТУДЕНТІВ{' '}
-        <span className="text-purple-500">У КОМАНДУ HOLYSTUDIO</span> НА ОПЛАЧУВАНІ ЗАМОВЛЕННЯ ВЖЕ
-        ПІД ЧАС НАВЧАННЯ. ОПАНУЙ AI ЗАРАЗ І ОТРИМАЙ РОБОТУ В КРАЩОМУ AI ВІДЕО-ПРОДАКШНІ КРАЇНИ
-        ШВИДШЕ, НІЖ ВСТИГНЕШ ДОДИВИТИСЯ ЦЕЙ КУРС.
+        Поки інші зволікають, наші випускники{' '}
+        <span className="text-purple-500">вже заробляють.</span> Ми забираємо топових студентів{' '}
+        <span className="text-purple-500">у команду HOLYSTUDIO</span> на оплачувані замовлення вже
+        під час навчання. Опануй AI зараз і отримай роботу в кращому AI відео-продакшні країни
+        швидше, ніж встигнеш додивитися цей курс.
     </>
 );
 

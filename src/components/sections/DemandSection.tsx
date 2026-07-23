@@ -62,7 +62,7 @@ const DemandSection: React.FC<DemandSectionProps> = ({
                         {offerTitle}
                     </h4>
 
-                    <p className="text-[13px] sm:text-[14px] md:text-[22px] leading-tight opacity-90">
+                    <p className="text-[13px] sm:text-[14px] md:text-[22px] normal-case leading-snug opacity-90">
                         {offerDetails}
                     </p>
                 </div>
