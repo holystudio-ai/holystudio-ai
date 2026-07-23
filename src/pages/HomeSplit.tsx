@@ -5,6 +5,8 @@ import Audience from "@/src/components/sections/Audience.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
+import heroSplitDesktop from "@/src/assets/images/hero-split-desktop.webp";
+import heroSplitMobile from "@/src/assets/images/hero-split-mobile.webp";
 
 const ResultsGallery = lazy(() => import("@/src/components/sections/ResultsGallery.tsx"));
 const Team = lazy(() => import("@/src/components/sections/Team.tsx"));
@@ -87,6 +89,8 @@ const HomeSplit = () => {
                     renderDemand={false}
                     ctaText={SPLIT_CTA}
                     ctaHref={SPLIT_CTA_HREF}
+                    imageDesktop={heroSplitDesktop}
+                    imageMobile={heroSplitMobile}
                 />
 
                 {/* 02. Роботи студентів — один слайдер: спочатку відео, потім фото */}

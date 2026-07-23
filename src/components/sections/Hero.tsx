@@ -64,6 +64,10 @@ interface HeroProps {
     ctaHref?: string;
     /** Render the hero Pricing countdown in the brutalist "program block" style. */
     timerBlocks?: boolean;
+    /** Override the hero image shown from 481px up. */
+    imageDesktop?: string;
+    /** Override the hero image shown up to 480px. */
+    imageMobile?: string;
 }
 
 const Hero: React.FC<HeroProps> = ({
@@ -80,7 +84,9 @@ const Hero: React.FC<HeroProps> = ({
                                        renderDemand = true,
                                        ctaText,
                                        ctaHref,
-                                       timerBlocks = false
+                                       timerBlocks = false,
+                                       imageDesktop = heroImage,
+                                       imageMobile = heroImageMobile
                                    }) => {
     return (
         <section
@@ -103,11 +109,11 @@ const Hero: React.FC<HeroProps> = ({
                     <picture>
                         <source
                             media="(max-width: 480px)"
-                            srcSet={heroImageMobile}
+                            srcSet={imageMobile}
                         />
 
                         <img
-                            src={heroImage}
+                            src={imageDesktop}
                             alt="AI creative course hero"
                             fetchPriority="high"
                             loading="eager"

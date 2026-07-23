@@ -1,4 +1,5 @@
 import React from 'react';
+import badgeImage from '../../../assets/images/cta-badge.webp';
 
 interface GraduateBadgeProps {
     /** Extra classes to position the badge within its (relative) container. */
@@ -7,17 +8,17 @@ interface GraduateBadgeProps {
 
 /**
  * Round "graduates get hired" sticker overlaid on the hero offer image
- * (split-test variant).
+ * (split-test variant). The sticker is a ready-made image — the copy lives in
+ * the artwork itself and is duplicated in `alt` for screen readers.
  */
 const GraduateBadge: React.FC<GraduateBadgeProps> = ({className = ''}) => {
     return (
-        <div
-            className={`pointer-events-none absolute -right-2 -top-4 z-20 flex h-[112px] w-[112px] rotate-[-8deg] items-center justify-center rounded-full border-4 border-black bg-purple-600 p-2 text-center shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:-right-4 md:-top-6 md:h-[150px] md:w-[150px] ${className}`}
-        >
-            <span className="font-brutal text-[9px] font-black uppercase leading-[1.1] tracking-tight text-white md:text-[12px]">
-                Найкращі випускники отримують роботу та оплачувані замовлення у HOLYSTUDIO
-            </span>
-        </div>
+        <img
+            src={badgeImage}
+            alt="Найкращі випускники отримують роботу та оплачувані замовлення у HOLYSTUDIO"
+            loading="lazy"
+            className={`pointer-events-none absolute -right-2 -top-4 z-20 h-[112px] w-[112px] rotate-[-8deg] object-contain md:-right-6 md:-top-8 md:h-[200px] md:w-[200px] lg:h-[230px] lg:w-[230px] ${className}`}
+        />
     );
 };
 
