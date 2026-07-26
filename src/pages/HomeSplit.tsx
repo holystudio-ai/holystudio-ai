@@ -54,9 +54,20 @@ const SPLIT_CTA = 'ЗРОБИТИ ПРОРИВ В AI!';
 // Split-test Telegram deep link (edits brief, point 10).
 const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1';
 
+// The on-page offer block (HOLYSTUDIO AI CREATOR) — timer CTAs scroll here, and
+// the floating CTA hides while it's on screen.
+const OFFER_BLOCK_ID = 'split-offer-block';
+
+const scrollToOfferBlock = (event: React.MouseEvent) => {
+    event.preventDefault();
+    document.getElementById(OFFER_BLOCK_ID)?.scrollIntoView({behavior: 'smooth', block: 'start'});
+};
+
 const HomeSplit = () => {
     const offersRef = useRef<HTMLDivElement>(null);
-    const [showFloatingCta, setShowFloatingCta] = useState(false);
+    const offerBlockRef = useRef<HTMLDivElement>(null);
+    const [pastOffers, setPastOffers] = useState(false);
+    const [offerBlockVisible, setOfferBlockVisible] = useState(false);
 
     useEffect(() => {
         const el = offersRef.current;
@@ -64,7 +75,7 @@ const HomeSplit = () => {
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                setShowFloatingCta(entry.isIntersecting || entry.boundingClientRect.top < 0);
+                setPastOffers(entry.isIntersecting || entry.boundingClientRect.top < 0);
             },
             {threshold: 0.15, rootMargin: '0px 0px -10% 0px'}
         );
@@ -72,6 +83,22 @@ const HomeSplit = () => {
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
+
+    // Hide the floating CTA while the offer block (its scroll target) is visible.
+    useEffect(() => {
+        const el = offerBlockRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setOfferBlockVisible(entry.isIntersecting),
+            {threshold: 0.12}
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    const showFloatingCta = pastOffers && !offerBlockVisible;
 
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
@@ -90,6 +117,8 @@ const HomeSplit = () => {
                     renderDemand={false}
                     ctaText={SPLIT_CTA}
                     ctaHref={SPLIT_CTA_HREF}
+                    ctaScrollToId={OFFER_BLOCK_ID}
+                    wideMobile
                     imageDesktop={heroSplitDesktop}
                     imageMobile={heroSplitMobile}
                 />
@@ -133,9 +162,11 @@ const HomeSplit = () => {
                 </Suspense>
 
                 {/* 09. Контент курсу + офер (окремий блок з таймером після відгуків прибрано) */}
-                <Suspense fallback={null}>
-                    <SplitCourseBlock ctaHref={SPLIT_CTA_HREF}/>
-                </Suspense>
+                <div id={OFFER_BLOCK_ID} ref={offerBlockRef} className="scroll-mt-20">
+                    <Suspense fallback={null}>
+                        <SplitCourseBlock ctaHref={SPLIT_CTA_HREF}/>
+                    </Suspense>
+                </div>
 
                 {/* 10. Гарантія + «dont scroll the future» (після оферу, за брифом) */}
                 <Suspense fallback={null}>
@@ -160,9 +191,8 @@ const HomeSplit = () => {
                 }`}
             >
                 <a
-                    href={SPLIT_CTA_HREF}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`#${OFFER_BLOCK_ID}`}
+                    onClick={scrollToOfferBlock}
                     className="button bg-purple-600 text-white px-6 py-4 font-black text-sm sm:text-base uppercase brutalist-border border-white transition-all font-brutal inline-block text-center"
                 >
                     Залетіти в навчання

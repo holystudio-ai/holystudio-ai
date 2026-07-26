@@ -17,7 +17,7 @@ const GraduateBadge: React.FC<GraduateBadgeProps> = ({className = ''}) => {
             src={badgeImage}
             alt="Найкращі випускники отримують роботу та оплачувані замовлення у HOLYSTUDIO"
             loading="lazy"
-            className={`pointer-events-none absolute -right-2 -top-4 z-20 h-[112px] w-[112px] rotate-[-8deg] object-contain md:-right-6 md:-top-8 md:h-[200px] md:w-[200px] lg:h-[230px] lg:w-[230px] ${className}`}
+            className={`pointer-events-none absolute right-6 -top-4 z-20 h-[112px] w-[112px] rotate-[-8deg] object-contain md:-right-6 md:-top-8 md:h-[200px] md:w-[200px] lg:h-[230px] lg:w-[230px] ${className}`}
         />
     );
 };

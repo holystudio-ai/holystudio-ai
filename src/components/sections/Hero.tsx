@@ -64,6 +64,10 @@ interface HeroProps {
     ctaHref?: string;
     /** Render the hero Pricing countdown in the brutalist "program block" style. */
     timerBlocks?: boolean;
+    /** When set, the hero timer CTA scrolls to this element id instead of opening its link. */
+    ctaScrollToId?: string;
+    /** On mobile: stretch the hero pricing card to full width and trim its height. */
+    wideMobile?: boolean;
     /** Override the hero image shown from 481px up. */
     imageDesktop?: string;
     /** Override the hero image shown up to 480px. */
@@ -85,6 +89,8 @@ const Hero: React.FC<HeroProps> = ({
                                        ctaText,
                                        ctaHref,
                                        timerBlocks = false,
+                                       ctaScrollToId,
+                                       wideMobile = false,
                                        imageDesktop = heroImage,
                                        imageMobile = heroImageMobile
                                    }) => {
@@ -136,12 +142,11 @@ const Hero: React.FC<HeroProps> = ({
                 </div>
 
                 <div
-                    className="
+                    className={`
                         relative z-10 mt-4 px-4
-
                         max-[480px]:mt-0
-                        max-[480px]:px-4
-                    "
+                        ${wideMobile ? 'max-[480px]:px-0' : 'max-[480px]:px-4'}
+                    `}
                 >
                     <Pricing
                         badge
@@ -153,6 +158,8 @@ const Hero: React.FC<HeroProps> = ({
                         ctaText={ctaText}
                         ctaHref={ctaHref}
                         timerBlocks={timerBlocks}
+                        ctaScrollToId={ctaScrollToId}
+                        wideMobile={wideMobile}
                     />
                 </div>
 

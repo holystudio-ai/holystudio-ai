@@ -10,6 +10,8 @@ interface CountdownBlocksProps {
     /** Countdown duration in minutes. */
     minutes?: number;
     className?: string;
+    /** Shorter cells / smaller digits so the whole offer block fits one screen. */
+    compact?: boolean;
 }
 
 const formatTimeLeft = (totalSeconds: number) => {
@@ -22,7 +24,7 @@ const formatTimeLeft = (totalSeconds: number) => {
     };
 };
 
-const CountdownBlocks: React.FC<CountdownBlocksProps> = ({minutes = 10, className = ''}) => {
+const CountdownBlocks: React.FC<CountdownBlocksProps> = ({minutes = 10, className = '', compact = false}) => {
     const deadlineRef = useRef<number | null>(null);
 
     const getTimeLeft = React.useCallback(() => {
@@ -55,9 +57,13 @@ const CountdownBlocks: React.FC<CountdownBlocksProps> = ({minutes = 10, classNam
             {items.map((item) => (
                 <div
                     key={item.label}
-                    className="flex h-[76px] flex-col items-center justify-center border-4 border-black bg-white px-2 text-center shadow-[5px_5px_0px_0px_#a855f7] md:h-[94px]"
+                    className={`flex flex-col items-center justify-center border-4 border-black bg-white px-2 text-center shadow-[5px_5px_0px_0px_#a855f7] ${
+                        compact ? 'h-[58px] md:h-[80px]' : 'h-[76px] md:h-[94px]'
+                    }`}
                 >
-                    <div className="font-brutal text-[34px] font-black leading-none tracking-tight text-black md:text-[46px]">
+                    <div className={`font-brutal font-black leading-none tracking-tight text-black ${
+                        compact ? 'text-[26px] md:text-[40px]' : 'text-[34px] md:text-[46px]'
+                    }`}>
                         {item.value}
                     </div>
                     <div className="mt-1 font-brutal text-[9px] font-black uppercase leading-none tracking-widest text-purple-600 md:text-[11px]">
