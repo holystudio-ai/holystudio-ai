@@ -119,6 +119,7 @@ const HomeSplit = () => {
                     ctaHref={SPLIT_CTA_HREF}
                     ctaScrollToId={OFFER_BLOCK_ID}
                     wideMobile
+                    showBadge={false}
                     imageDesktop={heroSplitDesktop}
                     imageMobile={heroSplitMobile}
                 />

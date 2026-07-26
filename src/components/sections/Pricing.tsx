@@ -151,22 +151,22 @@ const Pricing: React.FC<PricingProps> = ({
 
             <div
                 className={`flex justify-center items-center gap-5 max-[480px]:gap-4 md:gap-8 mb-5 ${wideMobile ? 'max-[480px]:mb-3' : 'max-[480px]:mb-4'} ${!title && badge ? `mt-8 ${wideMobile ? 'max-[480px]:mt-6' : 'max-[480px]:mt-7'}` : ''}`}>
-                <div className={wideMobile ? 'flex items-baseline gap-1.5' : 'flex flex-col items-center'}>
+                <div className={`flex flex-col items-center ${wideMobile ? 'max-[480px]:flex-row max-[480px]:items-baseline max-[480px]:gap-1.5' : ''}`}>
                     <span
-                        className="text-3xl max-[480px]:text-2xl md:text-5xl line-through decoration-red-500 decoration-[3px] max-[480px]:decoration-2 text-white/30 font-black font-brutal tracking-tighter">
+                        className="whitespace-nowrap text-3xl max-[480px]:text-2xl md:text-5xl line-through decoration-red-500 decoration-[3px] max-[480px]:decoration-2 text-white/30 font-black font-brutal tracking-tighter">
                         {oldPrice}
                     </span>
-                    <span className={`text-xs md:text-sm text-white/30 font-bold font-brutal ${wideMobile ? '' : 'mt-0.5'}`}>
+                    <span className={`text-xs md:text-sm text-white/30 font-bold font-brutal mt-0.5 ${wideMobile ? 'max-[480px]:mt-0' : ''}`}>
                         ГРН
                     </span>
                 </div>
 
-                <div className={wideMobile ? 'flex items-baseline gap-1.5' : 'flex flex-col items-center'}>
+                <div className={`flex flex-col items-center ${wideMobile ? 'max-[480px]:flex-row max-[480px]:items-baseline max-[480px]:gap-1.5' : ''}`}>
                     <span
-                        className="text-5xl max-[480px]:text-4xl md:text-7xl font-black text-white font-brutal tracking-tighter leading-none">
+                        className="whitespace-nowrap text-5xl max-[480px]:text-4xl md:text-7xl font-black text-white font-brutal tracking-tighter leading-none">
                         {displayPrice}
                     </span>
-                    <span className={`text-sm max-[480px]:text-xs md:text-base text-white/70 font-bold font-brutal leading-none ${wideMobile ? '' : 'mt-1'}`}>
+                    <span className={`text-sm max-[480px]:text-xs md:text-base text-white/70 font-bold font-brutal leading-none mt-1 ${wideMobile ? 'max-[480px]:mt-0' : ''}`}>
                         ГРН
                     </span>
                 </div>

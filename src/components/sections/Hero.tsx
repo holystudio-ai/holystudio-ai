@@ -68,6 +68,8 @@ interface HeroProps {
     ctaScrollToId?: string;
     /** On mobile: stretch the hero pricing card to full width and trim its height. */
     wideMobile?: boolean;
+    /** Show the "Limited Offer" badge on the hero pricing card. */
+    showBadge?: boolean;
     /** Override the hero image shown from 481px up. */
     imageDesktop?: string;
     /** Override the hero image shown up to 480px. */
@@ -91,6 +93,7 @@ const Hero: React.FC<HeroProps> = ({
                                        timerBlocks = false,
                                        ctaScrollToId,
                                        wideMobile = false,
+                                       showBadge = true,
                                        imageDesktop = heroImage,
                                        imageMobile = heroImageMobile
                                    }) => {
@@ -149,7 +152,7 @@ const Hero: React.FC<HeroProps> = ({
                     `}
                 >
                     <Pricing
-                        badge
+                        badge={showBadge}
                         showBonus
                         showTimer
                         timerMode={timerMode}
