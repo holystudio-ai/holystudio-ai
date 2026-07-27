@@ -28,66 +28,61 @@ const Header: React.FC = () => {
     ];
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-black border-b-2 border-white">
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 md:h-20 flex items-center justify-between gap-3">
+        <>
+            {/* Desktop header */}
+            <header className="hidden md:block fixed top-0 left-0 w-full z-50 bg-black border-b-2 border-white">
+                <div className="max-w-7xl mx-auto px-3 sm:px-4 h-16 md:h-20 flex items-center justify-between gap-3">
 
-                {/* LEFT: Logo */}
-                <div className="flex items-center shrink-0">
-                    <Link to="/" className="flex items-center">
-                        <img
-                            src={logo}
-                            alt="HOLYSTUDIO LOGO"
-                            className="h-8 md:h-12 w-auto"
-                        />
-                    </Link>
+                    {/* LEFT: Logo */}
+                    <div className="flex items-center shrink-0">
+                        <Link to="/" className="flex items-center">
+                            <img
+                                src={logo}
+                                alt="HOLYSTUDIO LOGO"
+                                className="h-8 md:h-12 w-auto"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Desktop nav */}
+                    <div className="flex items-center ml-auto">
+                        <nav className="flex gap-8 font-bold text-xs uppercase font-brutal text-white">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    className="hover:text-purple-500 transition-colors"
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
                 </div>
+            </header>
 
-                {/* Desktop nav */}
-                <div className="hidden md:flex items-center ml-auto">
-                    <nav className="flex gap-8 font-bold text-xs uppercase font-brutal text-white">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="hover:text-purple-500 transition-colors"
-                            >
-                                {link.name}
-                            </a>
-                        ))}
-                    </nav>
-                </div>
-
-                {/* RIGHT: badge + burger */}
-                <div className="flex items-center gap-3 md:hidden">
-                    <img
-                        src="/header-badge.png"
-                        alt="Інтенсив від рекламного відеопродакшену"
-                        className="h-8 w-auto max-w-[160px] object-contain"
-                    />
-
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="flex flex-col gap-1.5 z-50 p-2"
-                        aria-label="Toggle menu"
-                    >
-                        <span
-                            className={`h-1 w-7 bg-white transition-all duration-300 ${
-                                isOpen ? "rotate-45 translate-y-2.5" : ""
-                            }`}
-                        />
-                        <span
-                            className={`h-1 w-7 bg-white transition-all duration-300 ${
-                                isOpen ? "opacity-0" : ""
-                            }`}
-                        />
-                        <span
-                            className={`h-1 w-7 bg-white transition-all duration-300 ${
-                                isOpen ? "-rotate-45 -translate-y-2.5" : ""
-                            }`}
-                        />
-                    </button>
-                </div>
-            </div>
+            {/* Mobile burger — always on screen */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="md:hidden fixed top-3 right-3 z-50 flex flex-col gap-1.5 p-2"
+                aria-label="Toggle menu"
+            >
+                <span
+                    className={`h-1 w-7 bg-white transition-all duration-300 ${
+                        isOpen ? "rotate-45 translate-y-2.5" : ""
+                    }`}
+                />
+                <span
+                    className={`h-1 w-7 bg-white transition-all duration-300 ${
+                        isOpen ? "opacity-0" : ""
+                    }`}
+                />
+                <span
+                    className={`h-1 w-7 bg-white transition-all duration-300 ${
+                        isOpen ? "-rotate-45 -translate-y-2.5" : ""
+                    }`}
+                />
+            </button>
 
             {/* Mobile menu */}
             <div
@@ -120,7 +115,7 @@ const Header: React.FC = () => {
                     </div>
                 </nav>
             </div>
-        </header>
+        </>
     );
 };
 

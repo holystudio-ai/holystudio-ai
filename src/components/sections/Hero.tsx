@@ -52,6 +52,8 @@ interface HeroProps {
     oldPrice?: string;
     /** New split-test offer copy — replaces the default headline plate. */
     heroOffer?: HeroOffer;
+    /** Hide the default headline plate ("В НОВІЙ РЕАЛЬНОСТІ…") when no heroOffer is given. Defaults to true (original `/` layout). */
+    showHeadlinePlate?: boolean;
     /** Small pill shown in the offer plate (e.g. "300+ учнів"). */
     studentsBadge?: string;
     /** Show the "companies we collaborated with" logos strip (placeholder). */
@@ -85,6 +87,7 @@ const Hero: React.FC<HeroProps> = ({
                                        price,
                                        oldPrice,
                                        heroOffer,
+                                       showHeadlinePlate = true,
                                        studentsBadge,
                                        showCompanyLogos = false,
                                        renderDemand = true,
@@ -100,12 +103,12 @@ const Hero: React.FC<HeroProps> = ({
     return (
         <section
             className="
-                overflow-x-hidden px-4 pb-8 pt-20
+                overflow-x-hidden px-4 pb-2 pt-6
                 md:pb-10 md:pt-24
 
                 max-[480px]:px-0
-                max-[480px]:pt-[70px]
-                max-[480px]:pb-8
+                max-[480px]:pt-4
+                max-[480px]:pb-0
             "
         >
             <div className="mx-auto max-w-7xl">
@@ -215,7 +218,7 @@ const Hero: React.FC<HeroProps> = ({
                                 )}
                             </div>
                         ) : (
-                            heroBlock && (
+                            showHeadlinePlate && heroBlock && (
                                 <div className="border-2 border-dashed border-white bg-black px-4 py-5 md:px-5 md:py-6 text-white">
                                     <h3 className="text-[18px] sm:text-[22px] md:text-[34px] uppercase leading-[1.05] tracking-tight text-center font-black">
                                         {heroBlock.titleStart}

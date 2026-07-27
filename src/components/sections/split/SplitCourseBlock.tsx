@@ -58,29 +58,40 @@ const SplitCourseBlock: React.FC<SplitCourseBlockProps> = ({
                     ))}
                 </div>
 
-                <div className="mt-4 flex flex-col items-center gap-3 border-4 border-black bg-black p-4 text-white md:mt-6 md:gap-5 md:p-8">
-                    <div className="flex items-end justify-center gap-3 md:gap-4">
-                        <span className="font-brutal text-2xl font-black leading-none text-white/30 line-through decoration-red-500 decoration-[3px] md:text-5xl">
-                            {OLD_PRICE}
-                        </span>
-                        <span className="font-brutal text-4xl font-black leading-none tracking-tighter md:text-7xl">
-                            {NEW_PRICE}
-                        </span>
-                        <span className="mb-0.5 font-brutal text-xs font-bold text-white/70 md:text-base">
-                            ГРН
-                        </span>
+                <div className="mt-4 flex flex-col items-center gap-3 rounded-lg border border-white/10 bg-[#0b0b10] p-4 text-white shadow-[0_4px_40px_rgba(0,0,0,0.6)] md:mt-6 md:gap-5 md:p-8">
+                    <div className="flex items-center justify-center gap-5 md:gap-8">
+                        <div className="flex flex-col items-center">
+                            <span className="whitespace-nowrap font-brutal text-2xl font-black leading-none tracking-tighter text-white/30 line-through decoration-red-500 decoration-[3px] md:text-5xl">
+                                {OLD_PRICE}
+                            </span>
+                            <span className="mt-0.5 font-brutal text-xs font-bold text-white/30 md:text-sm">
+                                ГРН
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col items-center">
+                            <span className="whitespace-nowrap font-brutal text-4xl font-black leading-none tracking-tighter text-white md:text-7xl">
+                                {NEW_PRICE}
+                            </span>
+                            <span className="mt-1 font-brutal text-xs font-bold leading-none text-white/70 md:text-base">
+                                ГРН
+                            </span>
+                        </div>
                     </div>
 
-                    <a
-                        href={ctaHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="button w-full bg-purple-600 py-3 text-center font-brutal text-sm font-black uppercase text-white brutalist-border border-white transition-all hover:bg-purple-500 md:py-4 md:text-lg"
-                    >
-                        Зробити прорив в AI!
-                    </a>
+                    <div className="relative z-10 w-full">
+                        <div className="pointer-events-none absolute -inset-x-3 -bottom-3 h-9 rounded-full bg-red-600/30 blur-xl"></div>
+                        <a
+                            href={ctaHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="button relative block w-full rounded-xl bg-red-600 py-3 text-center font-brutal text-sm font-black uppercase text-white shadow-[0_0_16px_rgba(239,68,68,0.68),0_0_40px_rgba(239,68,68,0.34),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-200 hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.8),0_0_54px_rgba(239,68,68,0.42),inset_0_1px_0_rgba(255,255,255,0.22)] md:py-4 md:text-lg"
+                        >
+                            Зробити прорив в AI!
+                        </a>
+                    </div>
 
-                    <CountdownBlocks compact/>
+                    <CountdownBlocks compact variant="dark"/>
                 </div>
             </div>
         </section>

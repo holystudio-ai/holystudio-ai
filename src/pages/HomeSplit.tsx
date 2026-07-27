@@ -41,13 +41,6 @@ const OFFER_DETAILS = (
     </>
 );
 
-// Split-test hero offer. The headline / "300+ учнів" pill / bottom plate were
-// dropped per the 2.0 edits brief (point 2) — only the offer line + body remain.
-const HERO_OFFER = {
-    offer: 'Навчись з нуля генерувати АІ фото та відео за 5 днів.',
-    text: 'Отримай систему створення кіношного контенту, яку ми використовуємо у своєму продакшені. Від першого промпта до готового ролика.',
-} as const;
-
 // CTA label used on all split-test timer/pricing cards.
 const SPLIT_CTA = 'ЗРОБИТИ ПРОРИВ В AI!';
 
@@ -113,8 +106,8 @@ const HomeSplit = () => {
                     timerMode={SPLIT_TIMER_MODE}
                     price={SPLIT_PRICE}
                     oldPrice={SPLIT_OLD_PRICE}
-                    heroOffer={HERO_OFFER}
                     renderDemand={false}
+                    showHeadlinePlate={false}
                     ctaText={SPLIT_CTA}
                     ctaHref={SPLIT_CTA_HREF}
                     ctaScrollToId={OFFER_BLOCK_ID}
