@@ -4,6 +4,7 @@ import Footer from '@/src/components/layout/Footer.tsx';
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from '@/src/pages/Home.tsx';
 import HomeSplit from '@/src/pages/HomeSplit.tsx';
+import HomeSplitV2 from '@/src/pages/HomeSplitV2.tsx';
 import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
 import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
 import TermsOfUse from "@/src/pages/TermsOfUse.tsx";
@@ -35,6 +36,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/split" element={<HomeSplit />} />
+                <Route path="/splitv2" element={<HomeSplitV2 />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/public-offer" element={<PublicOfferPage />} />
                 <Route path="/terms" element={<TermsOfUse />} />
