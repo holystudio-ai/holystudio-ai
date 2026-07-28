@@ -18,7 +18,7 @@ const items = [
 
 // Split-test pricing: full ~1000 → 390 грн (matches HomeSplit).
 const OLD_PRICE = '1 000';
-const NEW_PRICE = formatPriceUah(390);
+const NEW_PRICE = formatPriceUah(490);
 
 interface SplitCourseBlockProps {
     /** CTA target link (Telegram bot deep link). */
