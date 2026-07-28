@@ -1,4 +1,4 @@
-export const onRequest: PaёgesFunction = async (context) => {
+export const onRequest: PagesFunction = async (context) => {
     const { pathname } = new URL(context.request.url);
 
     const isStaticAssetRequest =
