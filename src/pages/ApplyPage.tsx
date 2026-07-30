@@ -169,7 +169,7 @@ const ApplyPage = () => {
                                     href={channelUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="button inline-block w-full md:w-auto bg-purple-600 text-white px-10 py-4 font-black text-sm md:text-base uppercase brutalist-border border-white font-brutal"
+                                    className="inline-block w-full md:w-auto bg-purple-600 text-white px-10 py-4 font-black text-sm md:text-base uppercase brutalist-border border-white font-brutal"
                                 >
                                     ✈️ Вступити в Telegram-канал
                                 </a>
@@ -232,7 +232,7 @@ const ApplyPage = () => {
                                 <button
                                     type="submit"
                                     disabled={status === 'sending'}
-                                    className="button w-full bg-purple-600 text-white px-6 py-4 font-black text-sm md:text-base uppercase brutalist-border border-white font-brutal disabled:opacity-60 disabled:cursor-not-allowed"
+                                    className="w-full bg-purple-600 text-white px-6 py-4 font-black text-sm md:text-base uppercase brutalist-border border-white font-brutal disabled:opacity-60 disabled:cursor-not-allowed"
                                 >
                                     {status === 'sending' ? 'Надсилаємо...' : 'Записатися на навчання'}
                                 </button>

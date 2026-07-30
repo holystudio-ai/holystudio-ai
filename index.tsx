@@ -16,6 +16,10 @@ window.addEventListener('vite:preloadError', (event) => {
 // reload, without allowing an instant reload loop when a chunk is truly gone.
 window.setTimeout(() => sessionStorage.removeItem('chunk-reload'), 30_000);
 
+// Build marker: changes the bundle hash so browsers that cached a poisoned
+// response under the old asset URL fetch a fresh file after this deploy.
+(window as any).__buildId = '2026-07-30T2';
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
     throw new Error('Could not find root element to mount to');

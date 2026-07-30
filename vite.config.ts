@@ -53,6 +53,20 @@ export default defineConfig(({ mode }) => {
             alias: {
                 '@': path.resolve(__dirname, '.'),
             }
+        },
+        build: {
+            rollupOptions: {
+                output: {
+                    // The "b-" generation prefix retires every previously cached
+                    // asset URL at once: browsers that cached poisoned responses
+                    // (HTML served under .js URLs during the 2026-07-30 outage,
+                    // stored as immutable) never see those URLs referenced again.
+                    // Bump the prefix if a poisoning incident ever recurs.
+                    entryFileNames: 'assets/b-[name]-[hash].js',
+                    chunkFileNames: 'assets/b-[name]-[hash].js',
+                    assetFileNames: 'assets/b-[name]-[hash][extname]',
+                },
+            },
         }
     };
 });

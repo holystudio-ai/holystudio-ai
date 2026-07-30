@@ -348,6 +348,12 @@
     };
     Array.from(document.getElementsByClassName(e)).forEach(function (e) {
       if (e.dataset.ssDeepLinkBound) return;
+      // Only hijack real messenger links; a submit button or a plain link with
+      // this class would otherwise get preventDefault'ed and crash on null href.
+      var ssHref = e.getAttribute("href");
+      if (!ssHref || !a.messengers.some(function (m) {
+        return m.prefixes.some(function (p) { return 0 === ssHref.indexOf(p) });
+      })) return;
       e.dataset.ssDeepLinkBound = "1";
       e.addEventListener("click", function (t) {
         t.preventDefault(),
