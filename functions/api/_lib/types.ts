@@ -20,6 +20,9 @@ export interface Env {
     ADMIN_PASSWORD: string;
     WFP_RETURN_URL: string;
     WFP_FAILED_URL: string;
+    LEADS_SHEETS_WEBHOOK_URL: string;
+    LEADS_NOTIFY_EMAIL: string;
+    TELEGRAM_CHANNEL_INVITE_URL: string;
 }
 
 export function jsonResponse(data: unknown, status = 200): Response {

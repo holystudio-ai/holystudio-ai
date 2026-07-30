@@ -36,3 +36,6 @@ server/node_modules
 *.njsproj
 *.sln
 *.sw?
+# local screenshots / scratch
+plans/
+.wrangler/
