@@ -20,6 +20,10 @@ window.setTimeout(() => sessionStorage.removeItem('chunk-reload'), 30_000);
 // response under the old asset URL fetch a fresh file after this deploy.
 (window as any).__buildId = '2026-07-30T2';
 
+// The app booted, so the bundle loaded fine — re-arm the boot-retry guard
+// (see index.html) for a possible future deploy window in this same tab.
+sessionStorage.removeItem('boot-retry');
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
     throw new Error('Could not find root element to mount to');

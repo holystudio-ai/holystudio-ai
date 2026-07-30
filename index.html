@@ -13,6 +13,20 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="canonical" href="https://holystudio.ai/">
     <meta name="format-detection" content="telephone=no">
+    <script>
+        // During the ~1-2 min deploy rollout the fresh HTML can reference a JS
+        // bundle that isn't served everywhere yet (it 404s, uncached). Retry a
+        // couple of times so a visitor landing in that window self-heals
+        // instead of staring at a black screen.
+        addEventListener('error', function (e) {
+            var t = e.target;
+            if (!t || t.tagName !== 'SCRIPT' || t.type !== 'module') return;
+            var n = +(sessionStorage.getItem('boot-retry') || 0);
+            if (n >= 3) return;
+            sessionStorage.setItem('boot-retry', n + 1);
+            setTimeout(function () { location.reload(); }, 3000 * (n + 1));
+        }, true);
+    </script>
     <meta property="og:title" content="AI іntensive | HOLYSTUDIO">
     <meta property="og:description"
           content="Навчись створювати AI фото та відео кінематографічної якості за 5 днів. Онлайн-інтенсив від HOLYSTUDIO для креаторів і новачків.">
