@@ -29,11 +29,14 @@ const App: React.FC = () => {
         return <AdminPanel />;
     }
 
+    // The apply form is a standalone lead-capture page — no site nav on it.
+    const hideHeader = location.pathname === '/apply';
+
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
             <ScrollToTop />
 
-            <Header/>
+            {!hideHeader && <Header/>}
 
             <Routes>
                 <Route path="/" element={<HomeMain />} />

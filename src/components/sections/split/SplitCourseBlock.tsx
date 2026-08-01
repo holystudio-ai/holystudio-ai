@@ -16,18 +16,26 @@ const items = [
     {num: '06', text: 'Постійний доступ до матеріалів'},
 ];
 
-// Split-test pricing: full ~1000 → 390 грн (matches HomeSplit).
-const OLD_PRICE = '1 000';
-const NEW_PRICE = formatPriceUah(390);
+// Fallback pricing (matches HomeSplit): full ~1000 → 390 грн.
+const DEFAULT_PRICE = 390;
+const DEFAULT_OLD_PRICE = '1 000';
 
 interface SplitCourseBlockProps {
     /** CTA target link (Telegram bot deep link). */
     ctaHref?: string;
+    /** Discounted price shown in the offer/timer card. */
+    price?: number;
+    /** Full/old (struck-through) price label. */
+    oldPrice?: string;
 }
 
 const SplitCourseBlock: React.FC<SplitCourseBlockProps> = ({
     ctaHref = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1',
+    price = DEFAULT_PRICE,
+    oldPrice = DEFAULT_OLD_PRICE,
 }) => {
+    const displayPrice = formatPriceUah(price);
+
     return (
         <section className="bg-white px-4 py-8 text-black md:py-14">
             <div className="mx-auto flex max-w-2xl flex-col md:max-w-3xl">
@@ -62,7 +70,7 @@ const SplitCourseBlock: React.FC<SplitCourseBlockProps> = ({
                     <div className="flex items-center justify-center gap-5 md:gap-8">
                         <div className="flex flex-col items-center">
                             <span className="whitespace-nowrap font-brutal text-2xl font-black leading-none tracking-tighter text-white/30 line-through decoration-red-500 decoration-[3px] md:text-5xl">
-                                {OLD_PRICE}
+                                {oldPrice}
                             </span>
                             <span className="mt-0.5 font-brutal text-xs font-bold text-white/30 md:text-sm">
                                 ГРН
@@ -71,7 +79,7 @@ const SplitCourseBlock: React.FC<SplitCourseBlockProps> = ({
 
                         <div className="flex flex-col items-center">
                             <span className="whitespace-nowrap font-brutal text-4xl font-black leading-none tracking-tighter text-white md:text-7xl">
-                                {NEW_PRICE}
+                                {displayPrice}
                             </span>
                             <span className="mt-1 font-brutal text-xs font-bold leading-none text-white/70 md:text-base">
                                 ГРН

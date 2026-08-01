@@ -155,7 +155,11 @@ const HomeMain = () => {
                 {/* 09. Контент курсу + офер (окремий блок з таймером після відгуків прибрано) */}
                 <div id={OFFER_BLOCK_ID} ref={offerBlockRef} className="scroll-mt-20">
                     <Suspense fallback={null}>
-                        <SplitCourseBlock ctaHref={MAIN_CTA_HREF}/>
+                        <SplitCourseBlock
+                            ctaHref={MAIN_CTA_HREF}
+                            price={MAIN_PRICE}
+                            oldPrice={MAIN_OLD_PRICE}
+                        />
                     </Suspense>
                 </div>
 

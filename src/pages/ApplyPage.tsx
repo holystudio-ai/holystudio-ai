@@ -153,7 +153,8 @@ const ApplyPage = () => {
                 title="Запис на навчання — HOLYSTUDIO"
                 description="Анкета предзапису на навчання з ШІ генерацій від HOLYSTUDIO. Навчись створювати рекламні відео кінематографічної якості."
             />
-            <main className="pt-24 md:pt-36 pb-16 md:pb-24 px-4">
+            {/* No header on this page — top padding is just breathing room, not header clearance. */}
+            <main className="pt-10 md:pt-16 pb-16 md:pb-24 px-4">
                 <div className="max-w-3xl mx-auto">
                     {submitted ? (
                         <div className="brutalist-border brutalist-shadow-accent bg-black p-6 md:p-12 text-center">
