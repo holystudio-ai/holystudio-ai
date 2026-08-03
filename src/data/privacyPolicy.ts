@@ -18,7 +18,7 @@ export const privacyPolicy: PolicyData = {
             title: "Збір даних",
             text: `
 Виконавець збирає такі дані: ім'я, адреса електронної пошти, номер телефону,
-дані про оплату (через checkout-сервіс Zenedu), IP-адреса,
+дані про оплату (через сервіси WayForPay і SmartSender), IP-адреса,
 дані cookies та аналітики.
       `
         },

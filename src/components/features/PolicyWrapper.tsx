@@ -5,6 +5,30 @@ interface PolicyWrapperProps {
     policyData: PolicyData;
 }
 
+// Policy bodies are plain text, but they mention Telegram handles (@HOLYSTUDIO_AI_bot)
+// that should be clickable. Split on handles and render those parts as t.me links.
+// Two regexes: the /g one is only for split(), the anchored one for the per-part
+// check — reusing a /g regex with .test() would carry lastIndex between calls.
+const TG_HANDLE_SPLIT = /(@[A-Za-z0-9_]{4,32})/g;
+const TG_HANDLE_EXACT = /^@[A-Za-z0-9_]{4,32}$/;
+
+const linkifyHandles = (text: string) =>
+    text.split(TG_HANDLE_SPLIT).map((part, i) =>
+        TG_HANDLE_EXACT.test(part) ? (
+            <a
+                key={i}
+                href={`https://t.me/${part.slice(1)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-700 underline underline-offset-2 font-black break-words"
+            >
+                {part}
+            </a>
+        ) : (
+            part
+        )
+    );
+
 const PolicyWrapper: FC<PolicyWrapperProps> = ({policyData}) => {
     const safeTitle = policyData?.title ?? "";
     const sections = useMemo(() => policyData?.sections ?? [], [policyData]);
@@ -39,7 +63,7 @@ const PolicyWrapper: FC<PolicyWrapperProps> = ({policyData}) => {
                             <div className="p-6 bg-white">
                                 <div className="h-[3px] w-20 bg-purple-600 mb-4"/>
                                 <p className="text-sm md:text-lg font-medium leading-relaxed whitespace-pre-line text-zinc-900">
-                                    {section.text?.trim()}
+                                    {linkifyHandles(section.text?.trim() ?? "")}
                                 </p>
                             </div>
                         </article>

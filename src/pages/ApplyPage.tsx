@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
-import heroImage from "../assets/images/hero-image.webp";
-import heroImageMobile from "../assets/images/hero-image-mobile.webp";
+import heroImage from "../assets/images/apply-hero.webp";
+import heroImageDesktop from "../assets/images/apply-hero-desktop.webp";
 
 const ROLE_OPTIONS = [
     'підприємець',
@@ -159,21 +159,26 @@ const ApplyPage = () => {
             <section className="overflow-x-hidden px-4 pt-6 md:pt-10 max-[480px]:px-0 max-[480px]:pt-0">
                 <div className="mx-auto max-w-5xl">
                     <div className="overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
+                        {/*
+                          Two separate crops, not one image scaled: landscape 1672×941 from md up,
+                          portrait 1122×1402 below. object-contain everywhere — both carry baked-in
+                          copy (clapperboard, headline) that must never be cropped.
+                        */}
                         <picture>
-                            <source media="(max-width: 480px)" srcSet={heroImageMobile}/>
+                            {/* width/height here so the desktop crop reserves its own 16:9-ish box,
+                                not the portrait ratio declared on <img>. */}
+                            <source media="(min-width: 768px)" srcSet={heroImageDesktop} width={1672} height={941}/>
                             <img
                                 src={heroImage}
-                                alt="Навчись створювати AI контент кіношної якості за 5 днів"
+                                width={1122}
+                                height={1402}
+                                alt="Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO"
                                 fetchPriority="high"
                                 loading="eager"
                                 decoding="async"
                                 className="
-                                    block w-full h-auto object-cover object-center
-                                    max-h-[72svh] md:max-h-[80svh]
-
-                                    max-[480px]:max-h-none
-                                    max-[480px]:object-contain
-                                    max-[480px]:object-top
+                                    mx-auto block w-full h-auto object-contain object-top
+                                    max-w-[560px] md:max-w-none
                                 "
                             />
                         </picture>
