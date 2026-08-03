@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
+import heroImage from "../assets/images/hero-image.webp";
+import heroImageMobile from "../assets/images/hero-image-mobile.webp";
 
 const ROLE_OPTIONS = [
     'підприємець',
@@ -154,7 +156,32 @@ const ApplyPage = () => {
                 description="Анкета предзапису на навчання з ШІ генерацій від HOLYSTUDIO. Навчись створювати рекламні відео кінематографічної якості."
             />
             {/* No header on this page — top padding is just breathing room, not header clearance. */}
-            <main className="pt-10 md:pt-16 pb-16 md:pb-24 px-4">
+            <section className="overflow-x-hidden px-4 pt-6 md:pt-10 max-[480px]:px-0 max-[480px]:pt-0">
+                <div className="mx-auto max-w-5xl">
+                    <div className="overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
+                        <picture>
+                            <source media="(max-width: 480px)" srcSet={heroImageMobile}/>
+                            <img
+                                src={heroImage}
+                                alt="Навчись створювати AI контент кіношної якості за 5 днів"
+                                fetchPriority="high"
+                                loading="eager"
+                                decoding="async"
+                                className="
+                                    block w-full h-auto object-cover object-center
+                                    max-h-[72svh] md:max-h-[80svh]
+
+                                    max-[480px]:max-h-none
+                                    max-[480px]:object-contain
+                                    max-[480px]:object-top
+                                "
+                            />
+                        </picture>
+                    </div>
+                </div>
+            </section>
+
+            <main className="pt-8 md:pt-12 pb-16 md:pb-24 px-4">
                 <div className="max-w-3xl mx-auto">
                     {submitted ? (
                         <div className="brutalist-border brutalist-shadow-accent bg-black p-6 md:p-12 text-center">
