@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
-import heroImage from "../assets/images/apply-hero.webp";
-import heroImageDesktop from "../assets/images/apply-hero-desktop.webp";
+import heroImage from "../assets/images/apply-hero-2.webp";
 
 const ROLE_OPTIONS = [
     'підприємець',
@@ -11,6 +10,13 @@ const ROLE_OPTIONS = [
     'власник продакшену',
     'фотограф',
     'відеограф',
+];
+
+const INCOME_OPTIONS = [
+    'До $500',
+    '$500 – $1000',
+    '$1000 – $2000',
+    '$2000+',
 ];
 
 const READINESS_OPTIONS = [
@@ -71,34 +77,69 @@ interface ChoiceProps {
     options: string[];
     value: string;
     onChange: (name: string, value: string) => void;
+    allowOther?: boolean;
 }
 
-const ChoiceField: React.FC<ChoiceProps> = ({label, name, options, value, onChange}) => (
-    <div>
-        <span className={labelClass}>
-            {label} <span className="text-purple-500">*</span>
-        </span>
-        <div className="flex flex-wrap gap-2">
-            {options.map((option) => {
-                const active = value === option;
-                return (
+const choiceButtonClass = (active: boolean) =>
+    `px-4 py-2 border-2 text-xs md:text-sm font-bold uppercase transition-colors ${
+        active
+            ? 'bg-purple-600 border-white text-white'
+            : 'bg-black border-white text-white hover:bg-white hover:text-black'
+    }`;
+
+const ChoiceField: React.FC<ChoiceProps> = ({label, name, options, value, onChange, allowOther}) => {
+    // "Інше" is a mode, not a value: once picked, the field's value becomes whatever
+    // the user types. Seeded from `value` so a filled-in custom answer stays open.
+    const [otherMode, setOtherMode] = useState(() => !!value && !options.includes(value));
+
+    return (
+        <div>
+            <span className={labelClass}>
+                {label} <span className="text-purple-500">*</span>
+            </span>
+            <div className="flex flex-wrap gap-2">
+                {options.map((option) => (
                     <button
                         key={option}
                         type="button"
-                        onClick={() => onChange(name, option)}
-                        className={`px-4 py-2 border-2 text-xs md:text-sm font-bold uppercase transition-colors ${
-                            active
-                                ? 'bg-purple-600 border-white text-white'
-                                : 'bg-black border-white text-white hover:bg-white hover:text-black'
-                        }`}
+                        onClick={() => {
+                            setOtherMode(false);
+                            onChange(name, option);
+                        }}
+                        className={choiceButtonClass(!otherMode && value === option)}
                     >
                         {option}
                     </button>
-                );
-            })}
+                ))}
+
+                {allowOther && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setOtherMode(true);
+                            onChange(name, '');
+                        }}
+                        className={choiceButtonClass(otherMode)}
+                    >
+                        інше
+                    </button>
+                )}
+            </div>
+
+            {allowOther && otherMode && (
+                <input
+                    type="text"
+                    name={`${name}Other`}
+                    value={value}
+                    autoFocus
+                    placeholder="Вкажіть свій варіант"
+                    onChange={(e) => onChange(name, e.target.value)}
+                    className={`${inputClass} mt-3`}
+                />
+            )}
         </div>
-    </div>
-);
+    );
+};
 
 const EMPTY_FORM = {
     name: '',
@@ -108,6 +149,7 @@ const EMPTY_FORM = {
     telegram: '',
     source: '',
     role: '',
+    income: '',
     interest: '',
     motivation: '',
     readiness: '',
@@ -125,7 +167,7 @@ const ApplyPage = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!form.role || !form.readiness) {
+        if (!form.role || !form.income || !form.readiness) {
             setStatus('error');
             return;
         }
@@ -159,29 +201,18 @@ const ApplyPage = () => {
             <section className="overflow-x-hidden px-4 pt-6 md:pt-10 max-[480px]:px-0 max-[480px]:pt-0">
                 <div className="mx-auto max-w-5xl">
                     <div className="overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
-                        {/*
-                          Two separate crops, not one image scaled: landscape 1672×941 from md up,
-                          portrait 1122×1402 below. object-contain everywhere — both carry baked-in
-                          copy (clapperboard, headline) that must never be cropped.
-                        */}
-                        <picture>
-                            {/* width/height here so the desktop crop reserves its own 16:9-ish box,
-                                not the portrait ratio declared on <img>. */}
-                            <source media="(min-width: 768px)" srcSet={heroImageDesktop} width={1672} height={941}/>
-                            <img
-                                src={heroImage}
-                                width={1122}
-                                height={1402}
-                                alt="Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO"
-                                fetchPriority="high"
-                                loading="eager"
-                                decoding="async"
-                                className="
-                                    mx-auto block w-full h-auto object-contain object-top
-                                    max-w-[560px] md:max-w-none
-                                "
-                            />
-                        </picture>
+                        {/* object-contain, never cover — the banner has baked-in copy
+                            (HOLYSTUDIO / АНКЕТА ПЕРЕД ЗАПИСУ) that must not be cropped. */}
+                        <img
+                            src={heroImage}
+                            width={1774}
+                            height={887}
+                            alt="Анкета передзапису — AI Director School від HOLYSTUDIO"
+                            fetchPriority="high"
+                            loading="eager"
+                            decoding="async"
+                            className="block w-full h-auto object-contain"
+                        />
                     </div>
                 </div>
             </section>
@@ -210,20 +241,7 @@ const ApplyPage = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="mb-10">
-                                <span className="inline-block bg-purple-600 border-2 border-white px-3 py-1.5 font-brutal font-black text-[10px] md:text-xs uppercase tracking-tighter mb-5">
-                                    Анкета предзапису
-                                </span>
-                                <h1 className="text-2xl md:text-4xl font-black font-brutal tracking-tighter leading-tight mb-5">
-                                    Навчання з <span className="text-purple-500">ШІ генерацій</span> від
-                                    HOLYSTUDIO
-                                </h1>
-                                <p className="text-gray-300 text-sm md:text-base leading-relaxed border-l-4 border-purple-500 pl-4">
-                                    Навчись створювати рекламні відео кінематографічної якості — з тими
-                                    інструментами, з якими ми знімаємо для клієнтів продакшену.
-                                </p>
-                            </div>
-
+                            {/* No intro copy here — the hero banner already carries the headline. */}
                             <form
                                 onSubmit={handleSubmit}
                                 className="brutalist-border bg-black p-6 md:p-10 space-y-6"
@@ -242,7 +260,11 @@ const ApplyPage = () => {
                                        onChange={setField} placeholder="Instagram, друзі, реклама..."/>
 
                                 <ChoiceField label="Ваша роль" name="role" options={ROLE_OPTIONS}
-                                             value={form.role} onChange={setField}/>
+                                             value={form.role} onChange={setField} allowOther/>
+
+                                <ChoiceField label="Який твій середній дохід на місяць зараз?" name="income"
+                                             options={INCOME_OPTIONS}
+                                             value={form.income} onChange={setField}/>
 
                                 <Field label="Який напрямок вас найбільше цікавить в AI?" name="interest"
                                        value={form.interest} onChange={setField} textarea
@@ -257,8 +279,8 @@ const ApplyPage = () => {
 
                                 {status === 'error' && (
                                     <div className="border-2 border-red-500 text-red-400 px-4 py-3 text-sm font-bold uppercase">
-                                        Не вдалося надіслати. Перевір, що всі поля заповнені (включно з роллю та
-                                        готовністю), і спробуй ще раз.
+                                        Не вдалося надіслати. Перевір, що всі поля заповнені (включно з роллю,
+                                        доходом та готовністю), і спробуй ще раз.
                                     </div>
                                 )}
 

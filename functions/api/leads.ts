@@ -9,6 +9,7 @@ interface LeadBody {
     telegram: string;
     source: string;
     role: string;
+    income: string;
     interest: string;
     motivation: string;
     readiness: string;
@@ -16,7 +17,7 @@ interface LeadBody {
 
 const REQUIRED_FIELDS: (keyof LeadBody)[] = [
     'name', 'email', 'country', 'phone', 'telegram',
-    'source', 'role', 'interest', 'motivation', 'readiness',
+    'source', 'role', 'income', 'interest', 'motivation', 'readiness',
 ];
 
 const FIELD_LABELS: Record<keyof LeadBody, string> = {
@@ -27,6 +28,7 @@ const FIELD_LABELS: Record<keyof LeadBody, string> = {
     telegram: 'Telegram',
     source: 'Звідки дізнались',
     role: 'Роль',
+    income: 'Середній дохід/міс',
     interest: 'Напрямок в AI',
     motivation: 'Чому менторство',
     readiness: 'Готовність до покупки',
