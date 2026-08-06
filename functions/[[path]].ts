@@ -18,7 +18,10 @@ interface LinkPreview {
  */
 const LINK_PREVIEWS: Record<string, LinkPreview> = {
     '/apply': {
-        image: `${SITE_URL}/new-link-img.PNG`,
+        // ?v is a cache-buster: messengers keep preview images keyed by URL, so
+        // replacing the file in place leaves them showing the old one forever.
+        // Bump the number whenever the file behind this name changes.
+        image: `${SITE_URL}/new-link-img.PNG?v=2`,
         title: 'Анкета передзапису | HOLYSTUDIO',
         description:
             'Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO. ' +
