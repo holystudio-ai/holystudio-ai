@@ -23,8 +23,8 @@ const LINK_PREVIEWS: Record<string, LinkPreview> = {
         description:
             'Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO. ' +
             'Навчись створювати рекламні відео кінематографічної якості.',
-        width: '1122',
-        height: '1402',
+        width: '1774',
+        height: '887',
     },
 };
 

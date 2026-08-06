@@ -206,8 +206,8 @@ const ApplyPage = () => {
                             (HOLYSTUDIO / АНКЕТА ПЕРЕД ЗАПИСУ) that must not be cropped. */}
                         <img
                             src={heroImage}
-                            width={1774}
-                            height={887}
+                            width={1122}
+                            height={1402}
                             alt="Анкета передзапису — AI Director School від HOLYSTUDIO"
                             fetchPriority="high"
                             loading="eager"
