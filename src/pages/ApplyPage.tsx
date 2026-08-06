@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
-import heroImage from "../assets/images/apply-hero-2.webp";
+
+const heroImage = '/new-img-ank.PNG';
 
 const ROLE_OPTIONS = [
     'підприємець',

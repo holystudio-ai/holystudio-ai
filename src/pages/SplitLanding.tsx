@@ -5,8 +5,6 @@ import Audience from "@/src/components/sections/Audience.tsx";
 import {coursePriceUah} from '@/src/lib/pricing.ts';
 import Seo from "@/src/components/features/Seo.tsx";
 import {buildCourseSchema} from "@/src/lib/seo.ts";
-import heroSplitDesktop from "@/src/assets/images/hero-splitv2-desktop.webp";
-import heroSplitMobile from "@/src/assets/images/hero-splitv2-mobile.webp";
 
 const ResultsGallery = lazy(() => import("@/src/components/sections/ResultsGallery.tsx"));
 const Team = lazy(() => import("@/src/components/sections/Team.tsx"));
@@ -20,7 +18,7 @@ const Testimonials = lazy(() => import("@/src/components/sections/split/Testimon
 
 const priceValue = String(coursePriceUah);
 
-// Countdown timer resets 10 minutes from the visitor's first visit to /split.
+// Countdown timer resets 10 minutes from the visitor's first visit to the page.
 const SPLIT_TIMER_MODE = 'countdown' as const;
 
 // Split-test pricing (independent of the live `/` price env): full ~1000 → 390 грн.
@@ -45,7 +43,7 @@ const OFFER_DETAILS = (
 const SPLIT_CTA = 'ЗРОБИТИ ПРОРИВ В AI!';
 
 // Split-test Telegram deep link (edits brief, point 10).
-const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1';
+export const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1';
 
 // The on-page offer block (HOLYSTUDIO AI CREATOR) — timer CTAs scroll here, and
 // the floating CTA hides while it's on screen.
@@ -56,7 +54,23 @@ const scrollToOfferBlock = (event: React.MouseEvent) => {
     document.getElementById(OFFER_BLOCK_ID)?.scrollIntoView({behavior: 'smooth', block: 'start'});
 };
 
-const HomeSplitV2 = () => {
+interface SplitLandingProps {
+    /** Hero artwork shown from 481px up — the only thing that differs between variants. */
+    imageDesktop: string;
+    /** Hero artwork shown up to 480px. */
+    imageMobile: string;
+    /** Per-variant SmartSender deep link, so bot-side conversions can be told apart. */
+    ctaHref?: string;
+    /** Keep a test landing out of search results — it duplicates `/`. */
+    noindex?: boolean;
+}
+
+const SplitLanding: React.FC<SplitLandingProps> = ({
+                                                       imageDesktop,
+                                                       imageMobile,
+                                                       ctaHref = SPLIT_CTA_HREF,
+                                                       noindex = false,
+                                                   }) => {
     const offersRef = useRef<HTMLDivElement>(null);
     const offerBlockRef = useRef<HTMLDivElement>(null);
     const [pastOffers, setPastOffers] = useState(false);
@@ -99,6 +113,7 @@ const HomeSplitV2 = () => {
                 title="AI Creative Intensive"
                 description="Онлайн-інтенсив від HOLYSTUDIO: навчись створювати AI фото та відео кінематографічної якості з нуля за 5 днів. Програма, кейси, гарантія та спеціальна ціна."
                 structuredData={buildCourseSchema(priceValue)}
+                noindex={noindex}
             />
             <main>
                 {/* 01. Головний екран — офер без заголовка, бейджа та лого */}
@@ -109,12 +124,12 @@ const HomeSplitV2 = () => {
                     renderDemand={false}
                     showHeadlinePlate={false}
                     ctaText={SPLIT_CTA}
-                    ctaHref={SPLIT_CTA_HREF}
+                    ctaHref={ctaHref}
                     ctaScrollToId={OFFER_BLOCK_ID}
                     wideMobile
                     showBadge={false}
-                    imageDesktop={heroSplitDesktop}
-                    imageMobile={heroSplitMobile}
+                    imageDesktop={imageDesktop}
+                    imageMobile={imageMobile}
                 />
 
                 {/* 02. Роботи студентів — один слайдер: спочатку відео, потім фото */}
@@ -159,7 +174,7 @@ const HomeSplitV2 = () => {
                 <div id={OFFER_BLOCK_ID} ref={offerBlockRef} className="scroll-mt-20">
                     <Suspense fallback={null}>
                         <SplitCourseBlock
-                            ctaHref={SPLIT_CTA_HREF}
+                            ctaHref={ctaHref}
                             price={SPLIT_PRICE}
                             oldPrice={SPLIT_OLD_PRICE}
                         />
@@ -200,4 +215,4 @@ const HomeSplitV2 = () => {
     );
 };
 
-export default HomeSplitV2;
+export default SplitLanding;

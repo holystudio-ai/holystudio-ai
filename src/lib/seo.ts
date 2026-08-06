@@ -1,8 +1,8 @@
 export const SITE_URL = "https://holystudio.ai";
 export const SITE_NAME = "HOLYSTUDIO";
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
-export const DEFAULT_OG_IMAGE_WIDTH = "2000";
-export const DEFAULT_OG_IMAGE_HEIGHT = "2233";
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.JPG`;
+export const DEFAULT_OG_IMAGE_WIDTH = "2552";
+export const DEFAULT_OG_IMAGE_HEIGHT = "1424";
 
 export const buildCourseSchema = (price: string) => ({
     "@context": "https://schema.org",

@@ -1,3 +1,78 @@
+const SITE_URL = 'https://holystudio.ai';
+
+interface LinkPreview {
+    image: string;
+    title: string;
+    description: string;
+    /** Real pixel size of `image`. Omitted rather than guessed — a wrong value
+     *  makes messengers reserve the wrong box and crop the preview. */
+    width?: string;
+    height?: string;
+}
+
+/**
+ * Messengers and crawlers don't execute JavaScript, so the <Seo> component that
+ * rewrites these tags in the browser is invisible to them: every link shared out
+ * of the SPA shows whatever sits in the static index.html. Paths listed here get
+ * their tags swapped in the HTML itself, on the way out.
+ */
+const LINK_PREVIEWS: Record<string, LinkPreview> = {
+    '/apply': {
+        image: `${SITE_URL}/new-link-img.PNG`,
+        title: 'Анкета передзапису | HOLYSTUDIO',
+        description:
+            'Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO. ' +
+            'Навчись створювати рекламні відео кінематографічної якості.',
+        width: '1122',
+        height: '1402',
+    },
+};
+
+class SetContent {
+    constructor(private readonly value: string) {}
+
+    element(element: Element) {
+        element.setAttribute('content', this.value);
+    }
+}
+
+class SetText {
+    constructor(private readonly value: string) {}
+
+    element(element: Element) {
+        element.setInnerContent(this.value);
+    }
+}
+
+class RemoveElement {
+    element(element: Element) {
+        element.remove();
+    }
+}
+
+function applyLinkPreview(response: Response, preview: LinkPreview, canonicalUrl: string): Response {
+    const size = (value?: string) => (value ? new SetContent(value) : new RemoveElement());
+
+    return new HTMLRewriter()
+        .on('title', new SetText(preview.title))
+        .on('meta[name="description"]', new SetContent(preview.description))
+        .on('meta[property="og:title"]', new SetContent(preview.title))
+        .on('meta[property="og:description"]', new SetContent(preview.description))
+        .on('meta[property="og:image"]', new SetContent(preview.image))
+        .on('meta[property="og:image:width"]', size(preview.width))
+        .on('meta[property="og:image:height"]', size(preview.height))
+        .on('meta[property="og:url"]', new SetContent(canonicalUrl))
+        .on('link[rel="canonical"]', {
+            element(element) {
+                element.setAttribute('href', canonicalUrl);
+            },
+        })
+        .on('meta[name="twitter:title"]', new SetContent(preview.title))
+        .on('meta[name="twitter:description"]', new SetContent(preview.description))
+        .on('meta[name="twitter:image"]', new SetContent(preview.image))
+        .transform(response);
+}
+
 export const onRequest: PagesFunction = async (context) => {
     const { pathname } = new URL(context.request.url);
 
@@ -31,5 +106,13 @@ export const onRequest: PagesFunction = async (context) => {
     }
 
     const assetUrl = new URL('/', context.request.url);
-    return context.env.ASSETS.fetch(new Request(assetUrl, context.request));
+    const response = await context.env.ASSETS.fetch(new Request(assetUrl, context.request));
+
+    const route = pathname.replace(/\/+$/, '') || '/';
+    const preview = LINK_PREVIEWS[route];
+    if (!preview) {
+        return response;
+    }
+
+    return applyLinkPreview(response, preview, `${SITE_URL}${route}`);
 };

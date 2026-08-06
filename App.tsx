@@ -5,8 +5,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from '@/src/pages/Home.tsx';
 import HomeMain from '@/src/pages/HomeMain.tsx';
 import ApplyPage from '@/src/pages/ApplyPage.tsx';
-import HomeSplit from '@/src/pages/HomeSplit.tsx';
-import HomeSplitV2 from '@/src/pages/HomeSplitV2.tsx';
+import SplitLanding from '@/src/pages/SplitLanding.tsx';
+import {SPLIT_VARIANTS} from '@/src/pages/splitVariants.ts';
 import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
 import PublicOfferPage from "@/src/pages/PublicOffer.tsx";
 import TermsOfUse from "@/src/pages/TermsOfUse.tsx";
@@ -42,8 +42,20 @@ const App: React.FC = () => {
                 <Route path="/" element={<HomeMain />} />
                 <Route path="/old" element={<HomePage />} />
                 <Route path="/apply" element={<ApplyPage />} />
-                <Route path="/split" element={<HomeSplit />} />
-                <Route path="/splitv2" element={<HomeSplitV2 />} />
+                {SPLIT_VARIANTS.map((variant) => (
+                    <Route
+                        key={variant.slug}
+                        path={`/${variant.slug}`}
+                        element={
+                            <SplitLanding
+                                imageDesktop={variant.imageDesktop}
+                                imageMobile={variant.imageMobile}
+                                ctaHref={variant.ctaHref}
+                                noindex={variant.noindex}
+                            />
+                        }
+                    />
+                ))}
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/public-offer" element={<PublicOfferPage />} />
                 <Route path="/terms" element={<TermsOfUse />} />

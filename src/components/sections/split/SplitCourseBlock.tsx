@@ -16,7 +16,7 @@ const items = [
     {num: '06', text: 'Постійний доступ до матеріалів'},
 ];
 
-// Fallback pricing (matches HomeSplit): full ~1000 → 390 грн.
+// Fallback pricing (matches SplitLanding): full ~1000 → 390 грн.
 const DEFAULT_PRICE = 390;
 const DEFAULT_OLD_PRICE = '1 000';
 
