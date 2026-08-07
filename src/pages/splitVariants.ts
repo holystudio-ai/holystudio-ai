@@ -30,22 +30,22 @@ export const SPLIT_VARIANTS: SplitVariant[] = [
         imageMobile: heroSplitMobile,
     },
     {
-        slug: 'splitv2',
+        slug: 'split2',
         imageDesktop: heroSplitV2Desktop,
         imageMobile: heroSplitV2Mobile,
     },
     {
-        slug: 'splitv3',
+        slug: 'split3',
         imageDesktop: offer01,
         imageMobile: offer01,
     },
     {
-        slug: 'splitv4',
+        slug: 'split4',
         imageDesktop: offer02,
         imageMobile: offer02,
     },
     {
-        slug: 'splitv5',
+        slug: 'split5',
         imageDesktop: offer03,
         imageMobile: offer03,
     },
