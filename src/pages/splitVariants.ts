@@ -20,14 +20,19 @@ export interface SplitVariant {
  * Every split-test landing is the same page with different hero artwork — the
  * offer copy is baked into the image. Adding a variant means adding a line here.
  *
- * split3/4/5 only got vertical creatives from the client; the same file is used
- * for both breakpoints so every device shows the tested offer.
+ * Media buyers use /split2…/split5. /split and /splitv2 stay as aliases so old
+ * links keep working.
  */
 export const SPLIT_VARIANTS: SplitVariant[] = [
     {
         slug: 'split',
         imageDesktop: heroSplitDesktop,
         imageMobile: heroSplitMobile,
+    },
+    {
+        slug: 'splitv2',
+        imageDesktop: heroSplitV2Desktop,
+        imageMobile: heroSplitV2Mobile,
     },
     {
         slug: 'split2',
