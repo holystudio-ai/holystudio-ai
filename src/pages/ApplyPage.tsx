@@ -216,15 +216,12 @@ const ApplyPage = () => {
             />
             {/* No header on this page — top padding is just breathing room, not header clearance.
                 Size like an opened image: as large as possible while the whole frame stays
-                on screen (width or height hits the viewport, aspect ratio preserved). */}
+                on screen (width or height hits the viewport, aspect ratio preserved).
+                CTA hotspot is %-based on the image box — safe across devices while the
+                creative keeps the same aspect ratio; recalibrate if the crop changes. */}
             <section className="overflow-x-hidden px-4 pt-4 md:pt-8 max-[480px]:px-0 max-[480px]:pt-0">
                 <div className="flex justify-center">
-                    <button
-                        type="button"
-                        onClick={jumpToForm}
-                        aria-label="Заповнити анкету — перейти до першого поля"
-                        className="max-w-full overflow-hidden border-4 border-black bg-black max-[480px]:border-0 cursor-pointer p-0 text-left"
-                    >
+                    <div className="relative max-w-full overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
                         <img
                             src={heroImage}
                             width={1122}
@@ -233,9 +230,16 @@ const ApplyPage = () => {
                             fetchPriority="high"
                             loading="eager"
                             decoding="async"
-                            className="block h-auto w-auto max-w-full max-h-[100svh] object-contain pointer-events-none"
+                            className="block h-auto w-auto max-w-full max-h-[100svh] object-contain"
                         />
-                    </button>
+                        {/* Transparent hit target over the painted «ЗАПОВНИТИ АНКЕТУ» pill. */}
+                        <button
+                            type="button"
+                            onClick={jumpToForm}
+                            aria-label="Заповнити анкету — перейти до першого поля"
+                            className="absolute left-[10%] bottom-[4%] h-[12%] w-[80%] cursor-pointer rounded-full border-0 bg-transparent p-0"
+                        />
+                    </div>
                 </div>
             </section>
 
