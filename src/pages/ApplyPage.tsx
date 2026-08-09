@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
-
-// const heroImage = '/new-img-ank.PNG';
 import heroImage from "@/src/assets/images/new-aplpic.png";
 
 const ROLE_OPTIONS = [
@@ -40,9 +38,12 @@ interface FieldProps {
     placeholder?: string;
     type?: string;
     textarea?: boolean;
+    inputRef?: React.Ref<HTMLInputElement>;
 }
 
-const Field: React.FC<FieldProps> = ({label, name, value, onChange, placeholder, type = 'text', textarea}) => (
+const Field: React.FC<FieldProps> = ({
+    label, name, value, onChange, placeholder, type = 'text', textarea, inputRef,
+}) => (
     <div>
         <label htmlFor={name} className={labelClass}>
             {label} <span className="text-purple-500">*</span>
@@ -60,6 +61,7 @@ const Field: React.FC<FieldProps> = ({label, name, value, onChange, placeholder,
             />
         ) : (
             <input
+                ref={inputRef}
                 id={name}
                 name={name}
                 required
@@ -162,9 +164,22 @@ const ApplyPage = () => {
     const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle');
     const [channelUrl, setChannelUrl] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
+    const firstFieldRef = useRef<HTMLInputElement>(null);
 
     const setField = (name: string, value: string) => {
         setForm((prev) => ({...prev, [name]: value}));
+    };
+
+    /** Banner CTA is painted into the image — whole hero is the hit target. */
+    const jumpToForm = () => {
+        const field = firstFieldRef.current ?? document.getElementById('name');
+        field?.scrollIntoView({behavior: 'smooth', block: 'center'});
+        // Focus after scroll starts so mobile keyboards don't fight the jump.
+        window.setTimeout(() => {
+            if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+                field.focus({preventScroll: true});
+            }
+        }, 300);
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -204,7 +219,12 @@ const ApplyPage = () => {
                 on screen (width or height hits the viewport, aspect ratio preserved). */}
             <section className="overflow-x-hidden px-4 pt-4 md:pt-8 max-[480px]:px-0 max-[480px]:pt-0">
                 <div className="flex justify-center">
-                    <div className="max-w-full overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
+                    <button
+                        type="button"
+                        onClick={jumpToForm}
+                        aria-label="Заповнити анкету — перейти до першого поля"
+                        className="max-w-full overflow-hidden border-4 border-black bg-black max-[480px]:border-0 cursor-pointer p-0 text-left"
+                    >
                         <img
                             src={heroImage}
                             width={1122}
@@ -213,9 +233,9 @@ const ApplyPage = () => {
                             fetchPriority="high"
                             loading="eager"
                             decoding="async"
-                            className="block h-auto w-auto max-w-full max-h-[100svh] object-contain"
+                            className="block h-auto w-auto max-w-full max-h-[100svh] object-contain pointer-events-none"
                         />
-                    </div>
+                    </button>
                 </div>
             </section>
 
@@ -249,7 +269,8 @@ const ApplyPage = () => {
                                 className="brutalist-border bg-black p-6 md:p-10 space-y-6"
                             >
                                 <Field label="Ваше ім'я" name="name" value={form.name}
-                                       onChange={setField} placeholder="Ім'я та прізвище"/>
+                                       onChange={setField} placeholder="Ім'я та прізвище"
+                                       inputRef={firstFieldRef}/>
                                 <Field label="Ваш email" name="email" type="email" value={form.email}
                                        onChange={setField} placeholder="you@example.com"/>
                                 <Field label="Країна" name="country" value={form.country}
