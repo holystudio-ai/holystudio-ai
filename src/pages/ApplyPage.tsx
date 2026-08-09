@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
 
-const heroImage = '/new-img-ank.PNG';
+// const heroImage = '/new-img-ank.PNG';
+import heroImage from "@/src/assets/images/new-aplpic.png";
 
 const ROLE_OPTIONS = [
     'підприємець',
@@ -198,12 +199,12 @@ const ApplyPage = () => {
                 title="Запис на навчання — HOLYSTUDIO"
                 description="Анкета предзапису на навчання з ШІ генерацій від HOLYSTUDIO. Навчись створювати рекламні відео кінематографічної якості."
             />
-            {/* No header on this page — top padding is just breathing room, not header clearance. */}
-            <section className="overflow-x-hidden px-4 pt-6 md:pt-10 max-[480px]:px-0 max-[480px]:pt-0">
-                <div className="mx-auto max-w-5xl">
-                    <div className="overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
-                        {/* object-contain, never cover — the banner has baked-in copy
-                            (HOLYSTUDIO / АНКЕТА ПЕРЕД ЗАПИСУ) that must not be cropped. */}
+            {/* No header on this page — top padding is just breathing room, not header clearance.
+                Size like an opened image: as large as possible while the whole frame stays
+                on screen (width or height hits the viewport, aspect ratio preserved). */}
+            <section className="overflow-x-hidden px-4 pt-4 md:pt-8 max-[480px]:px-0 max-[480px]:pt-0">
+                <div className="flex justify-center">
+                    <div className="max-w-full overflow-hidden border-4 border-black bg-black max-[480px]:border-0">
                         <img
                             src={heroImage}
                             width={1122}
@@ -212,7 +213,7 @@ const ApplyPage = () => {
                             fetchPriority="high"
                             loading="eager"
                             decoding="async"
-                            className="block w-full h-auto object-contain"
+                            className="block h-auto w-auto max-w-full max-h-[100svh] object-contain"
                         />
                     </div>
                 </div>
