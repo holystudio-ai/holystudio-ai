@@ -3,8 +3,6 @@ import { Resend } from 'resend';
 
 interface LeadBody {
     name: string;
-    email: string;
-    country: string;
     phone: string;
     telegram: string;
     source: string;
@@ -16,14 +14,12 @@ interface LeadBody {
 }
 
 const REQUIRED_FIELDS: (keyof LeadBody)[] = [
-    'name', 'email', 'country', 'phone', 'telegram',
+    'name', 'phone', 'telegram',
     'source', 'role', 'income', 'interest', 'motivation', 'readiness',
 ];
 
 const FIELD_LABELS: Record<keyof LeadBody, string> = {
     name: "Ім'я",
-    email: 'Email',
-    country: 'Країна',
     phone: 'Телефон',
     telegram: 'Telegram',
     source: 'Звідки дізнались',
@@ -102,10 +98,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             return jsonResponse({ ok: false, error: 'missing_field', field: key }, 400);
         }
         lead[key] = value.trim().slice(0, 2000);
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(lead.email)) {
-        return jsonResponse({ ok: false, error: 'invalid_email', field: 'email' }, 400);
     }
 
     const submittedAt = new Date().toISOString();

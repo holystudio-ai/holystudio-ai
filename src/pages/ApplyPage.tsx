@@ -147,8 +147,6 @@ const ChoiceField: React.FC<ChoiceProps> = ({label, name, options, value, onChan
 
 const EMPTY_FORM = {
     name: '',
-    email: '',
-    country: '',
     phone: '',
     telegram: '',
     source: '',
@@ -275,10 +273,6 @@ const ApplyPage = () => {
                                 <Field label="Ваше ім'я" name="name" value={form.name}
                                        onChange={setField} placeholder="Ім'я та прізвище"
                                        inputRef={firstFieldRef}/>
-                                <Field label="Ваш email" name="email" type="email" value={form.email}
-                                       onChange={setField} placeholder="you@example.com"/>
-                                <Field label="Країна" name="country" value={form.country}
-                                       onChange={setField} placeholder="Україна"/>
                                 <Field label="Номер телефону" name="phone" type="tel" value={form.phone}
                                        onChange={setField} placeholder="+380..."/>
                                 <Field label="Ваш Telegram" name="telegram" value={form.telegram}
