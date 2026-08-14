@@ -23,6 +23,13 @@ export interface Env {
     LEADS_SHEETS_WEBHOOK_URL: string;
     LEADS_NOTIFY_EMAIL: string;
     TELEGRAM_CHANNEL_INVITE_URL: string;
+
+    /** Meta Conversions API. Without the token the server-side copy is skipped
+     *  and only the browser pixel reports the lead. */
+    META_DATASET_ID: string;
+    META_CAPI_ACCESS_TOKEN: string;
+    /** Set temporarily to see events in Events Manager → Test events. */
+    META_TEST_EVENT_CODE: string;
 }
 
 export function jsonResponse(data: unknown, status = 200): Response {

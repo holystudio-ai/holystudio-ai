@@ -7,3 +7,7 @@ compatibility_flags = ["nodejs_compat_v2"]
 SITE_URL = "https://holystudio.ai"
 COURSE_PRICE_UAH = "490"
 RESEND_FROM = "HOLYSTUDIO <noreply@holystudio.ai>"
+# Same dataset the pixel in index.html initialises with.
+# The matching META_CAPI_ACCESS_TOKEN is a secret and lives in the Cloudflare
+# dashboard only — never in this file.
+META_DATASET_ID = "1743358290241901"

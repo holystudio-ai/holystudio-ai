@@ -111,6 +111,36 @@ export function trackLead(email: string, {
     identifySmartSender(email);
 }
 
+/* ─── pre-registration form ─── */
+
+export const APPLY_CONTENT_NAME = 'Анкета передзапису';
+
+/**
+ * `crypto.randomUUID` needs a secure context and Safari 15.4+; the fallback is
+ * there so an old browser degrades to a weaker id instead of throwing in the
+ * middle of a form submit.
+ */
+export function newEventId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/**
+ * Pre-registration form submitted on /apply.
+ *
+ * `eventId` has to be the same one the Conversions API sends for this lead —
+ * that is how Meta recognises the browser and server copies as one event
+ * instead of counting two registrations.
+ */
+export function trackApplyLead(eventId: string) {
+    window.fbq?.('track', 'Lead', {
+        content_name: APPLY_CONTENT_NAME,
+        content_category: 'apply',
+    }, {eventID: eventId});
+}
+
 /* ─── initiate checkout ─── */
 
 export function trackInitiateCheckout({

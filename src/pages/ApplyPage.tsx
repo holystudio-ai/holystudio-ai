@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
+import {newEventId, trackApplyLead} from '@/src/lib/analytics.ts';
 import heroImage from "@/src/assets/images/new-aplpic.png";
 
 const ROLE_OPTIONS = [
@@ -188,17 +189,20 @@ const ApplyPage = () => {
         }
 
         setStatus('sending');
+        // Shared with the server so Meta counts one lead, not two.
+        const eventId = newEventId();
         try {
             const resp = await fetch('/api/leads', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(form),
+                body: JSON.stringify({...form, eventId}),
             });
             const data = await resp.json().catch(() => ({}));
             if (!resp.ok || !data.ok) {
                 setStatus('error');
                 return;
             }
+            trackApplyLead(eventId);
             setChannelUrl(data.channelUrl || null);
             setSubmitted(true);
         } catch {

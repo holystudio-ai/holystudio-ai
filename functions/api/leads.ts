@@ -1,5 +1,9 @@
 import { Env, jsonResponse } from './_lib/types';
+import { sendLeadToMeta } from './_lib/meta-capi';
 import { Resend } from 'resend';
+
+/** Kept in sync with APPLY_CONTENT_NAME in src/lib/analytics.ts. */
+const APPLY_CONTENT_NAME = 'Анкета передзапису';
 
 interface LeadBody {
     name: string;
@@ -146,6 +150,17 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (!sheetOk && !emailOk) {
         return jsonResponse({ ok: false, error: 'delivery_failed' }, 502);
     }
+
+    // Reported only on success, matching the browser pixel, which fires from
+    // the same branch. Runs past the response so it adds no latency.
+    const clientEventId = body.eventId;
+    context.waitUntil(sendLeadToMeta(request, env, {
+        eventId: typeof clientEventId === 'string' && clientEventId
+            ? clientEventId
+            : crypto.randomUUID(),
+        phone: lead.phone,
+        contentName: APPLY_CONTENT_NAME,
+    }));
 
     return jsonResponse({
         ok: true,
