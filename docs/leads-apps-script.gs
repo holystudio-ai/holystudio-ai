@@ -1,39 +1,57 @@
 /**
  * HOLYSTUDIO — приймач заявок для Google Таблиці.
  *
- * Source page стоїть ОСТАННЬОЮ колонкою, щоб не зсувати ім'я/телефон.
- *
  * Заголовки рядка 1:
  * Дата | Ім'я | Email | Країна | Телефон | Telegram | Звідки дізнались |
  * Роль | Напрямок в AI | Чому менторство | Готовність | Source page
  *
- * У таблиці: виріж колонку "Source page" з B і вставь її після "Готовність".
+ * Пише рівно 12 клітинок у колонки A–L за фіксованим порядком.
  *
- * Після зміни коду:
- * Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
+ * Додатково веде вкладку "debug": туди падає сирий JSON кожної заявки.
+ * Якщо після тестової анкети вкладка порожня — працює СТАРА версія
+ * веб-застосунку, і потрібен Deploy → Manage deployments → Edit →
+ * Version: New version → Deploy.
  */
 
+var SCRIPT_VERSION = 'v3';
+
 function doPost(e) {
-  var lead = JSON.parse(e.postData.contents);
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var raw = e && e.postData ? e.postData.contents : '';
 
-  var row = [
-    new Date(lead.submittedAt || Date.now()),
-    lead.name || '',
-    lead.email || '',
-    lead.country || '',
-    lead.phone || '',
-    lead.telegram || '',
-    lead.source || '',
-    lead.role || '',
-    lead.interest || '',
-    lead.motivation || '',
-    lead.readiness || '',
-    lead.sourcePage || '',
-  ];
+  try {
+    var lead = JSON.parse(raw);
+    var sheet = ss.getSheets()[0];
 
-  sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
+    var row = [
+      new Date(lead.submittedAt || Date.now()),
+      lead.name || '',
+      lead.email || '',
+      lead.country || '',
+      lead.phone || '',
+      lead.telegram || '',
+      lead.source || '',
+      lead.role || '',
+      lead.interest || '',
+      lead.motivation || '',
+      lead.readiness || '',
+      lead.sourcePage || '',
+    ];
 
-  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+    sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
+
+    writeDebug(ss, raw, lead.sourcePage || '(порожньо)');
+
+    return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    writeDebug(ss, raw, 'ERROR: ' + err);
+    return ContentService.createTextOutput(JSON.stringify({ ok: false }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function writeDebug(ss, raw, sourcePage) {
+  var dbg = ss.getSheetByName('debug') || ss.insertSheet('debug');
+  dbg.appendRow([new Date(), SCRIPT_VERSION, sourcePage, raw]);
 }
