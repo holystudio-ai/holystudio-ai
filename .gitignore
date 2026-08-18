@@ -18,6 +18,9 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# Local secrets for `wrangler pages dev`.
+.dev.vars
+.dev.vars.*
 cloudflare-secrets.txt
 server/.env
 server/dist

@@ -195,7 +195,13 @@ const ApplyPage = () => {
             const resp = await fetch('/api/leads', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({...form, eventId}),
+                body: JSON.stringify({
+                    ...form,
+                    eventId,
+                    // Full address of this page, query string included — that is
+                    // how the sheet knows which ad the lead came from.
+                    sourcePage: window.location.href,
+                }),
             });
             const data = await resp.json().catch(() => ({}));
             if (!resp.ok || !data.ok) {

@@ -15,6 +15,8 @@ interface LeadBody {
     interest: string;
     motivation: string;
     readiness: string;
+    /** Full page URL at submit, including UTM query params. Optional. */
+    sourcePage: string;
 }
 
 const REQUIRED_FIELDS: (keyof LeadBody)[] = [
@@ -32,6 +34,7 @@ const FIELD_LABELS: Record<keyof LeadBody, string> = {
     interest: 'Напрямок в AI',
     motivation: 'Чому менторство',
     readiness: 'Готовність до покупки',
+    sourcePage: 'Source page',
 };
 
 function escapeHtml(value: string): string {
@@ -42,16 +45,32 @@ function escapeHtml(value: string): string {
         .replace(/"/g, '&quot;');
 }
 
+function readSourcePage(raw: unknown): string {
+    if (typeof raw !== 'string') return '';
+    const value = raw.trim().slice(0, 2000);
+    if (!/^https?:\/\//i.test(value)) return '';
+    return value;
+}
+
 function buildLeadNotificationHtml(lead: LeadBody): string {
-    const rows = REQUIRED_FIELDS.map((key) => `
+    const emailFields: (keyof LeadBody)[] = lead.sourcePage
+        ? [...REQUIRED_FIELDS, 'sourcePage']
+        : REQUIRED_FIELDS;
+    const rows = emailFields.map((key) => {
+        const raw = lead[key];
+        const cell = key === 'sourcePage'
+            ? `<a href="${escapeHtml(raw)}" style="color:#a855f7;word-break:break-all;">${escapeHtml(raw)}</a>`
+            : escapeHtml(raw);
+        return `
 <tr>
   <td style="padding:10px 14px;border-bottom:1px solid #333333;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;color:#a855f7;white-space:nowrap;vertical-align:top;">
     ${FIELD_LABELS[key]}
   </td>
   <td style="padding:10px 14px;border-bottom:1px solid #333333;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#ffffff;line-height:1.5;">
-    ${escapeHtml(lead[key])}
+    ${cell}
   </td>
-</tr>`).join('');
+</tr>`;
+    }).join('');
 
     return `
 <!DOCTYPE html>
@@ -103,6 +122,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         }
         lead[key] = value.trim().slice(0, 2000);
     }
+    lead.sourcePage = readSourcePage(body.sourcePage);
 
     const submittedAt = new Date().toISOString();
 
