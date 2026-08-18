@@ -1,17 +1,16 @@
 /**
  * HOLYSTUDIO — приймач заявок для Google Таблиці.
  *
- * Пише рівно 12 клітинок у фіксованому порядку A–L.
- * Не використовує appendRow: він викидає порожні Email/Країна/Source page
- * і зсуває ім'я в колонку B.
+ * Source page стоїть ОСТАННЬОЮ колонкою, щоб не зсувати ім'я/телефон.
  *
- * Заголовки рядка 1 мають бути:
- * Дата | Source page | Ім'я | Email | Країна | Телефон | Telegram |
- * Звідки дізнались | Роль | Напрямок в AI | Чому менторство | Готовність
+ * Заголовки рядка 1:
+ * Дата | Ім'я | Email | Країна | Телефон | Telegram | Звідки дізнались |
+ * Роль | Напрямок в AI | Чому менторство | Готовність | Source page
  *
- * Після зміни коду обов'язково:
+ * У таблиці: виріж колонку "Source page" з B і вставь її після "Готовність".
+ *
+ * Після зміни коду:
  * Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
- * Save в редакторі недостатньо — Google продовжить стару версію.
  */
 
 function doPost(e) {
@@ -20,7 +19,6 @@ function doPost(e) {
 
   var row = [
     new Date(lead.submittedAt || Date.now()),
-    lead.sourcePage || '',
     lead.name || '',
     lead.email || '',
     lead.country || '',
@@ -31,6 +29,7 @@ function doPost(e) {
     lead.interest || '',
     lead.motivation || '',
     lead.readiness || '',
+    lead.sourcePage || '',
   ];
 
   sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
