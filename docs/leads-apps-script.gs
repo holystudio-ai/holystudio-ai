@@ -7,13 +7,15 @@
  *
  * Пише рівно 12 клітинок у колонки A–L за фіксованим порядком.
  *
- * Додатково веде вкладку "debug": туди падає сирий JSON кожної заявки.
- * Якщо після тестової анкети вкладка порожня — працює СТАРА версія
- * веб-застосунку, і потрібен Deploy → Manage deployments → Edit →
- * Version: New version → Deploy.
+ * УВАГА: після будь-якої зміни коду треба оновити ІСНУЮЧЕ розгортання:
+ * Deploy → Управління розгортаннями → ✏️ → Версія: Нова версія → Розгорнути.
+ * Нове розгортання створювати НЕ можна — у нього інший /exec URL,
+ * і сайт продовжить стукати в старе.
+ *
+ * Помилки пишуться у вкладку "debug". Успішні заявки туди не потрапляють.
  */
 
-var SCRIPT_VERSION = 'v3';
+var DATE_FORMAT = 'dd.MM.yyyy HH:mm:ss';
 
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -38,20 +40,18 @@ function doPost(e) {
       lead.sourcePage || '',
     ];
 
-    sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
-
-    writeDebug(ss, raw, lead.sourcePage || '(порожньо)');
+    var rowIndex = sheet.getLastRow() + 1;
+    sheet.getRange(rowIndex, 1, 1, row.length).setValues([row]);
+    // Column formatting would otherwise hide the time part.
+    sheet.getRange(rowIndex, 1).setNumberFormat(DATE_FORMAT);
 
     return ContentService.createTextOutput(JSON.stringify({ ok: true }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
-    writeDebug(ss, raw, 'ERROR: ' + err);
+    var dbg = ss.getSheetByName('debug') || ss.insertSheet('debug');
+    dbg.appendRow([new Date(), 'ERROR: ' + err, raw]);
+
     return ContentService.createTextOutput(JSON.stringify({ ok: false }))
       .setMimeType(ContentService.MimeType.JSON);
   }
-}
-
-function writeDebug(ss, raw, sourcePage) {
-  var dbg = ss.getSheetByName('debug') || ss.insertSheet('debug');
-  dbg.appendRow([new Date(), SCRIPT_VERSION, sourcePage, raw]);
 }

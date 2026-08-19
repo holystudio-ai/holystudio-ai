@@ -5,6 +5,12 @@ import heroSplitV2Mobile from "@/src/assets/images/hero-splitv2-mobile.webp";
 import offer01 from "@/src/assets/images/offer01.png";
 import offer02 from "@/src/assets/images/offer02.png";
 import offer03 from "@/src/assets/images/offer03.png";
+import offer04 from "@/src/assets/images/offer04.png";
+import offer05 from "@/src/assets/images/offer05.png";
+import offer06 from "@/src/assets/images/offer06.png";
+import offer07 from "@/src/assets/images/offer07.png";
+import offer08 from "@/src/assets/images/offer08.png";
+
 
 export interface SplitVariant {
     /** Route path without the leading slash — this is the link media buyers get. */
@@ -53,5 +59,31 @@ export const SPLIT_VARIANTS: SplitVariant[] = [
         slug: 'split5',
         imageDesktop: offer03,
         imageMobile: offer03,
+    }, 
+    {
+        slug: 'split6',
+        imageDesktop: offer04,
+        imageMobile: offer04,
+        noindex: true,
+    },
+    {
+        slug: 'split7',
+        imageDesktop: offer05,
+        imageMobile: offer05,
+    },
+    {
+        slug: 'split8',
+        imageDesktop: offer06,
+        imageMobile: offer06,
+    },
+    {
+        slug: 'split9',
+        imageDesktop: offer07,
+        imageMobile: offer07,
+    },
+    {
+        slug: 'split10',
+        imageDesktop: offer08,
+        imageMobile: offer08,
     },
 ];
