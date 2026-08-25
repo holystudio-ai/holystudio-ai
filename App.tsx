@@ -5,6 +5,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from '@/src/pages/Home.tsx';
 import HomeMain from '@/src/pages/HomeMain.tsx';
 import ApplyPage from '@/src/pages/ApplyPage.tsx';
+import {APPLY_VARIANTS} from '@/src/pages/applyVariants.ts';
 import SplitLanding from '@/src/pages/SplitLanding.tsx';
 import {SPLIT_VARIANTS} from '@/src/pages/splitVariants.ts';
 import PrivacyPolicyPage from "@/src/pages/PrivacyPolicy.tsx";
@@ -29,8 +30,8 @@ const App: React.FC = () => {
         return <AdminPanel />;
     }
 
-    // The apply form is a standalone lead-capture page — no site nav on it.
-    const hideHeader = location.pathname === '/apply';
+    // The apply forms are standalone lead-capture pages — no site nav on them.
+    const hideHeader = APPLY_VARIANTS.some((variant) => location.pathname === `/${variant.slug}`);
 
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
@@ -41,7 +42,13 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<HomeMain />} />
                 <Route path="/old" element={<HomePage />} />
-                <Route path="/apply" element={<ApplyPage />} />
+                {APPLY_VARIANTS.map((variant) => (
+                    <Route
+                        key={variant.slug}
+                        path={`/${variant.slug}`}
+                        element={<ApplyPage fields={variant.fields} />}
+                    />
+                ))}
                 {SPLIT_VARIANTS.map((variant) => (
                     <Route
                         key={variant.slug}

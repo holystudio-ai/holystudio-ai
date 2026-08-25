@@ -19,9 +19,21 @@ interface LeadBody {
     sourcePage: string;
 }
 
-const REQUIRED_FIELDS: (keyof LeadBody)[] = [
-    'name', 'phone', 'telegram',
+const REQUIRED_FIELDS: (keyof LeadBody)[] = ['name', 'phone', 'telegram'];
+
+/**
+ * Asked by some form variants only (see src/pages/applyVariants.ts). Always
+ * forwarded, empty when the variant didn't ask, so the spreadsheet columns
+ * keep their positions.
+ */
+const OPTIONAL_FIELDS: (keyof LeadBody)[] = [
     'source', 'role', 'income', 'interest', 'motivation', 'readiness',
+];
+
+/** Order of rows in the notification email; empty values are skipped. */
+const EMAIL_FIELD_ORDER: (keyof LeadBody)[] = [
+    'name', 'phone', 'telegram', 'source', 'role', 'income',
+    'interest', 'motivation', 'readiness', 'sourcePage',
 ];
 
 const FIELD_LABELS: Record<keyof LeadBody, string> = {
@@ -53,10 +65,7 @@ function readSourcePage(raw: unknown): string {
 }
 
 function buildLeadNotificationHtml(lead: LeadBody): string {
-    const emailFields: (keyof LeadBody)[] = lead.sourcePage
-        ? [...REQUIRED_FIELDS, 'sourcePage']
-        : REQUIRED_FIELDS;
-    const rows = emailFields.map((key) => {
+    const rows = EMAIL_FIELD_ORDER.filter((key) => lead[key]).map((key) => {
         const raw = lead[key];
         const cell = key === 'sourcePage'
             ? `<a href="${escapeHtml(raw)}" style="color:#a855f7;word-break:break-all;">${escapeHtml(raw)}</a>`
@@ -122,6 +131,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         }
         lead[key] = value.trim().slice(0, 2000);
     }
+    for (const key of OPTIONAL_FIELDS) {
+        const value = body[key];
+        lead[key] = typeof value === 'string' ? value.trim().slice(0, 2000) : '';
+    }
     lead.sourcePage = readSourcePage(body.sourcePage);
 
     const submittedAt = new Date().toISOString();
@@ -152,7 +165,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             const { error } = await resend.emails.send({
                 from: env.RESEND_FROM,
                 to: to.split(',').map((v) => v.trim()).filter(Boolean),
-                subject: `Нова заявка: ${lead.name} (${lead.readiness})`,
+                subject: lead.readiness
+                    ? `Нова заявка: ${lead.name} (${lead.readiness})`
+                    : `Нова заявка: ${lead.name}`,
                 html: buildLeadNotificationHtml(lead),
             });
             if (error) console.error('[Leads] Resend error', error);

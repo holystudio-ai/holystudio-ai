@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import Seo from "@/src/components/features/Seo.tsx";
 import {newEventId, trackApplyLead} from '@/src/lib/analytics.ts';
+import type {ApplyFieldName} from '@/src/pages/applyVariants.ts';
 import heroImage from "@/src/assets/images/new-aplpic.png";
 
 const ROLE_OPTIONS = [
@@ -158,7 +159,27 @@ const EMPTY_FORM = {
     readiness: '',
 };
 
-const ApplyPage = () => {
+/**
+ * Button groups aren't native inputs, so the browser's `required` never guards
+ * them — they have to be checked by hand, and only when actually rendered.
+ */
+const CHOICE_FIELDS = [
+    {name: 'role', hint: 'роллю'},
+    {name: 'income', hint: 'доходом'},
+    {name: 'readiness', hint: 'готовністю'},
+] as const satisfies readonly {name: ApplyFieldName; hint: string}[];
+
+interface ApplyPageProps {
+    fields: ApplyFieldName[];
+}
+
+const ApplyPage: React.FC<ApplyPageProps> = ({fields}) => {
+    const has = (field: ApplyFieldName) => fields.includes(field);
+    const choiceHints = CHOICE_FIELDS
+        .filter((choice) => has(choice.name))
+        .map((choice) => choice.hint)
+        .join(', ');
+
     const [form, setForm] = useState(EMPTY_FORM);
     const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle');
     const [channelUrl, setChannelUrl] = useState<string | null>(null);
@@ -183,7 +204,8 @@ const ApplyPage = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!form.role || !form.income || !form.readiness) {
+        const choiceMissing = CHOICE_FIELDS.some((choice) => has(choice.name) && !form[choice.name]);
+        if (choiceMissing) {
             setStatus('error');
             return;
         }
@@ -280,38 +302,56 @@ const ApplyPage = () => {
                                 onSubmit={handleSubmit}
                                 className="brutalist-border bg-black p-6 md:p-10 space-y-6"
                             >
-                                <Field label="Ваше ім'я" name="name" value={form.name}
-                                       onChange={setField} placeholder="Ім'я та прізвище"
-                                       inputRef={firstFieldRef}/>
-                                <Field label="Номер телефону" name="phone" type="tel" value={form.phone}
-                                       onChange={setField} placeholder="+380..."/>
-                                <Field label="Ваш Telegram" name="telegram" value={form.telegram}
-                                       onChange={setField} placeholder="@nickname"/>
-                                <Field label="Звідки дізналися про нас?" name="source" value={form.source}
-                                       onChange={setField} placeholder="Instagram, друзі, реклама..."/>
+                                {has('name') && (
+                                    <Field label="Ваше ім'я" name="name" value={form.name}
+                                           onChange={setField} placeholder="Ім'я та прізвище"
+                                           inputRef={firstFieldRef}/>
+                                )}
+                                {has('phone') && (
+                                    <Field label="Номер телефону" name="phone" type="tel" value={form.phone}
+                                           onChange={setField} placeholder="+380..."/>
+                                )}
+                                {has('telegram') && (
+                                    <Field label="Ваш Telegram" name="telegram" value={form.telegram}
+                                           onChange={setField} placeholder="@nickname"/>
+                                )}
+                                {has('source') && (
+                                    <Field label="Звідки дізналися про нас?" name="source" value={form.source}
+                                           onChange={setField} placeholder="Instagram, друзі, реклама..."/>
+                                )}
 
-                                <ChoiceField label="Ваша роль" name="role" options={ROLE_OPTIONS}
-                                             value={form.role} onChange={setField} allowOther/>
+                                {has('role') && (
+                                    <ChoiceField label="Ваша роль" name="role" options={ROLE_OPTIONS}
+                                                 value={form.role} onChange={setField} allowOther/>
+                                )}
 
-                                <ChoiceField label="Який твій середній дохід на місяць зараз?" name="income"
-                                             options={INCOME_OPTIONS}
-                                             value={form.income} onChange={setField}/>
+                                {has('income') && (
+                                    <ChoiceField label="Який твій середній дохід на місяць зараз?" name="income"
+                                                 options={INCOME_OPTIONS}
+                                                 value={form.income} onChange={setField}/>
+                                )}
 
-                                <Field label="Який напрямок вас найбільше цікавить в AI?" name="interest"
-                                       value={form.interest} onChange={setField} textarea
-                                       placeholder="Фото, відео, реклама, контент..."/>
-                                <Field label="Чому вирішили, що вам потрібне менторство з AI?" name="motivation"
-                                       value={form.motivation} onChange={setField} textarea
-                                       placeholder="Розкажіть коротко про вашу ціль"/>
+                                {has('interest') && (
+                                    <Field label="Який напрямок вас найбільше цікавить в AI?" name="interest"
+                                           value={form.interest} onChange={setField} textarea
+                                           placeholder="Фото, відео, реклама, контент..."/>
+                                )}
+                                {has('motivation') && (
+                                    <Field label="Чому вирішили, що вам потрібне менторство з AI?" name="motivation"
+                                           value={form.motivation} onChange={setField} textarea
+                                           placeholder="Розкажіть коротко про вашу ціль"/>
+                                )}
 
-                                <ChoiceField label="Готовність до покупки" name="readiness"
-                                             options={READINESS_OPTIONS}
-                                             value={form.readiness} onChange={setField}/>
+                                {has('readiness') && (
+                                    <ChoiceField label="Готовність до покупки" name="readiness"
+                                                 options={READINESS_OPTIONS}
+                                                 value={form.readiness} onChange={setField}/>
+                                )}
 
                                 {status === 'error' && (
                                     <div className="border-2 border-red-500 text-red-400 px-4 py-3 text-sm font-bold uppercase">
-                                        Не вдалося надіслати. Перевір, що всі поля заповнені (включно з роллю,
-                                        доходом та готовністю), і спробуй ще раз.
+                                        Не вдалося надіслати. Перевір, що всі поля заповнені
+                                        {choiceHints && ` (включно з ${choiceHints})`}, і спробуй ще раз.
                                     </div>
                                 )}
 

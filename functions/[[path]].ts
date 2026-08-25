@@ -16,19 +16,23 @@ interface LinkPreview {
  * of the SPA shows whatever sits in the static index.html. Paths listed here get
  * their tags swapped in the HTML itself, on the way out.
  */
+const APPLY_PREVIEW: LinkPreview = {
+    // ?v is a cache-buster: messengers keep preview images keyed by URL, so
+    // replacing the file in place leaves them showing the old one forever.
+    // Bump the number whenever the file behind this name changes.
+    image: `${SITE_URL}/new-link-img.PNG?v=2`,
+    title: 'Анкета передзапису | HOLYSTUDIO',
+    description:
+        'Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO. ' +
+        'Навчись створювати рекламні відео кінематографічної якості.',
+    width: '1774',
+    height: '887',
+};
+
 const LINK_PREVIEWS: Record<string, LinkPreview> = {
-    '/apply': {
-        // ?v is a cache-buster: messengers keep preview images keyed by URL, so
-        // replacing the file in place leaves them showing the old one forever.
-        // Bump the number whenever the file behind this name changes.
-        image: `${SITE_URL}/new-link-img.PNG?v=2`,
-        title: 'Анкета передзапису | HOLYSTUDIO',
-        description:
-            'Анкета передзапису на навчання з ШІ генерацій від HOLYSTUDIO. ' +
-            'Навчись створювати рекламні відео кінематографічної якості.',
-        width: '1774',
-        height: '887',
-    },
+    '/apply': APPLY_PREVIEW,
+    // Short version of the same form; shared under the same preview.
+    '/apply2': APPLY_PREVIEW,
 };
 
 class SetContent {
