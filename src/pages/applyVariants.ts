@@ -30,6 +30,6 @@ export const APPLY_VARIANTS: ApplyVariant[] = [
     },
     {
         slug: 'apply2',
-        fields: ['name', 'phone', 'telegram', 'interest', 'readiness'],
+        fields: ['name', 'phone', 'telegram', 'role', 'interest', 'readiness'],
     },
 ];
