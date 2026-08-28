@@ -63,6 +63,8 @@ const Team: React.FC<TeamProps> = ({productionVariant = 'default', sliderAutoScr
     ];
 
     const videoWorks = [
+        {id: '00', videoId: 'ojv7Yxn3PvA', title: 'HOLYSTUDIO', caption: 'HOLYSTUDIO', tag: 'РЕКЛАМНИЙ РОЛИК'},
+        {id: '00b', videoId: 'EqJAy6jo438', title: 'HOLYSTUDIO', caption: 'HOLYSTUDIO', tag: 'РЕКЛАМНИЙ РОЛИК'},
         {id: '01', videoId: 'xNfiBxSdNIk', title: 'AMIC', caption: 'AMIC', tag: 'РЕКЛАМНИЙ РОЛИК', thumbnail: workPoster1},
         {id: '02', videoId: 'sNyjAXZDqbs', title: 'AFFX', caption: 'AFFX', tag: 'РЕКЛАМНА КАМПАНІЯ', thumbnail: workPoster2},
         {id: '03', videoId: '48s3rwVwJOQ', title: 'VERIFIED', caption: 'VERIFIED', tag: 'SHORTS', thumbnail: workPoster3},

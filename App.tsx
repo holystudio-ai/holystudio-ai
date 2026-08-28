@@ -20,7 +20,10 @@ import ReturnPage from "@/src/pages/ReturnPage.tsx";
 import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
 import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
+import DirectorGuideHtmlPage from "@/src/pages/DirectorGuideHtmlPage.tsx";
 import AdminPanel from "@/src/pages/AdminPanel.tsx";
+
+
 
 const App: React.FC = () => {
     const location = useLocation();
@@ -30,8 +33,16 @@ const App: React.FC = () => {
         return <AdminPanel />;
     }
 
+    // Standalone HTML pages redirect immediately — skip chrome so it doesn't flash.
+    const isStandaloneHtml =
+        location.pathname === '/guide' ||
+        location.pathname === '/holystudio-ai-director-guide' ||
+        location.pathname === '/promts_intensive';
+
     // The apply forms are standalone lead-capture pages — no site nav on them.
-    const hideHeader = APPLY_VARIANTS.some((variant) => location.pathname === `/${variant.slug}`);
+    const hideHeader =
+        isStandaloneHtml ||
+        APPLY_VARIANTS.some((variant) => location.pathname === `/${variant.slug}`);
 
     return (
         <div className="min-h-screen selection:bg-purple-500 selection:text-white">
@@ -74,9 +85,11 @@ const App: React.FC = () => {
                 <Route path="/cancel-page" element={<CancelPage />} />
                 <Route path="/service-page" element={<ServicePage />} />
                 <Route path="/promts_intensive" element={<PromtsIntensiveHtmlPage />} />
+                <Route path="/guide" element={<DirectorGuideHtmlPage />} />
+                <Route path="/holystudio-ai-director-guide" element={<DirectorGuideHtmlPage />} />
             </Routes>
 
-            <Footer/>
+            {!isStandaloneHtml && <Footer/>}
         </div>
     );
 };
