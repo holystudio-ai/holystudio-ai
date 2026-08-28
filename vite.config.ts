@@ -4,15 +4,29 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import devApiPlugin from './vite-plugin-dev-api.js';
 
-function copyPromptsIntensiveHtml() {
+function copyStandaloneHtml() {
+    const files = ['promts_intensive.html', 'holystudio-ai-director-guide.html'];
     return {
-        name: 'copy-prompts-intensive-html',
+        name: 'copy-standalone-html',
+        configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+                const url = (req.url || '').split('?')[0];
+                if (url === '/guide' || url === '/guide/') {
+                    res.statusCode = 302;
+                    res.setHeader('Location', '/holystudio-ai-director-guide.html');
+                    res.end();
+                    return;
+                }
+                next();
+            });
+        },
         closeBundle() {
-            const sourceFile = path.resolve(__dirname, 'public/promts_intensive.html');
-            const outputFile = path.resolve(__dirname, 'dist/promts_intensive.html');
-
-            if (fs.existsSync(sourceFile)) {
-                fs.copyFileSync(sourceFile, outputFile);
+            for (const name of files) {
+                const sourceFile = path.resolve(__dirname, 'public', name);
+                const outputFile = path.resolve(__dirname, 'dist', name);
+                if (fs.existsSync(sourceFile)) {
+                    fs.copyFileSync(sourceFile, outputFile);
+                }
             }
         },
     };
@@ -38,7 +52,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             react(),
             devApiPlugin(),
-            copyPromptsIntensiveHtml(),
+            copyStandaloneHtml(),
         ],
         define: {
             'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),

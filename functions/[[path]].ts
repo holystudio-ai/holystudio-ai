@@ -83,6 +83,19 @@ function applyLinkPreview(response: Response, preview: LinkPreview, canonicalUrl
 export const onRequest: PagesFunction = async (context) => {
     const { pathname } = new URL(context.request.url);
 
+    // Short URLs for the student guide. A React bounce would load the whole SPA
+    // first, then jump to a 6.5MB HTML file — that looks like an infinite blink.
+    // 302 here never touches the big file inside the Worker.
+    const guideAliases = new Set([
+        '/guide',
+        '/guide/',
+        '/holystudio-ai-director-guide',
+        '/holystudio-ai-director-guide/',
+    ]);
+    if (guideAliases.has(pathname)) {
+        return Response.redirect(new URL('/holystudio-ai-director-guide.html', context.request.url), 302);
+    }
+
     const hasFileExtension = /\.[^/]+$/.test(pathname);
     const isStaticAssetRequest =
         pathname === '/promts_intensive' ||

@@ -20,7 +20,6 @@ import ReturnPage from "@/src/pages/ReturnPage.tsx";
 import CancelPage from "@/src/pages/CancelPage.tsx";
 import ServicePage from "@/src/pages/ServicePage.tsx";
 import PromtsIntensiveHtmlPage from "@/src/pages/PromtsIntensiveHtmlPage.tsx";
-import DirectorGuideHtmlPage from "@/src/pages/DirectorGuideHtmlPage.tsx";
 import AdminPanel from "@/src/pages/AdminPanel.tsx";
 
 
@@ -34,10 +33,7 @@ const App: React.FC = () => {
     }
 
     // Standalone HTML pages redirect immediately — skip chrome so it doesn't flash.
-    const isStandaloneHtml =
-        location.pathname === '/guide' ||
-        location.pathname === '/holystudio-ai-director-guide' ||
-        location.pathname === '/promts_intensive';
+    const isStandaloneHtml = location.pathname === '/promts_intensive';
 
     // The apply forms are standalone lead-capture pages — no site nav on them.
     const hideHeader =
@@ -85,8 +81,6 @@ const App: React.FC = () => {
                 <Route path="/cancel-page" element={<CancelPage />} />
                 <Route path="/service-page" element={<ServicePage />} />
                 <Route path="/promts_intensive" element={<PromtsIntensiveHtmlPage />} />
-                <Route path="/guide" element={<DirectorGuideHtmlPage />} />
-                <Route path="/holystudio-ai-director-guide" element={<DirectorGuideHtmlPage />} />
             </Routes>
 
             {!isStandaloneHtml && <Footer/>}
