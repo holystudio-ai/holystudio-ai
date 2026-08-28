@@ -11,7 +11,7 @@ function copyStandaloneHtml() {
         configureServer(server) {
             server.middlewares.use((req, res, next) => {
                 const url = (req.url || '').split('?')[0];
-                if (url === '/guide' || url === '/guide/') {
+                if (url === '/guide' || url === '/guide/' || url === '/holystudio-ai-director-guide' || url === '/holystudio-ai-director-guide/') {
                     res.statusCode = 302;
                     res.setHeader('Location', '/holystudio-ai-director-guide.html');
                     res.end();
