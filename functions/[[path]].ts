@@ -84,10 +84,15 @@ export const onRequest: PagesFunction = async (context) => {
     const url = new URL(context.request.url);
     const { pathname } = url;
 
-    // masterai.holystudio.ai/ is the Higgsfield guide. Assets stay under /higgsfield/
-    // (the page has <base href="/higgsfield/">), so the address bar stays on the subdomain root.
+    if (pathname === '/higgsfield' || pathname.startsWith('/higgsfield/')) {
+        const next = '/masterai' + pathname.slice('/higgsfield'.length);
+        return Response.redirect(new URL(next, url), 301);
+    }
+
+    // masterai.holystudio.ai/ is the guide. Assets stay under /masterai/
+    // (the page has <base href="/masterai/">), so the address bar stays on the subdomain root.
     if (url.hostname === 'masterai.holystudio.ai' && (pathname === '/' || pathname === '')) {
-        const assetUrl = new URL('/higgsfield/index.html', url);
+        const assetUrl = new URL('/masterai/index.html', url);
         return context.env.ASSETS.fetch(new Request(assetUrl, context.request));
     }
 
