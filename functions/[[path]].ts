@@ -81,7 +81,15 @@ function applyLinkPreview(response: Response, preview: LinkPreview, canonicalUrl
 }
 
 export const onRequest: PagesFunction = async (context) => {
-    const { pathname } = new URL(context.request.url);
+    const url = new URL(context.request.url);
+    const { pathname } = url;
+
+    // masterai.holystudio.ai/ is the Higgsfield guide. Assets stay under /higgsfield/
+    // (the page has <base href="/higgsfield/">), so the address bar stays on the subdomain root.
+    if (url.hostname === 'masterai.holystudio.ai' && (pathname === '/' || pathname === '')) {
+        const assetUrl = new URL('/higgsfield/index.html', url);
+        return context.env.ASSETS.fetch(new Request(assetUrl, context.request));
+    }
 
     // Cloudflare Pages "pretty URLs" already map
     // /holystudio-ai-director-guide.html → /holystudio-ai-director-guide.
