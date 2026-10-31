@@ -5,29 +5,41 @@ interface PolicyWrapperProps {
     policyData: PolicyData;
 }
 
-// Policy bodies are plain text, but they mention Telegram handles (@HOLYSTUDIO_AI_bot)
-// that should be clickable. Split on handles and render those parts as t.me links.
-// Two regexes: the /g one is only for split(), the anchored one for the per-part
-// check — reusing a /g regex with .test() would carry lastIndex between calls.
-const TG_HANDLE_SPLIT = /(@[A-Za-z0-9_]{4,32})/g;
+// Policy bodies are plain text, but they mention emails (holystudio.ai@gmail.com) and
+// Telegram handles (@HOLYSTUDIO_AI_bot) that should be clickable. Emails are matched
+// first in the alternation, otherwise "@gmail" inside an address would pass as a handle.
+// Split regex is /g for split(); the anchored ones are for the per-part check —
+// reusing a /g regex with .test() would carry lastIndex between calls.
+const LINK_SPLIT = /([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|@[A-Za-z0-9_]{4,32})/g;
+const EMAIL_EXACT = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const TG_HANDLE_EXACT = /^@[A-Za-z0-9_]{4,32}$/;
 
+const LINK_CLASS = "text-purple-700 underline underline-offset-2 font-black break-words";
+
 const linkifyHandles = (text: string) =>
-    text.split(TG_HANDLE_SPLIT).map((part, i) =>
-        TG_HANDLE_EXACT.test(part) ? (
-            <a
-                key={i}
-                href={`https://t.me/${part.slice(1)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-purple-700 underline underline-offset-2 font-black break-words"
-            >
-                {part}
-            </a>
-        ) : (
-            part
-        )
-    );
+    text.split(LINK_SPLIT).map((part, i) => {
+        if (EMAIL_EXACT.test(part)) {
+            return (
+                <a key={i} href={`mailto:${part}`} className={LINK_CLASS}>
+                    {part}
+                </a>
+            );
+        }
+        if (TG_HANDLE_EXACT.test(part)) {
+            return (
+                <a
+                    key={i}
+                    href={`https://t.me/${part.slice(1)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={LINK_CLASS}
+                >
+                    {part}
+                </a>
+            );
+        }
+        return part;
+    });
 
 const PolicyWrapper: FC<PolicyWrapperProps> = ({policyData}) => {
     const safeTitle = policyData?.title ?? "";
