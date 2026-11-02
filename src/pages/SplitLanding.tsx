@@ -43,7 +43,7 @@ const OFFER_DETAILS = (
 const SPLIT_CTA = 'ЗРОБИТИ ПРОРИВ В AI!';
 
 // Split-test Telegram deep link (edits brief, point 10).
-export const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzM1MDE1';
+export const SPLIT_CTA_HREF = 'https://telegram.me/HOLYSTUDIO_AI_bot?start=ZGw6MzQ1OTI2';
 
 // The on-page offer block (HOLYSTUDIO AI CREATOR) — timer CTAs scroll here, and
 // the floating CTA hides while it's on screen.
