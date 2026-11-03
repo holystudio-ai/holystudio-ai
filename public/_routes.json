@@ -1,6 +1,8 @@
 {
   "version": 1,
-  "include": ["/*"],
+  "include": [
+    "/*"
+  ],
   "exclude": [
     "/promts_intensive",
     "/promts_intensive/",
@@ -21,6 +23,12 @@
     "/new-link-img.PNG",
     "/new-img-ank.PNG",
     "/robots.txt",
-    "/sitemap.xml"
+    "/sitemap.xml",
+    "/stake",
+    "/stake/*",
+    "/stake-alt",
+    "/stake-alt/*",
+    "/zarobitok",
+    "/zarobitok/*"
   ]
 }
