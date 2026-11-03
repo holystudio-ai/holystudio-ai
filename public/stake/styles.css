@@ -1,4 +1,4 @@
-@import url('assets/fonts/fonts.css');
+@import url('/stake/assets/fonts/fonts.css');
 /* Візуальна система — з HOLYSTUDIO RETRO / VHS v2 (holystudio-vhs-source.zip): ті самі токени, шрифти, CRT, сканлайни, зерно, тікер, касети */
 :root{--bg:#08090b;--surface:#101316;--surface2:#0d1519;--line:#2b3035;--cyan:#40f3ff;--mint:#36f5c5;--white:#f1f2ee;--muted:#9aa5aa;--cream:#f1f0e7;--display:'Unbounded',Arial,sans-serif;--sans:'Manrope',Arial,sans-serif;--mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace}
 *{box-sizing:border-box}
