@@ -28,6 +28,10 @@
     "/stake/*",
     "/stake-alt",
     "/stake-alt/*",
+    "/stake-alt-2611/*",
+    "/stake-alt-2611",
+    "/stake-2611/*",
+    "/stake-2611",
     "/zarobitok",
     "/zarobitok/*"
   ]
