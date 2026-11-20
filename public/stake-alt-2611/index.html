@@ -20,6 +20,25 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1743358290241901&ev=PageView&noscript=1"></noscript>
 <!-- fnlz трекер (як на holystudio-lm2) -->
 <script src="https://fnlz.to/t.js" data-project="hollystudio" async></script>
+<!-- OpenAI pixel -->
+<script>
+!function(w,d,s,u){
+  if(w.oaiq)return;
+  var q=function(){q.q.push(arguments)};
+  q.q=[];
+  w.oaiq=q;
+  var j=d.createElement(s);
+  j.async=1;
+  j.src=u;
+  var f=d.getElementsByTagName(s)[0];
+  f.parentNode.insertBefore(j,f);
+}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
+
+oaiq("init",{
+  pixelId:"UjYmb8ptBeFqFiqi9fxhW2",
+  debug:true
+});
+</script>
 <title>Покроковий розбір пайплайну реклами для STAKE — безкоштовний вебінар HOLYSTUDIO</title>
 <meta name="description" content="Безкоштовний живий онлайн-вебінар • Четвер, 26 листопада о 19:00. Покроковий розбір пайплайну реклами Формули 1 для Stake від HOLYSTUDIO.">
 <meta property="og:title" content="ПОКРОКОВИЙ РОЗБІР ПАЙПЛАЙНУ РЕКЛАМИ ДЛЯ STAKE">
